@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import BusComponent from "./BusComponent";
 import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
+import * as Font from 'expo-font';
 
 type BusStopComponentProps = {
   BusStopCode: string;
   Description: string;
   RoadName: string;
   Distance: string;
+};
+
+// font style
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'SpaceMono-Regular': require('../../assets/fonts/SpaceMono-Regular.ttf'),
+    'Nunito-Medium': require('../../assets/fonts/Nunito/Nunito-Medium.ttf'),
+    'Nunito-Bold': require('../../assets/fonts/Nunito/Nunito-Bold.ttf')
+  });
 };
 
 const BusStopComponent: React.FC<BusStopComponentProps> = ({
@@ -19,6 +30,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
 
+  fetchFonts();
   // Fetch bus arrival data every 5 seconds
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -38,12 +50,12 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
     <View style={styles.container}>
       <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
         <Text style={styles.header}>
-          Bus Stop: {BusStopCode} | {Description} | {RoadName} | {Distance}m
+          {BusStopCode} | {Description} | {RoadName} | {Distance}m
         </Text>
       </TouchableOpacity>
 
+      {/* When user press on bus stop */}
       {!isCollapsed && busArrivalData && (
-        // Render the bus data dynamically
         Object.entries(busArrivalData).map(([busNumber, timings]) => (
           <BusComponent
             key={busNumber}
@@ -61,14 +73,16 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
+    width: scale(340),
+    // height: verticalScale(50),
     backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  header: { backgroundColor: "#f0f0f0", padding: 10 },
-  title: { fontSize: 18 },
-  busNumber: { color: 'blue' },
+  header: { 
+    backgroundColor: "#FF7F7F",
+    // height: verticalScale(150),
+    fontSize: 18,
+    fontFamily: 'Nunito-Bold'
+  },
 });
 
 export default BusStopComponent;

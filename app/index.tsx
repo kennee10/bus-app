@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 import AppInitializer from "../components/AppInitializer";
 import BusStopsNearbyComponent from "../components/main/BusStopsNearbyComponent";
+import SearchComponent from "../components/main/SearchComponent"
 
 export default function App() {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -30,6 +31,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <SearchComponent />
       <BusStopsNearbyComponent />
     </SafeAreaView>
   );
@@ -38,6 +40,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
+    backgroundColor: 'green',
   },
   errorContainer: {
     flex: 1,
