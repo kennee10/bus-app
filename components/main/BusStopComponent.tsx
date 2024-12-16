@@ -16,7 +16,6 @@ type BusStopComponentProps = {
 const fetchFonts = () => {
   return Font.loadAsync({
     'SpaceMono-Regular': require('../../assets/fonts/SpaceMono-Regular.ttf'),
-    'Nunito-Medium': require('../../assets/fonts/Nunito/Nunito-Medium.ttf'),
     'Nunito-Bold': require('../../assets/fonts/Nunito/Nunito-Bold.ttf')
   });
 };
@@ -47,14 +46,28 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
   }, [BusStopCode]);
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)}>
-        <Text style={styles.header}>
-          {BusStopCode} | {Description} | {RoadName} | {Distance}m
-        </Text>
+    <View style={styles.outerContainer}>
+      <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} style={styles.container}>
+        <View style={styles.upper}>
+          <View style={styles.busStopCodeWrapper}>
+            <Text style={styles.busStopCode}>{BusStopCode}</Text>
+          </View>
+          <View style={styles.descriptionWrapper}>
+            <Text style={styles.description}>{Description}</Text>
+          </View>
+          <View style={styles.distanceWrapper}>
+            <Text style={styles.distance}>{Distance}m</Text>
+          </View>
+        </View>
+        
+        <View style={styles.lower}>
+          <Text style={styles.blackSpace1}> </Text>
+          <Text style={styles.roadName}>{RoadName}</Text>
+          <Text style={styles.blackSpace2}></Text>
+        </View>
       </TouchableOpacity>
 
-      {/* When user press on bus stop */}
+      {/* When user press on a bus stop */}
       {!isCollapsed && busArrivalData && (
         Object.entries(busArrivalData).map(([busNumber, timings]) => (
           <BusComponent
@@ -71,18 +84,77 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
+  outerContainer: {
     flex: 1,
     width: scale(340),
-    // height: verticalScale(50),
-    backgroundColor: 'blue',
   },
-  header: { 
-    backgroundColor: "#FF7F7F",
-    // height: verticalScale(150),
-    fontSize: 18,
-    fontFamily: 'Nunito-Bold'
+  container: {
+    flex: 1,
+    overflow: 'hidden',
+    flexDirection: 'column',
+    marginTop: verticalScale(10),
+    borderRadius: scale(4),
+    // paddingHorizontal: scale(4),
+    height: '100%',
+    backgroundColor: 'skyblue',
   },
+  upper: {
+    flex: 1,
+    height: scale(30),
+    flexDirection: 'row',
+  },
+  lower: {
+    flex: 1,
+    height: scale(25),
+    flexDirection: 'row',
+  },
+  busStopCodeWrapper: {
+    flex: 3,
+
+  },
+  descriptionWrapper: {
+    flex: 9,
+
+  },
+  distanceWrapper: {
+    flex: 2,
+
+  },
+  busStopCode: {
+    fontSize: scale(15),
+    lineHeight: scale(30),
+    paddingLeft: scale(5),
+    fontFamily: 'Nunito-Bold',
+    // backgroundColor: 'purple',
+  },
+  description: {
+    fontSize: scale(18),
+    lineHeight: scale(30),
+    fontFamily: 'Nunito-Bold',
+    // backgroundColor: 'red',
+  },
+  distance: {
+    fontSize: scale(12),
+    lineHeight: scale(30),
+    paddingRight: scale(5),
+    textAlign: 'right',
+    fontFamily: 'Nunito-Bold',
+    // backgroundColor: 'yellow',
+  },
+  
+  roadName: {
+    flex: 9,
+    fontSize: scale(14),
+    height: scale(25),
+    fontFamily: 'Nunito-Bold',
+    // backgroundColor: 'brown',
+  },
+  blackSpace1: {
+    flex: 3
+  },
+  blackSpace2: {
+    flex: 2
+  }
 });
 
 export default BusStopComponent;

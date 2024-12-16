@@ -42,21 +42,14 @@ const BusStopsNearbyComponent = () => {
   return (
     <SafeAreaView style={styles.container}>
       {busStops.length > 0 ? (
-        // <View>
-        //   <Text style={{backgroundColor: 'blue'}}>Test</Text>
-        // </View>
-        
         <FlatList
           data={busStops}
           keyExtractor={(item) => item.code}
           renderItem={({ item }) => (
             <View>
-              <Text>
-                <BusStopComponent BusStopCode={item.code} Distance={item.distance.toFixed(2)} Description={item.label} RoadName={item.detail}/>
-              </Text>
+                <BusStopComponent BusStopCode={item.code} Distance={item.distance.toFixed(0)} Description={item.label} RoadName={item.detail}/>
             </View>
           )}
-          // contentContainerStyle={styles.listContent}
         />
       ) : (
         <Text style={styles.messageText}>No nearby bus stops found.</Text>
@@ -69,17 +62,13 @@ const BusStopsNearbyComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    backgroundColor: 'grey',
+    // width: '100%', dk if need
+    backgroundColor: 'blue',
     alignItems: 'center'
   },
-  listContent: {
-    flexGrow: 1, // Ensures list content grows to fill the space
-    alignItems: 'center',     // Aligns the list items horizontally
-  },
 
 
-
+  // ONLY WHEN ERROR
   errorText: {
     color: 'white',
     fontSize: 16,
