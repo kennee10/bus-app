@@ -41,20 +41,24 @@ const BusStopsNearbyComponent = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      
+      {/* Render logic */}
       {busStops.length > 0 ? (
+        
+        // if TRUE
         <FlatList
           data={busStops}
           keyExtractor={(item) => item.code}
           renderItem={({ item }) => (
-            <View>
-                <BusStopComponent BusStopCode={item.code} Distance={item.distance.toFixed(0)} Description={item.label} RoadName={item.detail}/>
-            </View>
+            <BusStopComponent BusStopCode={item.code} Distance={item.distance.toFixed(0)} Description={item.label} RoadName={item.detail}/>
           )}
         />
       ) : (
+        
+        // if FALSE
         <Text style={styles.messageText}>No nearby bus stops found.</Text>
-      
       )}
+    
     </SafeAreaView>
   );
 };
@@ -62,9 +66,9 @@ const BusStopsNearbyComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // width: '100%', dk if need
     backgroundColor: 'blue',
     alignItems: 'center'
+    // width: '100%', // dk if need
   },
 
 

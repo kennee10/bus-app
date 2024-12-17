@@ -87,16 +87,15 @@ const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
     width: scale(340),
+    overflow: 'hidden',
+    marginTop: verticalScale(10),
+    borderRadius: scale(4),
+    backgroundColor: 'skyblue',
+    // height: '100%', // dk if need
   },
   container: {
     flex: 1,
-    overflow: 'hidden',
     flexDirection: 'column',
-    marginTop: verticalScale(10),
-    borderRadius: scale(4),
-    // paddingHorizontal: scale(4),
-    height: '100%',
-    backgroundColor: 'skyblue',
   },
   upper: {
     flex: 1,

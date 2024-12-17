@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'violet',
   },
+  
+  // ONLY WHEN ERROR
   errorContainer: {
     flex: 1,
     justifyContent: "center",
