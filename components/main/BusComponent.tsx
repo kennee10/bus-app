@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
 type BusComponentProps = {
     busNumber: string;
@@ -8,16 +9,23 @@ type BusComponentProps = {
     thirdArrival: string;
   };
   
-  const BusComponent: React.FC<BusComponentProps> = ({ 
+const BusComponent: React.FC<BusComponentProps> = ({ 
     busNumber, 
     firstArrival, 
     secondArrival, 
     thirdArrival 
   }) => {
+    
     return (
       <View style={styles.container}>
-        <Text style={styles.busNumber}>{busNumber}</Text>
-        <Text>{firstArrival} | {secondArrival} | {thirdArrival}</Text>
+        <View style={styles.busNumberWrapper}>
+          <Text style={styles.busNumber}>{busNumber}</Text>
+        </View>
+        <View style={styles.timingsWrapper}>
+          <Text style={styles.timings}>{firstArrival}</Text>
+          <Text style={styles.timings}>{secondArrival}</Text>
+          <Text style={styles.timings}>{thirdArrival}</Text>
+        </View>  
       </View>
     );
   };
@@ -25,19 +33,30 @@ type BusComponentProps = {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      width: '100%',
+      padding: scale(4),
       backgroundColor: 'green',
-      // alignItems: 'center'
+      flexDirection: 'row',
     },
-    header: {
-      backgroundColor: "#f0f0f0",
-      padding: 10
+    busNumberWrapper: {
+      flex: 1,
+      // backgroundColor: 'purple',
     },
-    title: {
-      fontSize: 18
+    timingsWrapper: {
+      flex: 3,
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+      // backgroundColor: 'brown',
     },
     busNumber: {
-      color: 'blue'
+      flex: 1,
+      color: 'blue',
+      fontSize: scale(15),
+      fontFamily: 'Nunito-Bold',
+    },
+    timings: {
+      flex: 1,
+      fontSize: scale(12),
+      fontFamily: 'Nunito-Bold',
     }
 });
   

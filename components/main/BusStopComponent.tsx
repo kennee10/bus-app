@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import BusComponent from "./BusComponent";
 import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
-import * as Font from 'expo-font';
+// import * as Font from 'expo-font';
 
 type BusStopComponentProps = {
   BusStopCode: string;
@@ -13,37 +13,38 @@ type BusStopComponentProps = {
 };
 
 // font style
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'SpaceMono-Regular': require('../../assets/fonts/SpaceMono-Regular.ttf'),
-    'Nunito-Bold': require('../../assets/fonts/Nunito/Nunito-Bold.ttf')
-  });
-};
+// const fetchFonts = () => {
+//   return Font.loadAsync({
+//     'SpaceMono-Regular': require('../../assets/fonts/SpaceMono-Regular.ttf'),
+//     'Nunito-Bold': require('../../assets/fonts/Nunito/Nunito-Bold.ttf')
+//   });
+// };
 
 const BusStopComponent: React.FC<BusStopComponentProps> = ({
-  BusStopCode,
-  Description,
-  RoadName,
-  Distance,
-}) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
+    BusStopCode,
+    Description,
+    RoadName,
+    Distance,
+  }) => {
+    const [isCollapsed, setIsCollapsed] = useState(true);
+    const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
 
-  fetchFonts();
-  // Fetch bus arrival data every 5 seconds
-  useEffect(() => {
-    const intervalId = setInterval(async () => {
-      try {
-        const data = await fetchBusArrival(BusStopCode);
-        setBusArrivalData(data); // Set the fetched bus data
-      } catch (error) {
-        console.error("Failed to fetch bus data", error);
-      }
-    }, 5000); // 5 seconds
+    // fetchFonts();
+    
+    // Fetch bus arrival data every 5 seconds
+    useEffect(() => {
+      const intervalId = setInterval(async () => {
+        try {
+          const data = await fetchBusArrival(BusStopCode);
+          setBusArrivalData(data); // Set the fetched bus data
+        } catch (error) {
+          console.error("Failed to fetch bus data", error);
+        }
+      }, 5000); // 5 seconds
 
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, [BusStopCode]);
+      // Clean up the interval when the component unmounts
+      return () => clearInterval(intervalId);
+    }, [BusStopCode]);
 
   return (
     <View style={styles.outerContainer}>
@@ -69,16 +70,20 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
 
       {/* When user press on a bus stop */}
       {!isCollapsed && busArrivalData && (
-        Object.entries(busArrivalData).map(([busNumber, timings]) => (
-          <BusComponent
-            key={busNumber}
-            busNumber={busNumber}
-            firstArrival={timings[0] || "No data"}
-            secondArrival={timings[1] || "No data"}
-            thirdArrival={timings[2] || "No data"}
-          />
-        ))
-      )}
+        <View style={styles.busesContainer}>
+          {Object.entries(busArrivalData).map(([busNumber, timings]) => (
+            <BusComponent
+              key={busNumber}
+              busNumber={busNumber}
+              firstArrival={timings[0] || "No data"}
+              secondArrival={timings[1] || "No data"}
+              thirdArrival={timings[2] || "No data"}
+            />
+          ))}
+        </View>
+)}
+
+      
     </View>
   );
 };
@@ -153,6 +158,11 @@ const styles = StyleSheet.create({
   },
   blackSpace2: {
     flex: 2
+  },
+
+  busesContainer: {
+    flex: 1,
+    // padding: scale(4)
   }
 });
 

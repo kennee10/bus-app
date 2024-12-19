@@ -15,17 +15,17 @@ export default function App() {
     setError(errorMessage);
   };
 
+  if (!isInitialized) {
+    console.log("index.tsx: initializing app")
+    return <AppInitializer onFetchComplete={handleFetchComplete} onError={handleError} />;
+  }
+
   if (error) {
     return (
       <SafeAreaView style={styles.errorContainer}>
         <Text style={styles.errorText}>{error}</Text>
       </SafeAreaView>
     );
-  }
-
-  if (!isInitialized) {
-    console.log("index.tsx: initializing app")
-    return <AppInitializer onFetchComplete={handleFetchComplete} onError={handleError} />;
   }
 
   return (

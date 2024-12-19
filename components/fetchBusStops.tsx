@@ -1,59 +1,58 @@
-import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const fetchBusStops = (onComplete: () => void) => {
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("useFetchBusStops.tsx: Fetching bus stops...");
-        let skip = 0;
-        let busStops: any[] = [];
-        let isMoreData = true;
+const fetchBusStops = async () => {
+  try {
+    // Check if bus stops are already stored in AsyncStorage
+    const storedBusStops = await AsyncStorage.getItem("busStops");
+    if (storedBusStops) {
+      console.log("Bus stops already exist in AsyncStorage.");
+      return; // Skip fetching data
+    }
 
-        while (isMoreData) {
-          const response = await fetch(
-            `https://datamall2.mytransport.sg/ltaodataservice/BusStops?$skip=${skip}`,
-            {
-              headers: {
-                AccountKey: "+szqz/rrQeO8c8ZsrgNWLg==",
-                Accept: "application/json",
-              },
-            }
-          );
+    console.log("Fetching bus stops from API...");
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
+    // Fetch data from the API
+    let skip = 0;
+    let busStops: any[] = [];
+    let isMoreData = true;
 
-          const data = await response.json();
-
-          if (data.value.length > 0) {
-            busStops = [...busStops, ...data.value];
-            skip += 500;
-          } else {
-            isMoreData = false; // Stop fetching if no more data
-          }
+    while (isMoreData) {
+      const response = await fetch(
+        `https://datamall2.mytransport.sg/ltaodataservice/BusStops?$skip=${skip}`,
+        {
+          headers: {
+            AccountKey: "+szqz/rrQeO8c8ZsrgNWLg==",
+            Accept: "application/json",
+          },
         }
+      );
 
-        if (busStops.length > 0) {
-            console.log(`useFetchBusStops.tsx: Total bus stops fetched: ${busStops.length}`);
-          await AsyncStorage.setItem("busStops", JSON.stringify(busStops));
-          console.log("useFetchBusStops.tsx: Bus stops successfully stored.");
-        
-        } else {
-          console.warn("useFetchBusStops.tsx: No bus stops retrieved from API.");
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error("useFetchBusStops.tsx: Fetch error:", error.message);
-        }
-      } finally {
-        onComplete(); // Notify the parent component that fetching is complete
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
 
-    fetchData();
-  }, [onComplete]);
+      const data = await response.json();
+
+      if (data.value.length > 0) {
+        busStops = [...busStops, ...data.value];
+        skip += 500;
+      } else {
+        isMoreData = false; // Stop fetching if no more data
+      }
+    }
+
+    // Save data to AsyncStorage
+    if (busStops.length > 0) {
+      await AsyncStorage.setItem("busStops", JSON.stringify(busStops));
+      console.log("Bus stops successfully stored in AsyncStorage.");
+    } else {
+      console.warn("No bus stops retrieved from the API.");
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error fetching bus stops:", error.message);
+    }
+  }
 };
 
-export default fetchBusStops;
+export default fetchBusStops

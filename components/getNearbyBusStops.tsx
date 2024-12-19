@@ -1,10 +1,6 @@
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// returns a dictionary of Bus Stop codes and the distance from user
-// BusStopsNearbyList = {'62041': ['Opp bethany ch', 'Upper paya lebar', 130] }
-
-// Type definition for a bus stop
 type BusStop = {
   BusStopCode: string;
   Description: string;
@@ -51,10 +47,12 @@ const GetNearbyBusStops = async (): Promise<{ [key: string]: [string, string, nu
       if (distance <= 400) {
         acc[stop.BusStopCode] = [stop.Description, stop.RoadName, distance]; // Add bus stop code and distance to dictionary
       }
+      
       return acc;
     }, {});
 
     return nearbyStops;
+  
   } catch (error) {
     console.error('Error getting nearby bus stops:', error);
     throw error; // Re-throw the error to indicate failure
