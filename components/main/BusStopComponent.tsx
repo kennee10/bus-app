@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import colors from '../../assets/styles/Colors';;
 import BusComponent from "./BusComponent";
 import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
-// import * as Font from 'expo-font';
 
 type BusStopComponentProps = {
   BusStopCode: string;
@@ -11,14 +11,6 @@ type BusStopComponentProps = {
   RoadName: string;
   Distance: string;
 };
-
-// font style
-// const fetchFonts = () => {
-//   return Font.loadAsync({
-//     'SpaceMono-Regular': require('../../assets/fonts/SpaceMono-Regular.ttf'),
-//     'Nunito-Bold': require('../../assets/fonts/Nunito/Nunito-Bold.ttf')
-//   });
-// };
 
 const BusStopComponent: React.FC<BusStopComponentProps> = ({
     BusStopCode,
@@ -95,7 +87,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: verticalScale(10),
     borderRadius: scale(4),
-    backgroundColor: 'skyblue',
+    backgroundColor: colors.secondaryBackground,
     // height: '100%', // dk if need
   },
   container: {
@@ -129,12 +121,14 @@ const styles = StyleSheet.create({
     lineHeight: scale(30),
     paddingLeft: scale(5),
     fontFamily: 'Nunito-Bold',
+    color: colors.text
     // backgroundColor: 'purple',
   },
   description: {
     fontSize: scale(18),
     lineHeight: scale(30),
     fontFamily: 'Nunito-Bold',
+    color: colors.text
     // backgroundColor: 'red',
   },
   distance: {
@@ -143,6 +137,7 @@ const styles = StyleSheet.create({
     paddingRight: scale(5),
     textAlign: 'right',
     fontFamily: 'Nunito-Bold',
+    color: colors.text
     // backgroundColor: 'yellow',
   },
   
@@ -151,6 +146,7 @@ const styles = StyleSheet.create({
     fontSize: scale(14),
     height: scale(25),
     fontFamily: 'Nunito-Bold',
+    color: colors.text
     // backgroundColor: 'brown',
   },
   blackSpace1: {

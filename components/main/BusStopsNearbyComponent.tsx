@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import colors from '../../assets/styles/Colors';
 import getNearbyBusStops from '../getNearbyBusStops';
 import BusStopComponent from './BusStopComponent'
 
@@ -61,20 +62,20 @@ const BusStopsNearbyComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'blue',
+    backgroundColor: colors.background,
     alignItems: 'center'
   },
 
 
   // ONLY WHEN ERROR
   errorText: {
-    color: 'white',
+    color: 'red',
     fontSize: 16,
     textAlign: 'center',
   },
   messageText: {
     fontSize: 16,
-    color: 'gray',
+    color: 'white',
   },
 });
 
