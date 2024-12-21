@@ -1,7 +1,7 @@
 export default {
-    background: "#181C14",
-    secondaryBackground: "#3C3D37",
-    text: "#ECDFCC",
-    accentGreen: "#697565",
+    background: "black",
+    secondaryBackground: "#35404B",
+    text: "white",
+    accent: "#b4c0ca",
   };
   

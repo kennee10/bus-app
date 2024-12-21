@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import colors from '../../assets/styles/Colors';
 
 type BusComponentProps = {
     busNumber: string;
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: scale(4),
-      backgroundColor: 'green',
+      backgroundColor: colors.accent,
       flexDirection: 'row',
       height: '100%'
     },

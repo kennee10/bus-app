@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
-import colors from '../../assets/styles/Colors';;
+import colors from '../../assets/styles/Colors';
 import BusComponent from "./BusComponent";
 import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
 

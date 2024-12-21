@@ -49,19 +49,19 @@ const fetchBusArrival = async (busStopCode: string): Promise<BusArrivalData> => 
       if (service.NextBus && service.NextBus.EstimatedArrival) {
         timings.push(getTimeDifference(service.NextBus.EstimatedArrival));
       } else {
-        timings.push("No data");
+        timings.push("-");
       }
       
       if (service.NextBus2 && service.NextBus2.EstimatedArrival) {
         timings.push(getTimeDifference(service.NextBus2.EstimatedArrival));
       } else {
-        timings.push("No data");
+        timings.push("-");
       }
 
       if (service.NextBus3 && service.NextBus3.EstimatedArrival) {
         timings.push(getTimeDifference(service.NextBus3.EstimatedArrival));
       } else {
-        timings.push("No data");
+        timings.push("-");
       }
 
       acc[busNumber] = timings;
