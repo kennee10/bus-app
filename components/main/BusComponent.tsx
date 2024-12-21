@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
       padding: scale(4),
       backgroundColor: 'green',
       flexDirection: 'row',
+      height: '100%'
     },
     busNumberWrapper: {
       flex: 1,

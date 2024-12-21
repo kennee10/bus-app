@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import colors from '../../assets/styles/Colors';;
 import BusComponent from "./BusComponent";
@@ -20,8 +20,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
   }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
-
-    // fetchFonts();
+    const [isLoading, setIsLoading] = useState(true);
     
     // Fetch bus arrival data every 5 seconds
     useEffect(() => {
@@ -31,6 +30,8 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
           setBusArrivalData(data); // Set the fetched bus data
         } catch (error) {
           console.error("Failed to fetch bus data", error);
+        } finally {
+          setIsLoading(false)
         }
       }, 5000); // 5 seconds
 
@@ -56,31 +57,50 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
         <View style={styles.lower}>
           <Text style={styles.blackSpace1}> </Text>
           <Text style={styles.roadName}>{RoadName}</Text>
-          <Text style={styles.blackSpace2}></Text>
+          {isLoading ? (
+            <ActivityIndicator size="small" color="#666" style={styles.blackSpace2}/>
+          ) : <Text style={styles.blackSpace2}></Text>}
         </View>
       </TouchableOpacity>
 
       {/* When user press on a bus stop */}
-      {!isCollapsed && busArrivalData && (
+      {!isCollapsed && (
         <View style={styles.busesContainer}>
-          {Object.entries(busArrivalData).map(([busNumber, timings]) => (
-            <BusComponent
-              key={busNumber}
-              busNumber={busNumber}
-              firstArrival={timings[0] || "No data"}
-              secondArrival={timings[1] || "No data"}
-              thirdArrival={timings[2] || "No data"}
-            />
-          ))}
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#666" />
+          ) : busArrivalData && Object.keys(busArrivalData).length > 0 ? (
+            Object.entries(busArrivalData).map(([busNumber, timings]) => (
+              <BusComponent
+                key={busNumber}
+                busNumber={busNumber}
+                firstArrival={timings[0] || "No data"}
+                secondArrival={timings[1] || "No data"}
+                thirdArrival={timings[2] || "No data"}
+              />
+            ))
+          ) : (
+            // Render a message when there are no buses
+            <Text style={styles.noBusesText}>
+              No buses are currently in operation.
+            </Text>
+          )}
         </View>
-)}
+      )}
 
-      
+
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingText: {
+    fontSize: scale(15),
+    lineHeight: scale(30),
+    paddingLeft: scale(5),
+    fontFamily: 'Nunito-Bold',
+    color: colors.text
+  },
   outerContainer: {
     flex: 1,
     width: scale(340),
@@ -153,12 +173,20 @@ const styles = StyleSheet.create({
     flex: 3
   },
   blackSpace2: {
-    flex: 2
+    flex: 2,
+    paddingLeft: scale(5)
   },
 
   busesContainer: {
     flex: 1,
     // padding: scale(4)
+  },
+
+  noBusesText: {
+    flex: 1,
+    fontFamily: 'Nunito-Bold',
+    color: 'red',
+    textAlign: 'center'
   }
 });
 
