@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
-import colors from '../../assets/styles/Colors';
-import getNearbyBusStops from '../getNearbyBusStops';
-import BusStopComponent from './BusStopComponent'
+import colors from '../assets/styles/Colors';
+import getNearbyBusStops from '../components/getNearbyBusStops';
+import BusStopComponent from '../components/main/BusStopComponent'
 
-const BusStopsNearbyComponent = () => {
+const busStopsNearby = () => {
   const [busStops, setBusStops] = React.useState<{label: string; code: string; distance:number, detail: string}[]>([]);
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
 
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BusStopsNearbyComponent;
+export default busStopsNearby;

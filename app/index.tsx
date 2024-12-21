@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 import AppInitializer from "../components/AppInitializer";
 import colors from '../assets/styles/Colors';
-import BusStopsNearbyComponent from "../components/main/BusStopsNearbyComponent";
+import BusStopsNearbyComponent from "./busStopsNearby";
 
-export default function App() {
+export default function index() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,6 +29,8 @@ export default function App() {
     );
   }
 
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <BusStopsNearbyComponent />
