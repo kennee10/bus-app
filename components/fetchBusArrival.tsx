@@ -29,6 +29,7 @@ const fetchBusArrival = async (busStopCode: string): Promise<BusArrivalData> => 
   };
 
   try {
+    // console.log(`fetching data for b ${busStopCode}`)
     const response = await fetch(
       `https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=${busStopCode}`,
       requestOptions

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 import AppInitializer from "../components/AppInitializer";
+import colors from '../assets/styles/Colors';
 import BusStopsNearbyComponent from "../components/main/BusStopsNearbyComponent";
 
 export default function App() {
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'violet',
+    backgroundColor: colors.background,
   },
   
   // ONLY WHEN ERROR
