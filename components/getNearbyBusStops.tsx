@@ -23,7 +23,7 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
   return R * c; // Distance in meters
 };
 
-const GetNearbyBusStops = async (): Promise<{ [key: string]: [string, string, number] }> => {
+const GetNearbyBusStops = async (): Promise<[string, string, string, number][]> => {
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
@@ -40,20 +40,19 @@ const GetNearbyBusStops = async (): Promise<{ [key: string]: [string, string, nu
     }
 
     const busStops: BusStop[] = JSON.parse(storedData);
-    // console.log(busStops[0])
 
-    // Create a dictionary of nearby bus stops and their distances
-    const nearbyStops = busStops.reduce<{ [key: string]: [string, string, number] }>((acc, stop) => {
-      const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
-      if (distance <= 400) {
-        acc[stop.BusStopCode] = [stop.Description, stop.RoadName, distance]; // Add bus stop code and distance to dictionary
-      }
-      
-      return acc;
-    }, {});
+    // Create a list of nearby bus stops with their details
+    const nearbyStops: [string, string, string, number][] = busStops
+      .map((stop) => {
+        const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
+        if (distance <= 400) {
+          return [stop.BusStopCode, stop.Description, stop.RoadName, distance];
+        }
+        return null;
+      })
+      .filter((stop) => stop !== null) as [string, string, string, number][]; // Filter out null values
 
     return nearbyStops;
-  
   } catch (error) {
     console.error('Error getting nearby bus stops:', error);
     throw error; // Re-throw the error to indicate failure
