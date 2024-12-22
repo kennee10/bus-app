@@ -5,6 +5,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import colors from '../assets/styles/Colors';
 import Index from './index'
+import LikedBusStops from './likedBusStops'
 
 // Screens for each tab
 function NearbyScreen() {
@@ -26,7 +27,7 @@ function FavoriteBusesScreen() {
 function FavoriteBusStopsScreen() {
   return (
     <View style={styles.screenContainer}>
-      <Text>Bus Stops</Text>
+      <LikedBusStops/>
     </View>
   );
 }

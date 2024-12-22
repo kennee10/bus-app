@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import colors from '../assets/styles/Colors';
 import getNearbyBusStops from '../components/getNearbyBusStops';
 import BusStopComponent from '../components/main/BusStopComponent'
 
 const busStopsNearby = () => {
-  const [busStops, setBusStops] = React.useState<{label: string; code: string; distance:number, detail: string}[]>([]);
-  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
+  const [busStops, setBusStops] = useState<{code: string; decription: string; roadName: string; distance:number}[]>([]);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       try {
         const nearbyBusStops = await getNearbyBusStops();
         const sortedStops = Object.entries(nearbyBusStops)
-        .map(([code, [label, detail, distance]]) => ({ code, label, detail, distance }))
+        .map(([code, [decription, roadName, distance]]) => ({ code, decription, roadName, distance }))
         .sort((a, b) => a.distance - b.distance);
 
         setBusStops(sortedStops);
@@ -46,7 +46,7 @@ const busStopsNearby = () => {
           data={busStops}
           keyExtractor={(item) => item.code}
           renderItem={({ item }) => (
-            <BusStopComponent BusStopCode={item.code} Distance={item.distance.toFixed(0)} Description={item.label} RoadName={item.detail}/>
+            <BusStopComponent BusStopCode={item.code} Distance={item.distance.toFixed(0)} Description={item.decription} RoadName={item.roadName}/>
           )}
         />
       ) : (

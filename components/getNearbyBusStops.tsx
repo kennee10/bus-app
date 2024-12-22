@@ -40,6 +40,7 @@ const GetNearbyBusStops = async (): Promise<{ [key: string]: [string, string, nu
     }
 
     const busStops: BusStop[] = JSON.parse(storedData);
+    // console.log(busStops[0])
 
     // Create a dictionary of nearby bus stops and their distances
     const nearbyStops = busStops.reduce<{ [key: string]: [string, string, number] }>((acc, stop) => {
