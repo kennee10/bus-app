@@ -5,9 +5,13 @@ import colors from '../assets/styles/Colors';
 import { GetNearbyBusStops } from '../components/getNearbyBusStops';
 import BusStopComponent from '../components/main/BusStopComponent';
 
+import { useLikedBusStops } from "../components/context";
+
 const BusStopsNearby = () => {
   const [busStops, setBusStops] = useState<{code: string; description: string; roadName: string; distance: number}[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const { likedBusStops, toggleLike } = useLikedBusStops();
 
   useEffect(() => {
     (async () => {
@@ -42,9 +46,11 @@ const BusStopsNearby = () => {
           renderItem={({ item }) => (
             <BusStopComponent
               BusStopCode={item.code}
-              Distance={item.distance.toFixed(0)}
               Description={item.description}
               RoadName={item.roadName}
+              Distance={item.distance.toFixed(0)}
+              isLiked={likedBusStops.includes(item.code)}
+              onLikeToggle={toggleLike}
             />
           )}
         />

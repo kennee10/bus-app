@@ -6,15 +6,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../../assets/styles/Colors';
 import BusComponent from "./BusComponent";
 import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// CONTEXT
-import { useLikedStops } from "../context";
 
 type BusStopComponentProps = {
   BusStopCode: string;
   Description: string;
   RoadName: string;
-  Distance: string;
+  Distance: string; // ***
+  isLiked: boolean;
+  onLikeToggle: (busStopCode: string) => void;
 };
 
 const BusStopComponent: React.FC<BusStopComponentProps> = ({
@@ -22,53 +21,13 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
   Description,
   RoadName,
   Distance,
+  isLiked,
+  onLikeToggle,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLiked, setIsLiked] = useState(false);
-  // CONTEXT
-  const { likedStops, setLikedStops } = useLikedStops();
 
-  // Check if the current bus stop is liked on mount
-  useEffect(() => {
-    const checkIfLiked = async () => {
-      try {
-        const storedLikedStops = await AsyncStorage.getItem("likedBusStops");
-        const parsedLikedStops = storedLikedStops ? JSON.parse(storedLikedStops) : [];
-        setIsLiked(parsedLikedStops.includes(BusStopCode));
-      } catch (error) {
-        console.error("Failed to check liked bus stops", error);
-      }
-    };
-
-    checkIfLiked();
-  }, [BusStopCode]);
-
-  const toggleLike = async () => {
-    try {
-      const storedLikedStops = await AsyncStorage.getItem("likedBusStops");
-      const parsedLikedStops = storedLikedStops ? JSON.parse(storedLikedStops) : [];
-
-      let updatedBusStops;
-      if (isLiked) {
-        // Remove the bus stop if it's already liked
-        updatedBusStops = parsedLikedStops.filter((stop: string) => stop !== BusStopCode);
-      } else {
-        // Add the bus stop if it's not liked
-        updatedBusStops = [...parsedLikedStops, BusStopCode];
-      }
-
-      // Save the updated list back to AsyncStorage
-      await AsyncStorage.setItem("likedBusStops", JSON.stringify(updatedBusStops));
-      setIsLiked(!isLiked); // Update the like state for the current bus stop
-      // console.log(updatedBusStops)
-    } catch (error) {
-      console.error("Failed to toggle like state", error);
-    }
-  };
-
-  // Fetch bus arrival data every 5 seconds
   useEffect(() => {
     const intervalId = setInterval(async () => {
       try {
@@ -98,7 +57,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
             <Text style={styles.distance}>{Distance}m</Text>
           </View>
           <View style={styles.likeButtonWrapper}>
-            <TouchableOpacity onPress={toggleLike}>
+            <TouchableOpacity onPress={() => onLikeToggle(BusStopCode)}>
               <Ionicons
                 name={isLiked ? "star" : "star-outline"}
                 color={isLiked ? "gold" : "gray"}

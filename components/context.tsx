@@ -2,43 +2,60 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define the context type
-type LikedStopsContextType = {
-    likedStops: string[];
-    setLikedStops: React.Dispatch<React.SetStateAction<string[]>>;
+type LikedBusStopsContextType = {
+    likedBusStops: string[];
+    toggleLike: (busStopCode: string) => Promise<void>;
 }
 
 // Create Context
-const LikedStopsContext = createContext<LikedStopsContextType | undefined>(undefined)
+const LikedBusStopsContext = createContext<LikedBusStopsContextType | undefined>(undefined)
 
-export const LikedStopsProvider = ({children}: {children: ReactNode}) => {
-    const[likedStops, setLikedStops] = useState<string[]>([]);
+// Provider component
+export const LikedBusStopsProvider: React.FC<{children: ReactNode}> = ({children}) => {
+    const[likedBusStops, setLikedBusStops] = useState<string[]>([]);
 
-    // Load persisted data when the component mounts
+    // Load liked bus stops from AsyncStorage on initial render
     useEffect(() => {
-        const loadLikedStops = async () => {
-            const storedStops = await AsyncStorage.getItem('likedBusStops');
-            if (storedStops) setLikedStops(JSON.parse(storedStops));
+        const loadLikedBusStops = async () => {
+            try {
+                const storedLikedStops = await AsyncStorage.getItem('likedBusStops');
+                const parsedLikedStops = storedLikedStops ? JSON.parse(storedLikedStops) : [];
+                setLikedBusStops(parsedLikedStops);
+            } catch (error) {
+                console.log('Failed to load liked bus stops: ', error);
+            }
         };
-        loadLikedStops();
+        loadLikedBusStops();
     }, [])
 
-    // Update persistent storage whenever likeStops changes
-    useEffect(() => {
-        AsyncStorage.setItem('likedBusStops', JSON.stringify(likedStops));
-    }, [likedStops]);
+    // Function to toggle like/unlike a bus stop
+    const toggleLike = async (busStopCode: string) => {
+        try {
+            const updatedLikedBusStops = likedBusStops.includes(busStopCode)
+                ? likedBusStops.filter((code) => code !== busStopCode) // Unlike
+                : [...likedBusStops, busStopCode] // Like
+            
+            // Update AsyncStorage
+            await AsyncStorage.setItem('likedBusStops', JSON.stringify(updatedLikedBusStops));
+            // Update state
+            setLikedBusStops(updatedLikedBusStops);
+        } catch (error) {
+            console.error('Failed to toggle like for bus stop:', error);
+        }
+    };
 
     return (
-        <LikedStopsContext.Provider value={{ likedStops, setLikedStops }}>
+        <LikedBusStopsContext.Provider value={{ likedBusStops, toggleLike }}>
             {children}
-        </LikedStopsContext.Provider>
+        </LikedBusStopsContext.Provider>
     );
 };
 
-export const useLikedStops = (): LikedStopsContextType => {
-    const context = useContext(LikedStopsContext);
+// Hook to use the LikedBusStopsContext
+export const useLikedBusStops = (): LikedBusStopsContextType => {
+    const context = useContext(LikedBusStopsContext);
     if (!context) {
-        throw new Error('useLikedStops must be used within a LikedStopsProvider');
+        throw new Error('useLikedBusStops must be used within a LikedBusStopsProvider');
     }
     return context;
-
 }

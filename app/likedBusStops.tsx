@@ -1,54 +1,79 @@
 import React, { useState, useEffect } from "react";
-import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { Text, FlatList, StyleSheet, SafeAreaView, View } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import colors from '../assets/styles/Colors';
-import GetLikedBusStops  from "../components/getLikedBusStops";
 import BusStopComponent from '../components/main/BusStopComponent';
+import { calculateDistance } from '../components/getNearbyBusStops';
+import * as Location from 'expo-location';
+
+import { useLikedBusStops } from '../components/context'
+
+type BusStop = {
+  BusStopCode: string;
+  Description: string;
+  RoadName: string;
+  Latitude: number;
+  Longitude: number;
+  Distance: number; // Calculated dynamically
+};
 
 
-const LikedBusStops = () => {
-  const [busStops, setBusStops] = useState<[code: string, description: string, roadName: string, distance: number][]>([]);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+const LikedBusStopsComponent = () => {
+  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStop[]>([]); // Define the type
+  const { likedBusStops, toggleLike } = useLikedBusStops();
 
-  // Retrieve liked bus stops
   useEffect(() => {
     (async () => {
       try {
-        const likedBusStops = await GetLikedBusStops()
-        setBusStops(likedBusStops)
-        console.log(busStops)
-      } catch {
-        console.log("error")
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          throw new Error("Location permission denied");
+        }
+
+        const location = await Location.getCurrentPositionAsync({});
+        const { latitude, longitude } = location.coords;
+
+        const storedData = await AsyncStorage.getItem("busStops");
+        if (!storedData) throw new Error("No bus stop data found");
+
+        const parsedData = JSON.parse(storedData);
+        const enhancedStops = parsedData
+          .filter((stop: BusStop) => likedBusStops.includes(stop.BusStopCode)) // Filter liked stops
+          .map((stop: BusStop) => {
+            const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
+            return { ...stop, Distance: distance };
+          });
+
+        setLikedBusStopsDetails(enhancedStops);
+      } catch (error) {
+        console.error("Error fetching liked bus stops:", error);
       }
     })();
-  }, []);
+  }, [likedBusStops]);
+
 
   return (
-    <SafeAreaView style={styles.container}>
-      {busStops.length > 0 ? (
+    <View style={styles.container}>
+      {likedBusStopsDetails.length > 0 ? (
         <FlatList
-          data={busStops}
-          keyExtractor={(item, index) => item[0]} // Use the first element (code) as the key
-          renderItem={({ item }) => {
-            // Destructure the tuple into variables
-            const [code, description, roadName, distance] = item;
-            
-            return (
-              <BusStopComponent
-                BusStopCode={code}
-                Distance={distance.toFixed(0)}
-                Description={description}
-                RoadName={roadName}
-              />
-            );
-          }}
+          data={likedBusStopsDetails}
+          keyExtractor={(item) => item.BusStopCode}
+          renderItem={({ item }) => (
+            <BusStopComponent
+              BusStopCode={item.BusStopCode}
+              Description={item.Description}
+              RoadName={item.RoadName}
+              Distance={item.Distance.toFixed(0)}
+              isLiked={likedBusStops.includes(item.BusStopCode)}
+              onLikeToggle={() => toggleLike(item.BusStopCode)}
+            />
+          )}
         />
       ) : (
         <Text style={styles.messageText}>No Liked Bus Stops</Text>
       )}
-  </SafeAreaView>
-
+    </View>
   );
 };
 
@@ -74,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LikedBusStops;
+export default LikedBusStopsComponent;
