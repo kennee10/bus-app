@@ -7,6 +7,8 @@ import colors from '../../assets/styles/Colors';
 import BusComponent from "./BusComponent";
 import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// CONTEXT
+import { useLikedStops } from "../context";
 
 type BusStopComponentProps = {
   BusStopCode: string;
@@ -25,6 +27,8 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
   const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
+  // CONTEXT
+  const { likedStops, setLikedStops } = useLikedStops();
 
   // Check if the current bus stop is liked on mount
   useEffect(() => {
@@ -58,7 +62,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
       // Save the updated list back to AsyncStorage
       await AsyncStorage.setItem("likedBusStops", JSON.stringify(updatedBusStops));
       setIsLiked(!isLiked); // Update the like state for the current bus stop
-      console.log(updatedBusStops)
+      // console.log(updatedBusStops)
     } catch (error) {
       console.error("Failed to toggle like state", error);
     }
@@ -96,8 +100,8 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
           <View style={styles.likeButtonWrapper}>
             <TouchableOpacity onPress={toggleLike}>
               <Ionicons
-                name={isLiked ? "heart" : "heart-outline"}
-                color={isLiked ? "red" : "gray"}
+                name={isLiked ? "star" : "star-outline"}
+                color={isLiked ? "gold" : "gray"}
                 size={24}
               />
             </TouchableOpacity>

@@ -10,7 +10,7 @@ type BusStop = {
 };
 
 // Haversine formula to calculate the distance between two coordinates in meters
-const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+export const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
   const toRad = (value: number) => (value * Math.PI) / 180;
   const R = 6371000; // Radius of the Earth in meters
   const dLat = toRad(lat2 - lat1);
@@ -23,7 +23,7 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
   return R * c; // Distance in meters
 };
 
-const GetNearbyBusStops = async (): Promise<[string, string, string, number][]> => {
+export const GetNearbyBusStops = async (): Promise<[string, string, string, number][]> => {
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
@@ -39,11 +39,13 @@ const GetNearbyBusStops = async (): Promise<[string, string, string, number][]> 
       throw new Error('No bus stop data found locally.');
     }
 
+
+
     const busStops: BusStop[] = JSON.parse(storedData);
 
     // Create a list of nearby bus stops with their details
-    const nearbyStops: [string, string, string, number][] = busStops
-      .map((stop) => {
+    const nearbyStops: [string, string, string, number][] = 
+      busStops.map((stop) => {
         const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
         if (distance <= 400) {
           return [stop.BusStopCode, stop.Description, stop.RoadName, distance];
@@ -58,5 +60,3 @@ const GetNearbyBusStops = async (): Promise<[string, string, string, number][]> 
     throw error; // Re-throw the error to indicate failure
   }
 };
-
-export default GetNearbyBusStops;

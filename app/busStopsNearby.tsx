@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import colors from '../assets/styles/Colors';
-import getNearbyBusStops from '../components/getNearbyBusStops';
+import { GetNearbyBusStops } from '../components/getNearbyBusStops';
 import BusStopComponent from '../components/main/BusStopComponent';
 
 const BusStopsNearby = () => {
@@ -11,19 +12,10 @@ const BusStopsNearby = () => {
   useEffect(() => {
     (async () => {
       try {
-        const nearbyBusStops = await getNearbyBusStops();
-
-        // Map the list into the desired format and sort by distance
-        const sortedStops = nearbyBusStops
-          .map(([code, description, roadName, distance]) => ({
-            code,
-            description,
-            roadName,
-            distance,
-          }))
-          .sort((a, b) => a.distance - b.distance);
-
+        const nearbyBusStops = await GetNearbyBusStops();
+        const sortedStops = nearbyBusStops.map(([code, description, roadName, distance]) => ({code,description,roadName,distance,})).sort((a, b) => a.distance - b.distance);
         setBusStops(sortedStops);
+      
       } catch (error) {
         if (error instanceof Error) {
           console.error('Failed to get nearby bus stops:', error.message);
@@ -57,7 +49,7 @@ const BusStopsNearby = () => {
           )}
         />
       ) : (
-        <Text style={styles.messageText}>No nearby bus stops found.</Text>
+        <Text style={styles.messageText}>No Nearby Bus Stops</Text>
       )}
     </SafeAreaView>
   );
@@ -69,14 +61,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     alignItems: 'center',
   },
+
+  messageText: {
+    fontSize: scale(14),
+    fontFamily: "Nunito-Bold",
+    color: colors.text,
+  },
+
   errorText: {
     color: 'red',
     fontSize: 16,
     textAlign: 'center',
-  },
-  messageText: {
-    fontSize: 16,
-    color: 'white',
   },
 });
 

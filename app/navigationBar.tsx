@@ -76,7 +76,7 @@ export default function NavigationBar() {
         component={FavoriteBusesScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="star" color={color} size={size} />
+            <Ionicons name="heart" color={color} size={size} />
           ),
         }}
       />
@@ -85,16 +85,16 @@ export default function NavigationBar() {
         component={FavoriteBusStopsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart" color={color} size={size} />
+            <Ionicons name="star" color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
-        name="Donate"
+        name="Ads"
         component={DonateScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} />
+            <Ionicons name="battery-charging" color={color} size={size} />
           ),
         }}
       />
@@ -104,6 +104,8 @@ export default function NavigationBar() {
 
 const styles = StyleSheet.create({
   screenContainer: {
-    flex: 1
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
