@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 
-import colors from '../../assets/styles/Colors';
+import { colors, font } from '../../assets/styles/GlobalStyles';
 
 type BusComponentProps = {
     busNumber: string;
@@ -54,12 +54,12 @@ const styles = StyleSheet.create({
       flex: 1,
       color: 'blue',
       fontSize: scale(15),
-      fontFamily: 'Nunito-Bold',
+      fontFamily: font.bold,
     },
     timings: {
       flex: 1,
       fontSize: scale(12),
-      fontFamily: 'Nunito-Bold',
+      fontFamily: font.bold,
     }
 });
   

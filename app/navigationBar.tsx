@@ -3,11 +3,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { View, Text, StyleSheet } from "react-native";
 
-import colors from "../assets/styles/Colors";
+import { colors, font } from "../assets/styles/GlobalStyles";
 import Index from "./index";
 import LikedBusStops from "./likedBusStops";
 import BusStopsNearbyComponent from "./nearbyBusStops";
-import { LikedBusStopsProvider } from "../components/context";
+import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
 
 function NearbyScreen() {
   return (

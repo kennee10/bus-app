@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 
 import AppInitializer from "./AppInitializer";
-import colors from '../assets/styles/Colors';
+import { colors } from '../assets/styles/GlobalStyles';
 import BusStopsNearbyComponent from "./nearbyBusStops";
 
 export default function index() {

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
-import colors from '../assets/styles/Colors';
+import { colors, font } from '../assets/styles/GlobalStyles';
 import { GetNearbyBusStops } from '../components/getNearbyBusStops';
 import BusStopComponent from '../components/main/BusStopComponent';
-import { useLikedBusStops } from "../components/context";
+import { useLikedBusStops } from "../components/context/likedBusStopsContext";
 
 const NearbyBusStops = () => {
   const [busStops, setBusStops] = useState<{code: string; description: string; roadName: string; distance: number}[]>([]);
@@ -64,13 +64,12 @@ const NearbyBusStops = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // width: '100%',
     backgroundColor: colors.background,
     alignItems: 'center',
   },
   messageText: {
     fontSize: scale(14),
-    fontFamily: "Nunito-Bold",
+    fontFamily: font.bold,
     color: colors.text,
   },
 

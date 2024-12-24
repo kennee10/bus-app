@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } fr
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import colors from '../../assets/styles/Colors';
+import { colors, font } from '../../assets/styles/GlobalStyles';
 import BusComponent from "./BusComponent";
 import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
 
@@ -152,13 +152,13 @@ const styles = StyleSheet.create({
     fontSize: scale(15),
     lineHeight: scale(30),
     paddingLeft: scale(5),
-    fontFamily: "Nunito-Bold",
+    fontFamily: font.bold,
     color: colors.text,
   },
   description: {
     fontSize: scale(18),
     lineHeight: scale(30),
-    fontFamily: "Nunito-Bold",
+    fontFamily: font.bold,
     color: colors.text,
   },
   distance: {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     lineHeight: scale(30),
     paddingRight: scale(5),
     textAlign: "right",
-    fontFamily: "Nunito-Bold",
+    fontFamily: font.bold,
     color: colors.text,
   },
   blackSpace1: {
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   roadName: {
     fontSize: scale(14),
-    fontFamily: "Nunito-Bold",
+    fontFamily: font.bold,
     color: colors.text,
   },
   busesContainer: {
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   noBusesText: {
     flex: 1,
-    fontFamily: "Nunito-Bold",
+    fontFamily: font.bold,
     color: "red",
     textAlign: "center",
   },

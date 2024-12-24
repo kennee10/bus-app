@@ -4,10 +4,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import * as Location from 'expo-location';
 
-import colors from '../assets/styles/Colors';
+import { colors, font } from '../assets/styles/GlobalStyles';
 import BusStopComponent from '../components/main/BusStopComponent';
 import { calculateDistance } from '../components/getNearbyBusStops';
-import { useLikedBusStops } from '../components/context'
+import { useLikedBusStops } from '../components/context/likedBusStopsContext'
 
 type BusStop = {
   BusStopCode: string;
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: scale(14),
-    fontFamily: "Nunito-Bold",
+    fontFamily: font.bold,
     color: colors.text,
   },
 
