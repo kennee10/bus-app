@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
-import fetchBusStops from "./fetchBusStops";
 import * as Font from 'expo-font';
+
+import fetchBusStops from "./fetchBusStops";
+
 
 interface AppInitializerProps {
   onFetchComplete: () => void;

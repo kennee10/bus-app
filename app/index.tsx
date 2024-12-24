@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
+
 import AppInitializer from "../components/AppInitializer";
 import colors from '../assets/styles/Colors';
-import BusStopsNearbyComponent from "./busStopsNearby";
+import BusStopsNearbyComponent from "./nearbyBusStops";
 
 export default function index() {
   const [isInitialized, setIsInitialized] = useState(false);

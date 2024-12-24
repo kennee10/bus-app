@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+
 import colors from '../../assets/styles/Colors';
 
 type BusComponentProps = {

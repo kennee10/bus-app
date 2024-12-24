@@ -1,5 +1,5 @@
 export type BusArrivalData = {
-  [busNumber: string]: string[]; // Dictionary of bus numbers with an array of timings in "x minutes y seconds" format
+  [busNumber: string]: string[];
 };
 
 const fetchBusArrival = async (busStopCode: string): Promise<BusArrivalData> => {
@@ -29,7 +29,6 @@ const fetchBusArrival = async (busStopCode: string): Promise<BusArrivalData> => 
   };
 
   try {
-    // console.log(`fetching data for b ${busStopCode}`)
     const response = await fetch(
       `https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=${busStopCode}`,
       requestOptions
@@ -68,7 +67,7 @@ const fetchBusArrival = async (busStopCode: string): Promise<BusArrivalData> => 
       return acc;
     }, {});
 
-    return busArrivalData; // Return the constructed dictionary
+    return busArrivalData;
   } catch (error) {
     console.error("Error fetching bus arrival data:", error);
     throw error;

@@ -11,7 +11,7 @@ type BusStopComponentProps = {
   BusStopCode: string;
   Description: string;
   RoadName: string;
-  Distance: string; // ***
+  Distance: string;
   isLiked: boolean;
   onLikeToggle: (busStopCode: string) => void;
 };

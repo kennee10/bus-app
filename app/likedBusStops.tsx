@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Text, FlatList, StyleSheet, SafeAreaView, View } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import * as Location from 'expo-location';
+
 import colors from '../assets/styles/Colors';
 import BusStopComponent from '../components/main/BusStopComponent';
 import { calculateDistance } from '../components/getNearbyBusStops';
-import * as Location from 'expo-location';
-
 import { useLikedBusStops } from '../components/context'
 
 type BusStop = {
@@ -15,12 +15,12 @@ type BusStop = {
   RoadName: string;
   Latitude: number;
   Longitude: number;
-  Distance: number; // Calculated dynamically
+  Distance: number;
 };
 
 
 const LikedBusStopsComponent = () => {
-  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStop[]>([]); // Define the type
+  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStop[]>([]);
   const { likedBusStops, toggleLike } = useLikedBusStops();
 
   useEffect(() => {
@@ -85,17 +85,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  messageText: {
+    fontSize: scale(14),
+    fontFamily: "Nunito-Bold",
+    color: colors.text,
+  },
 
 
   errorText: {
     color: 'red',
     fontSize: 16,
     textAlign: 'center',
-  },
-  messageText: {
-    fontSize: scale(14),
-    fontFamily: "Nunito-Bold",
-    color: colors.text,
   },
 });
 
