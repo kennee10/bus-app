@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Text, FlatList, StyleSheet, SafeAreaView, View } from 'react-native';
+import { Text, FlatList, View } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import * as Location from 'expo-location';
 
-import { colors, font } from '../assets/styles/GlobalStyles';
+import { containerStyles } from '../assets/styles/GlobalStyles';
 import BusStopComponent from '../components/main/BusStopComponent';
 import { calculateDistance } from '../components/getNearbyBusStops';
 import { useLikedBusStops } from '../components/context/likedBusStopsContext'
@@ -54,7 +53,7 @@ const LikedBusStopsComponent = () => {
 
 
   return (
-    <View style={styles.container}>
+    <View style={containerStyles.pageContainer}>
       {likedBusStopsDetails.length > 0 ? (
         <FlatList
           data={likedBusStopsDetails}
@@ -71,32 +70,10 @@ const LikedBusStopsComponent = () => {
           )}
         />
       ) : (
-        <Text style={styles.messageText}>No Liked Bus Stops</Text>
+        <Text style={containerStyles.globalTextMessage}>No Liked Bus Stops</Text>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  messageText: {
-    fontSize: scale(14),
-    fontFamily: font.bold,
-    color: colors.text,
-  },
-
-
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
 
 export default LikedBusStopsComponent;

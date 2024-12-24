@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
-import { colors, font } from '../assets/styles/GlobalStyles';
+import { colors, containerStyles, font } from '../assets/styles/GlobalStyles';
 import { GetNearbyBusStops } from '../components/getNearbyBusStops';
 import BusStopComponent from '../components/main/BusStopComponent';
 import { useLikedBusStops } from "../components/context/likedBusStopsContext";
@@ -31,14 +30,14 @@ const NearbyBusStops = () => {
 
   if (errorMsg) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>{errorMsg}</Text>
+      <SafeAreaView style={containerStyles.globalContainer}>
+        <Text style={containerStyles.globalErrorText}>{errorMsg}</Text>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={containerStyles.pageContainer}>
       {busStops.length > 0 ? (
         <FlatList
           data={busStops}
@@ -55,30 +54,10 @@ const NearbyBusStops = () => {
           )}
         />
       ) : (
-        <Text style={styles.messageText}>No Nearby Bus Stops</Text>
+        <Text style={containerStyles.globalTextMessage}>No Nearby Bus Stops</Text>
       )}
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-  },
-  messageText: {
-    fontSize: scale(14),
-    fontFamily: font.bold,
-    color: colors.text,
-  },
-
-  
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
 
 export default NearbyBusStops;

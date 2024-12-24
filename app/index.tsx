@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 
 import AppInitializer from "./AppInitializer";
-import { colors } from '../assets/styles/GlobalStyles';
+import { containerStyles } from '../assets/styles/GlobalStyles';
 import BusStopsNearbyComponent from "./nearbyBusStops";
 
 export default function index() {
@@ -24,37 +24,16 @@ export default function index() {
 
   if (error) {
     return (
-      <SafeAreaView style={styles.errorContainer}>
-        <Text style={styles.errorText}>{error}</Text>
+      <SafeAreaView>
+        <Text style={containerStyles.globalErrorText}>{error}</Text>
       </SafeAreaView>
     );
   }
 
   
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={containerStyles.pageContainer}>
       <BusStopsNearbyComponent />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: colors.background,
-  },
-  
-  // ONLY WHEN ERROR
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 16,
-    color: "red",
-    textAlign: "center",
-  },
-});

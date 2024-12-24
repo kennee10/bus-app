@@ -1,17 +1,16 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 
-import { colors, font } from "../assets/styles/GlobalStyles";
+import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import Index from "./index";
 import LikedBusStops from "./likedBusStops";
-import BusStopsNearbyComponent from "./nearbyBusStops";
 import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
 
 function NearbyScreen() {
   return (
-    <View style={styles.screenContainer}>
+    <View style={containerStyles.globalContainer}>
       <Index />
     </View>
   );
@@ -19,7 +18,7 @@ function NearbyScreen() {
 
 function FavoriteBusesScreen() {
   return (
-    <View style={styles.screenContainer}>
+    <View style={containerStyles.globalContainer}>
       <Text>Buses</Text>
     </View>
   );
@@ -27,7 +26,7 @@ function FavoriteBusesScreen() {
 
 function FavoriteBusStopsScreen() {
   return (
-    <View style={styles.screenContainer}>
+    <View style={containerStyles.globalContainer}>
       <LikedBusStops />
     </View>
   );
@@ -35,7 +34,7 @@ function FavoriteBusStopsScreen() {
 
 function DonateScreen() {
   return (
-    <View style={styles.screenContainer}>
+    <View style={containerStyles.globalContainer}>
       <Text>Ads</Text>
     </View>
   );
@@ -103,15 +102,3 @@ export default function NavigationBar() {
     </LikedBusStopsProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-  },
-  screenContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 export const colors = {
     background: "black",
@@ -12,13 +13,27 @@ export const font = {
 }
 
 export const containerStyles = StyleSheet.create({
-    container: {
+    globalContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    pageContainer: {
       flex: 1,
       width: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
       backgroundColor: colors.background,
     },
-    errorText: {
-      fontSize: 16,
+    globalTextMessage: {
+      fontSize: scale(14),
+      fontFamily: font.bold,
+      color: "white",
+      textAlign: "center",
+    },
+    globalErrorText: {
+      fontSize: scale(14),
+      fontFamily: font.bold,
       color: "red",
       textAlign: "center",
     },
