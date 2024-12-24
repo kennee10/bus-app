@@ -6,7 +6,8 @@ import { View, Text, StyleSheet } from "react-native";
 import colors from "../assets/styles/Colors";
 import Index from "./index";
 import LikedBusStops from "./likedBusStops";
-import { LikedBusStopsProvider } from "@/components/context";
+import BusStopsNearbyComponent from "./nearbyBusStops";
+import { LikedBusStopsProvider } from "../components/context";
 
 function NearbyScreen() {
   return (
@@ -106,6 +107,7 @@ export default function NavigationBar() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
   },
   screenContainer: {
     flex: 1,

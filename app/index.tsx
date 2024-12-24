@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 
-import AppInitializer from "../components/AppInitializer";
+import AppInitializer from "./AppInitializer";
 import colors from '../assets/styles/Colors';
 import BusStopsNearbyComponent from "./nearbyBusStops";
 
@@ -30,7 +30,6 @@ export default function index() {
     );
   }
 
-  
   
   return (
     <SafeAreaView style={styles.container}>

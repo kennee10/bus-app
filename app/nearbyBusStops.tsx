@@ -64,6 +64,7 @@ const NearbyBusStops = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // width: '100%',
     backgroundColor: colors.background,
     alignItems: 'center',
   },
