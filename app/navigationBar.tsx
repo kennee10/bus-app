@@ -6,8 +6,8 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import Index from "./index";
-import LikedBusStops from "./likedBusStops";
-import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
+import LikedBusStops from "../components/pages/likedBusStops";
+
 
 function NearbyScreen() {
   return (
@@ -46,63 +46,61 @@ const Tab = createBottomTabNavigator();
 export default function NavigationBar() {
   return (
     // HOW i thought tab navigator only at bottom?
-    <LikedBusStopsProvider>
-      <Tab.Navigator
-        initialRouteName="Nearby"
-        screenOptions={{
-          headerShown: false,
-          tabBarLabelStyle: {
-            fontSize: scale(10),
-            fontFamily: "Nunito-Bold",
-          },
-          tabBarStyle: {
-            backgroundColor: colors.background,
-            // backgroundColor: 'red',
-            borderTopWidth: 0,
-            height: verticalScale(45),
-            paddingBottom: scale(20)
-          },
-          tabBarActiveTintColor: "white",
-          tabBarInactiveTintColor: "gray",
+    <Tab.Navigator
+      initialRouteName="Nearby"
+      screenOptions={{
+        headerShown: false,
+        tabBarLabelStyle: {
+          fontSize: scale(10),
+          fontFamily: "Nunito-Bold",
+        },
+        tabBarStyle: {
+          backgroundColor: colors.background,
+          // backgroundColor: 'red',
+          borderTopWidth: 0,
+          height: verticalScale(45),
+          paddingBottom: scale(20)
+        },
+        tabBarActiveTintColor: "white",
+        tabBarInactiveTintColor: "gray",
+      }}
+    >
+      <Tab.Screen
+        name="Nearby"
+        component={NearbyScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="location-sharp" color={color} size={size} />
+          ),
         }}
-      >
-        <Tab.Screen
-          name="Nearby"
-          component={NearbyScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="location-sharp" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Buses"
-          component={FavoriteBusesScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="heart" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Bus Stops"
-          component={FavoriteBusStopsScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="star" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Ads"
-          component={DonateScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="battery-charging" color={color} size={size} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    </LikedBusStopsProvider>
+      />
+      <Tab.Screen
+        name="Buses"
+        component={FavoriteBusesScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="heart" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Bus Stops"
+        component={FavoriteBusStopsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="star" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Ads"
+        component={DonateScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="battery-charging" color={color} size={size} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 }

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 
-import { colors, containerStyles, font } from '../assets/styles/GlobalStyles';
-import { GetNearbyBusStops } from '../components/getNearbyBusStops';
-import BusStopComponent from '../components/main/BusStopComponent';
-import { useLikedBusStops } from "../components/context/likedBusStopsContext";
+import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
+import { GetNearbyBusStops } from '../getNearbyBusStops';
+import BusStopComponent from '../main/BusStopComponent';
+import { useLikedBusStops } from "../context/likedBusStopsContext";
 
 const NearbyBusStops = () => {
   const [busStops, setBusStops] = useState<{code: string; description: string; roadName: string; distance: number}[]>([]);

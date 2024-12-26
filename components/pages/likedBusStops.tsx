@@ -3,10 +3,10 @@ import { Text, FlatList, View } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from 'expo-location';
 
-import { containerStyles } from '../assets/styles/GlobalStyles';
-import BusStopComponent from '../components/main/BusStopComponent';
-import { calculateDistance } from '../components/getNearbyBusStops';
-import { useLikedBusStops } from '../components/context/likedBusStopsContext'
+import { containerStyles } from '../../assets/styles/GlobalStyles';
+import BusStopComponent from '../main/BusStopComponent';
+import { calculateDistance } from '../getNearbyBusStops';
+import { useLikedBusStops } from '../context/likedBusStopsContext'
 
 type BusStop = {
   BusStopCode: string;
