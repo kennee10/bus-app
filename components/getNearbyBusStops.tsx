@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert, Linking } from 'react-native';
 
 type BusStop = {
   BusStopCode: string;
@@ -27,7 +28,14 @@ export const GetNearbyBusStops = async (): Promise<[string, string, string, numb
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
-      throw new Error('Permission to access location was denied.');
+      Alert.alert(
+        'Location Permission Required',
+        'This app needs access to your location to provide the best experience. Please enable location access in settings.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Open Settings', onPress: () => Linking.openSettings() },
+        ]
+      );
     }
 
     const location = await Location.getCurrentPositionAsync({});

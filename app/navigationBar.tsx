@@ -1,7 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import Index from "./index";
@@ -51,12 +52,15 @@ export default function NavigationBar() {
         screenOptions={{
           headerShown: false,
           tabBarLabelStyle: {
-            fontSize: 12,
+            fontSize: scale(10),
             fontFamily: "Nunito-Bold",
           },
           tabBarStyle: {
             backgroundColor: colors.background,
+            // backgroundColor: 'red',
             borderTopWidth: 0,
+            height: verticalScale(45),
+            paddingBottom: scale(20)
           },
           tabBarActiveTintColor: "white",
           tabBarInactiveTintColor: "gray",

@@ -24,6 +24,7 @@ export const containerStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.background,
+      // backgroundColor: 'red',
     },
     globalTextMessage: {
       fontSize: scale(14),
