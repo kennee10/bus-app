@@ -15,5 +15,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "components/widgets/androidLikedBusStops.ts", "components/test.js"  ]
 }

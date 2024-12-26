@@ -1,56 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, FlatList, View } from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Location from 'expo-location';
-
 import { containerStyles } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from '../main/BusStopComponent';
-import { calculateDistance } from '../getNearbyBusStops';
-import { useLikedBusStops } from '../context/likedBusStopsContext'
-
-type BusStop = {
-  BusStopCode: string;
-  Description: string;
-  RoadName: string;
-  Latitude: number;
-  Longitude: number;
-  Distance: number;
-};
-
+import { useLikedBusStops } from '../context/likedBusStopsContext';
+import { useLikedBusStopsData } from '../hooks/useLikedBusStopsData';
 
 const LikedBusStopsComponent = () => {
-  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStop[]>([]);
   const { likedBusStops, toggleLike } = useLikedBusStops();
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          throw new Error("Location permission denied");
-        }
-
-        const location = await Location.getCurrentPositionAsync({});
-        const { latitude, longitude } = location.coords;
-
-        const storedData = await AsyncStorage.getItem("busStops");
-        if (!storedData) throw new Error("No bus stop data found");
-
-        const parsedData = JSON.parse(storedData);
-        const enhancedStops = parsedData
-          .filter((stop: BusStop) => likedBusStops.includes(stop.BusStopCode)) // Filter liked stops
-          .map((stop: BusStop) => {
-            const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
-            return { ...stop, Distance: distance };
-          });
-
-        setLikedBusStopsDetails(enhancedStops);
-      } catch (error) {
-        console.error("Error fetching liked bus stops:", error);
-      }
-    })();
-  }, [likedBusStops]);
-
+  const likedBusStopsDetails = useLikedBusStopsData(likedBusStops);
 
   return (
     <View style={containerStyles.pageContainer}>
