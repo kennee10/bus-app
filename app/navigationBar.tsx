@@ -45,7 +45,6 @@ const Tab = createBottomTabNavigator();
 
 export default function NavigationBar() {
   return (
-    // HOW i thought tab navigator only at bottom?
     <Tab.Navigator
       initialRouteName="Nearby"
       screenOptions={{
@@ -53,6 +52,7 @@ export default function NavigationBar() {
         tabBarLabelStyle: {
           fontSize: scale(10),
           fontFamily: "Nunito-Bold",
+          flexWrap: "wrap", // * Testing if it fixes bug
         },
         tabBarStyle: {
           backgroundColor: colors.background,
@@ -69,6 +69,7 @@ export default function NavigationBar() {
         name="Nearby"
         component={NearbyScreen}
         options={{
+          tabBarLabel: "Nearby", // * Testing if it fixes bug
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="location-sharp" color={color} size={size} />
           ),
