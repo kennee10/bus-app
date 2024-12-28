@@ -9,7 +9,7 @@ type BusStop = {
   Description: string;
   RoadName: string;
   Latitude: number;
-  Longitude: number;
+  Longitude: number; 
   Distance: number;
 };
 

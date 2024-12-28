@@ -5,6 +5,7 @@ import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { colors } from '../assets/styles/GlobalStyles';
 import NavigationBar from "./navigationBar";
 import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
+import { LikedBusesProvider } from "../components/context/likedBusesContext";
 
 export default function RootLayout() {
   return (
@@ -13,7 +14,9 @@ export default function RootLayout() {
       
       <SafeAreaView style={styles.safeArea}>
         <LikedBusStopsProvider>
-          <NavigationBar />
+          <LikedBusesProvider>
+            <NavigationBar />
+          </LikedBusesProvider>
         </LikedBusStopsProvider>
       </SafeAreaView>
     </>

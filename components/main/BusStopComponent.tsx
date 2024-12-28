@@ -6,6 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors, font } from '../../assets/styles/GlobalStyles';
 import BusComponent from "./BusComponent";
 import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
+// FROM CONTEXT
+import { useLikedBuses } from "../context/likedBusesContext";
 
 type BusStopComponentProps = {
   BusStopCode: string;
@@ -27,6 +29,8 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // FROM CONTEXT
+  const { likedBuses, toggleLike } = useLikedBuses();
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -61,7 +65,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
               <Ionicons
                 name={isLiked ? "star" : "star-outline"}
                 color={isLiked ? "gold" : "gray"}
-                size={24}
+                size={scale(24)}
               />
             </TouchableOpacity>
           </View>
@@ -92,9 +96,14 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
               <BusComponent
                 key={busNumber}
                 busNumber={busNumber}
+                busStopCode={BusStopCode}
                 firstArrival={timings[0] || "No data"}
                 secondArrival={timings[1] || "No data"}
                 thirdArrival={timings[2] || "No data"}
+                isHearted={likedBuses.some(
+                  ([code, service]) => code === BusStopCode && service === busNumber
+              )}
+                onHeartToggle={toggleLike}
               />
             ))
           ) : (
