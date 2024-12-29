@@ -4,7 +4,7 @@ import { Text, FlatList, View, ActivityIndicator } from 'react-native';
 
 import { containerStyles } from "../../assets/styles/GlobalStyles";
 import BusComponent from '../main/BusComponent';
-import fetchBusArrival, { BusArrivalData } from '../fetchBusArrival';
+import fetchBusArrival, { BusArrivalData } from '../apis/fetchBusArrival';
 import { useLikedBuses } from "../context/likedBusesContext";
 
 

@@ -3,7 +3,7 @@ import { View, Text, ActivityIndicator } from "react-native";
 import * as Font from 'expo-font';
 
 import { containerStyles } from "../assets/styles/GlobalStyles";
-import fetchBusStops from "../components/fetchBusStops";
+import fetchBusStops from "../components/apis/fetchBusStops";
 
 
 interface AppInitializerProps {

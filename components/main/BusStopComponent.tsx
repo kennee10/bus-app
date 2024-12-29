@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { colors, font } from '../../assets/styles/GlobalStyles';
 import BusComponent from "./BusComponent";
-import fetchBusArrival, { BusArrivalData } from "../fetchBusArrival";
+import fetchBusArrival, { BusArrivalData } from "../apis/fetchBusArrival";
 // FROM CONTEXT
 import { useLikedBuses } from "../context/likedBusesContext";
 
