@@ -3,7 +3,7 @@ import { SafeAreaView, Text } from "react-native";
 
 import { containerStyles } from '../assets/styles/GlobalStyles';
 import AppInitializer from "./AppInitializer";
-import NearbyBusStopsPage from "../components/pages/Temp";
+import NearbyBusStopsPage from "../components/pages/NearbyBusStopsPage";
 
 export default function index() {
   const [isInitialized, setIsInitialized] = useState(false);
