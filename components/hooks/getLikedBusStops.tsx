@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { calculateDistance } from '../components/getNearbyBusStops';
+import { calculateDistance } from './getNearbyBusStops';
 
 type BusStop = {
     BusStopCode: string,

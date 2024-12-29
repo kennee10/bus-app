@@ -1,13 +1,14 @@
 import React from "react";
 import { Text, FlatList, View } from 'react-native';
+
 import { containerStyles } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from '../main/BusStopComponent';
 import { useLikedBusStops } from '../context/likedBusStopsContext';
-import { useLikedBusStopsData } from '../hooks/useLikedBusStopsData';
+import { getLikedBusStopsDetails } from '../hooks/getLikedBusStopsDetails';
 
 const LikedBusStopsComponent = () => {
   const { likedBusStops, toggleLike } = useLikedBusStops();
-  const likedBusStopsDetails = useLikedBusStopsData(likedBusStops);
+  const likedBusStopsDetails = getLikedBusStopsDetails();
 
   return (
     <View style={containerStyles.pageContainer}>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Text, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { Text, FlatList, SafeAreaView } from 'react-native';
 
-import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
-import { GetNearbyBusStops } from '../getNearbyBusStops';
+import { containerStyles } from '../../assets/styles/GlobalStyles';
+import { GetNearbyBusStops } from '../hooks/getNearbyBusStops';
 import BusStopComponent from '../main/BusStopComponent';
 import { useLikedBusStops } from "../context/likedBusStopsContext";
 

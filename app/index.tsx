@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, StyleSheet } from "react-native";
+import { SafeAreaView, Text } from "react-native";
 
-import AppInitializer from "./AppInitializer";
 import { containerStyles } from '../assets/styles/GlobalStyles';
+import AppInitializer from "./AppInitializer";
 import BusStopsNearbyComponent from "../components/pages/nearbyBusStops";
 
 export default function index() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  console.log("index.tsx: isInitialized = ", isInitialized);
 
   const handleFetchComplete = () => {
     setIsInitialized(true);
@@ -29,7 +31,7 @@ export default function index() {
       </SafeAreaView>
     );
   }
-  // This returns log
+  // returning this somehow shows console logs
   return (
     <SafeAreaView style={containerStyles.pageContainer}>
       <BusStopsNearbyComponent />

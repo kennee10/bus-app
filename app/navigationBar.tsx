@@ -6,7 +6,7 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import Index from "./index";
-import LikedBusesComponent from "../components/main/BusStopComponent";
+import LikedBusesComponent from "../components/pages/likedBuses";
 import LikedBusStops from "../components/pages/likedBusStops";
 
 

@@ -26,6 +26,10 @@ export const containerStyles = StyleSheet.create({
       backgroundColor: colors.background,
       // backgroundColor: 'red',
     },
+    loadingText: {
+      fontSize: scale(14),
+      color: "#333"
+    },
     globalTextMessage: {
       fontSize: scale(14),
       fontFamily: font.bold,

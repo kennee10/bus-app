@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import * as Font from 'expo-font';
 
+import { containerStyles } from "../assets/styles/GlobalStyles";
 import fetchBusStops from "../components/fetchBusStops";
 
 
@@ -14,24 +15,24 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
   const [isFetching, setIsFetching] = useState(true);
   const [isFontsLoaded, setFontsLoaded] = useState(false);
 
+  // Fetch all bus stops
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        console.log("AppInitializer: Starting initialization...");
         await fetchBusStops();
-        console.log("AppInitializer: Bus stops fetched successfully.");
-        setIsFetching(false);
         onFetchComplete(); // Notify parent about success
+
       } catch (error) {
-        console.error("AppInitializer: Error fetching bus stops", error);
-        setIsFetching(false);
         onError(error instanceof Error ? error.message : "Unknown error occurred");
+      } finally {
+        setIsFetching(false); // For loading indicator
       }
     };
 
     initializeApp();
   }, []);
 
+  // Load fonts
   useEffect(() => {
     const loadFonts = async () => {
       try {
@@ -48,29 +49,17 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
     loadFonts();
   }, []);
 
+
   if (isFetching && !isFontsLoaded) {
     return (
-      <View style={styles.loaderContainer}>
+      <View style={containerStyles.globalContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={styles.loadingText}>Fetching bus stop data...</Text>
+        <Text style={containerStyles.loadingText}>Fetching bus stop data...</Text>
       </View>
     );
+  } else {
+    return null;
   }
-
-  return null; // Render nothing once fetching is complete
 };
-
-const styles = StyleSheet.create({
-  loaderContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    fontSize: 16,
-    marginTop: 10,
-    color: "#333",
-  },
-});
 
 export default AppInitializer;

@@ -2,19 +2,22 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from 'expo-location';
 
-import { calculateDistance } from '../getNearbyBusStops';
+import { calculateDistance } from './getNearbyBusStops';
+import { useLikedBusStops } from '../context/likedBusStopsContext';
+
 
 type BusStop = {
   BusStopCode: string;
   Description: string;
   RoadName: string;
   Latitude: number;
-  Longitude: number; 
+  Longitude: number;
   Distance: number;
 };
 
-export const useLikedBusStopsData = (likedBusStops: string[]) => {
+export const getLikedBusStopsDetails = () => {
   const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStop[]>([]);
+  const { likedBusStops, toggleLike } = useLikedBusStops();
 
   useEffect(() => {
     (async () => {

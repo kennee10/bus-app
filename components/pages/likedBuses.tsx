@@ -1,85 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { Text, FlatList, View, ActivityIndicator } from 'react-native';
 
+
 import { containerStyles } from "../../assets/styles/GlobalStyles";
 import BusComponent from '../main/BusComponent';
 import fetchBusArrival, { BusArrivalData } from '../fetchBusArrival';
 import { useLikedBuses } from "../context/likedBusesContext";
 
+
 const LikedBusesComponent = () => {
     const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    // add more variables
 
-    // Access liked buses and the toggleLike function from context
-    const { likedBuses, toggleLike } = useLikedBuses();
+    const { likedBuses, toggleLike} = useLikedBuses();
 
     useEffect(() => {
         const intervalId = setInterval(async () => {
-            try {
-                // Assuming the `fetchBusArrival` function takes busStopCode as argument
-                const fetchBusArrivalData = async (busStopCode: string) => {
-                    const data = await fetchBusArrival(busStopCode);
-                    setBusArrivalData((prevData) => ({
-                        ...prevData,
-                        [busStopCode]: data,
-                    }));
-                };
-
-                if (likedBuses.length > 0) {
-                    likedBuses.forEach(([busStopCode]) => {
-                        fetchBusArrivalData(busStopCode);
-                    });
-                }
-            } catch (error) {
-                console.log('Error fetching bus arrival data: ', error);
-            } finally {
-                setIsLoading(false);
+          setIsLoading(true);
+    
+          try {
+            // Loop through likedBuses and fetch arrival for each bus
+            for (const entry of likedBuses) {
+              const busId = entry[0];  // Get the first element of the entry (bus ID)
+              const data = await fetchBusArrival(busId);  // Call fetchBusArrival for each bus ID
+              setBusArrivalData(data)
             }
-        }, 5000); // Fetch data every 5 seconds
+          } catch (error) {
+            console.error('Error fetching bus arrival:', error);
+          } finally {
+            setIsLoading(false); // Set loading to false once the process is done
+          }
+        }, 5000); // 5 seconds
+    
+        return () => clearInterval(intervalId); // Cleanup on component unmount
+      }, [likedBuses]);
 
-        // Cleanup function to clear the interval when the component is unmounted
-        return () => clearInterval(intervalId);
-    }, [likedBuses]);
-
-    // Function to render each bus in the liked buses list
-    const renderBusComponent = ({ item }: { item: [string, string] }) => {
-        const [busStopCode, serviceNo] = item;
-        const arrivalData = busArrivalData ? busArrivalData[busStopCode] : null;
-
-        // Extract first, second, and third arrivals from arrival data
-        const firstArrival = arrivalData ? arrivalData[0]?.arrivalTime || "N/A" : "N/A";
-        const secondArrival = arrivalData ? arrivalData[1]?.arrivalTime || "N/A" : "N/A";
-        const thirdArrival = arrivalData ? arrivalData[2]?.arrivalTime || "N/A" : "N/A";
-
-        // Check if this bus is hearted (liked)
-        const isHearted = likedBuses.some(([code, service]) => code === busStopCode && service === serviceNo);
-
-        return (
-            <BusComponent
-                busNumber={serviceNo}
-                busStopCode={busStopCode}
-                firstArrival={firstArrival}
-                secondArrival={secondArrival}
-                thirdArrival={thirdArrival}
-                isHearted={isHearted}
-                onHeartToggle={toggleLike}  // Pass the toggleLike function
-            />
-        );
-    };
 
     return (
         <View style={containerStyles.pageContainer}>
-            {isLoading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
-            ) : likedBuses.length > 0 ? (
-                <FlatList
-                    data={likedBuses}
-                    renderItem={renderBusComponent}
-                    keyExtractor={([busStopCode, serviceNo]) => `${busStopCode}-${serviceNo}`}
-                />
+            {likedBuses.length > 0 ? (
+              <Text style={containerStyles.globalTextMessage}>{JSON.stringify(likedBuses)}</Text>
             ) : (
-                <Text style={containerStyles.globalTextMessage}>No Liked Buses</Text>
-            )}
+              <Text style={containerStyles.globalTextMessage}>No liked buses</Text>
+            )
+          }
         </View>
     );
 };

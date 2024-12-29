@@ -5,11 +5,9 @@ const fetchBusStops = async () => {
     // Check if bus stops are already stored in AsyncStorage
     const storedBusStops = await AsyncStorage.getItem("busStops");
     if (storedBusStops) {
-      console.log("Bus stops already exist in AsyncStorage.");
+      console.log(`fetchBusStops.tsx: ${JSON.parse(storedBusStops).length} Bus stops already exist in AsyncStorage`);
       return; // Skip fetching data
     }
-
-    console.log("Fetching bus stops from API...");
 
     // Fetch data from the API
     let skip = 0;
@@ -44,13 +42,13 @@ const fetchBusStops = async () => {
     // Save data to AsyncStorage
     if (busStops.length > 0) {
       await AsyncStorage.setItem("busStops", JSON.stringify(busStops));
-      console.log("Bus stops successfully stored in AsyncStorage.");
+      console.log(`fetchBusStops.tsx: ${busStops.length} Bus stops successfully stored in AsyncStorage`);
     } else {
-      console.warn("No bus stops retrieved from the API.");
+      console.warn("fetchBusStops.tsx: No bus stops retrieved from the API.");
     }
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error fetching bus stops:", error.message);
+      console.error("fetchBusStops.tsx: Error fetching bus stops:", error.message);
     }
   }
 };
