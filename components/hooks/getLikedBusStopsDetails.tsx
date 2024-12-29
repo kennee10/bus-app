@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from 'expo-location';
 
-import { calculateDistance } from './getNearbyBusStops';
+import { calculateDistance } from './usefulFunctions';
 import { useLikedBusStops } from '../context/likedBusStopsContext';
 
 

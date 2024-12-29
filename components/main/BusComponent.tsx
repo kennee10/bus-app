@@ -15,32 +15,24 @@ type BusComponentProps = {
     onHeartToggle: (busStopCode: string, serviceNo: string) => void;
   };
   
-const BusComponent: React.FC<BusComponentProps> = ({ 
-    busNumber,
-    busStopCode,
-    firstArrival, 
-    secondArrival, 
-    thirdArrival,
-    isHearted,
-    onHeartToggle,
-  }) => {
+const BusComponent: React.FC<BusComponentProps> = (props) => {
     
     return (
       <View style={styles.container}>
         <View style={styles.busNumberWrapper}>
-          <Text style={styles.busNumber}>{busNumber}</Text>
+          <Text style={styles.busNumber}>{props.busNumber}</Text>
         </View>
         <View style={styles.timingsWrapper}>
-          <Text style={styles.busStopCode}>{busStopCode}</Text>
-          <Text style={styles.timings}>{firstArrival}</Text>
-          <Text style={styles.timings}>{secondArrival}</Text>
-          <Text style={styles.timings}>{thirdArrival}</Text>
+          <Text style={styles.busStopCode}>{props.busStopCode}</Text>
+          <Text style={styles.timings}>{props.firstArrival}</Text>
+          <Text style={styles.timings}>{props.secondArrival}</Text>
+          <Text style={styles.timings}>{props.thirdArrival}</Text>
         </View>
         <View style={styles.likeButtonWrapper}>
-          <TouchableOpacity onPress={() => onHeartToggle(busStopCode, busNumber)}>
+          <TouchableOpacity onPress={() => props.onHeartToggle(props.busStopCode, props.busNumber)}>
             <Ionicons 
-              name={isHearted? "heart" : "heart-outline"}
-              color={isHearted? "red": "gray"}
+              name={props.isHearted? "heart" : "heart-outline"}
+              color={props.isHearted? "red": "gray"}
               size={scale(18)}
             />
           </TouchableOpacity>

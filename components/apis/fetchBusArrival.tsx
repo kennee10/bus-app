@@ -38,7 +38,6 @@ const fetchBusArrival = async (busStopCode: string): Promise<BusArrivalData> => 
     
     const data = await response.json();
     
-    // Format each bus arrival time to display in minutes and seconds
     const busArrivalData: BusArrivalData = data.Services.reduce((acc: BusArrivalData, service: any) => {
       const busNumber = service.ServiceNo;
       
@@ -69,7 +68,7 @@ const fetchBusArrival = async (busStopCode: string): Promise<BusArrivalData> => 
 
     return busArrivalData;
   } catch (error) {
-    console.error("Error fetching bus arrival data:", error);
+    console.error("fetchBusArrival.tsx: Error fetching bus arrival data, error: ", error);
     throw error;
   }
 };

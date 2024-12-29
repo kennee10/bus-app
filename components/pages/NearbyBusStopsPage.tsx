@@ -2,45 +2,58 @@ import React, { useState, useEffect } from "react";
 import { Text, FlatList, SafeAreaView } from 'react-native';
 
 import { containerStyles } from '../../assets/styles/GlobalStyles';
-import { GetNearbyBusStops } from '../hooks/getNearbyBusStops';
+import { getNearbyBusStops } from '../hooks/getNearbyBusStops';
 import BusStopComponent from '../main/BusStopComponent';
 import { useLikedBusStops } from "../context/likedBusStopsContext";
+import { LocationWatcher } from "../hooks/LocationWatcher";
 
 const NearbyBusStopsPage = () => {
-  const [busStops, setBusStops] = useState<{code: string; description: string; roadName: string; distance: number}[]>([]);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  const [nearbyBusStops, setNearbyBusStops] = useState<{code: string; description: string; roadName: string; distance: number}[]>([]);
   const { likedBusStops, toggleLike } = useLikedBusStops();
 
+
   useEffect(() => {
+
+    let subscription: { remove: any; };
+
     (async () => {
-      try {
-        const nearbyBusStops = await GetNearbyBusStops();
-        const sortedStops = nearbyBusStops.map(([code, description, roadName, distance]) => ({code,description,roadName,distance,})).sort((a, b) => a.distance - b.distance);
-        setBusStops(sortedStops);
-      
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error('Failed to get nearby bus stops:', error.message);
-          setErrorMsg(error.message);
+      const result = await LocationWatcher(async (coords) => {
+        // Call getNearbyBusStops whenever coords changes
+        try {
+          const nearbyBusStops = await getNearbyBusStops(coords);
+          const sortedNearbyBusStops = nearbyBusStops
+            .map(([code, description, roadName, distance]) => ({ code, description, roadName, distance }))
+            .sort((a, b) => a.distance - b.distance);
+          
+          setNearbyBusStops(sortedNearbyBusStops);
+        } catch (error) {
+          console.error("NearbyBusStopsPage.tsx: ", error);
         }
+      });
+    
+      if (result && result.subscription) {
+        subscription = result.subscription;
+        console.log("NearbyBusStopsPage.tsx: Subscription started:", subscription);
       }
     })();
+    
+    
+
+    return () => {
+      // Cleanup: Remove the subscription on component unmount
+      if (subscription) {
+        subscription.remove();
+        console.log("NearbyBusStopsPage.tsx: Subscription removed");
+      }
+    };
   }, []);
 
-  if (errorMsg) {
-    return (
-      <SafeAreaView style={containerStyles.globalContainer}>
-        <Text style={containerStyles.globalErrorText}>{errorMsg}</Text>
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={containerStyles.pageContainer}>
-      {busStops.length > 0 ? (
+      {nearbyBusStops.length > 0 ? (
         <FlatList
-          data={busStops}
+          data={nearbyBusStops}
           keyExtractor={(item) => item.code}
           renderItem={({ item }) => (
             <BusStopComponent
@@ -54,7 +67,7 @@ const NearbyBusStopsPage = () => {
           )}
         />
       ) : (
-        <Text style={containerStyles.globalTextMessage}>No Nearby Bus Stops</Text>
+        <Text style={containerStyles.globalTextMessage}>No Bus Stops within 2000m</Text>
       )}
     </SafeAreaView>
   );

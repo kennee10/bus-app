@@ -2,6 +2,8 @@ import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert, Linking } from 'react-native';
 
+import { calculateDistance } from './usefulFunctions';
+
 type BusStop = {
   BusStopCode: string;
   Description: string;
@@ -10,36 +12,13 @@ type BusStop = {
   Longitude: number;
 };
 
-// Haversine formula to calculate the distance between two coordinates in meters
-export const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
-  const toRad = (value: number) => (value * Math.PI) / 180;
-  const R = 6371000; // Radius of the Earth in meters
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distance in meters
-};
+type Coordinates = {
+  latitude: number;
+  longitude: number;
+}
 
-export const GetNearbyBusStops = async (): Promise<[string, string, string, number][]> => {
+export const getNearbyBusStops = async (coords: Coordinates): Promise<[string, string, string, number][]> => {
   try {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert(
-        'Location Permission Required',
-        'This app needs access to your location to provide the best experience. Please enable location access in settings.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Open Settings', onPress: () => Linking.openSettings() },
-        ]
-      );
-    }
-
-    const location = await Location.getCurrentPositionAsync({});
-    const { latitude, longitude } = location.coords;
 
     // Retrieve bus stops from local storage
     const storedData = await AsyncStorage.getItem('busStops');
@@ -48,15 +27,13 @@ export const GetNearbyBusStops = async (): Promise<[string, string, string, numb
     }
 
 
-
     const busStops: BusStop[] = JSON.parse(storedData);
-
     // Create a list of nearby bus stops with their details
     const nearbyStops: [string, string, string, number][] = 
-      busStops.map((stop) => {
-        const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
-        if (distance <= 400) {
-          return [stop.BusStopCode, stop.Description, stop.RoadName, distance];
+      busStops.map((busStop) => {
+        const distance = calculateDistance(coords.latitude, coords.longitude, busStop.Latitude, busStop.Longitude);
+        if (distance <= 2000) {
+          return [busStop.BusStopCode, busStop.Description, busStop.RoadName, distance];
         }
         return null;
       })

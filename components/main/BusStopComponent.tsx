@@ -18,54 +18,50 @@ type BusStopComponentProps = {
   onLikeToggle: (busStopCode: string) => void;
 };
 
-const BusStopComponent: React.FC<BusStopComponentProps> = ({
-  BusStopCode,
-  Description,
-  RoadName,
-  Distance,
-  isLiked,
-  onLikeToggle,
-}) => {
+const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   // FROM CONTEXT
   const { likedBuses, toggleLike } = useLikedBuses();
 
+
+  // Refresh bus arrival timings
   useEffect(() => {
     const intervalId = setInterval(async () => {
       try {
-        const data = await fetchBusArrival(BusStopCode);
+        const data = await fetchBusArrival(props.BusStopCode);
         setBusArrivalData(data); // Set the fetched bus data
       } catch (error) {
-        console.error("Failed to fetch bus data", error);
+        console.error("BusStopComponent.tsx: Failed to fetch bus data, error: ", error);
       } finally {
         setIsLoading(false);
       }
     }, 5000); // 5 seconds
 
     return () => clearInterval(intervalId); // Cleanup
-  }, [BusStopCode]);
+  }, [props.BusStopCode]);
+
 
   return (
     <View style={styles.outerContainer}>
       <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} style={styles.container}>
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
-            <Text style={styles.busStopCode}>{BusStopCode}</Text>
+            <Text style={styles.busStopCode}>{props.BusStopCode}</Text>
           </View>
           <View style={styles.descriptionWrapper}>
-            <Text style={styles.description}>{Description}</Text>
+            <Text style={styles.description}>{props.Description}</Text>
           </View>
           <View style={styles.distanceWrapper}>
-            <Text style={styles.distance}>{Distance}m</Text>
+            <Text style={styles.distance}>{props.Distance}m</Text>
           </View>
           <View style={styles.likeButtonWrapper}>
-            <TouchableOpacity onPress={() => onLikeToggle(BusStopCode)}>
+            <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
               <Ionicons
-                name={isLiked ? "star" : "star-outline"}
-                color={isLiked ? "gold" : "gray"}
-                size={scale(24)}
+                name={props.isLiked ? "star" : "star-outline"}
+                color={props.isLiked ? "gold" : "gray"}
+                size={scale(20)}
               />
             </TouchableOpacity>
           </View>
@@ -74,7 +70,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
         <View style={styles.lower}>
           <View style={styles.blackSpace1}></View>
           <View style={styles.roadNameWrapper}>
-            <Text style={styles.roadName}>{RoadName}</Text>
+            <Text style={styles.roadName}>{props.RoadName}</Text>
           </View>
 
           <View style={styles.blackSpace2}>
@@ -87,6 +83,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
         </View>
       </TouchableOpacity>
 
+      {/* Bus arrival timings */}
       {!isCollapsed && (
         <View style={styles.busesContainer}>
           {isLoading ? (
@@ -96,12 +93,13 @@ const BusStopComponent: React.FC<BusStopComponentProps> = ({
               <BusComponent
                 key={busNumber}
                 busNumber={busNumber}
-                busStopCode={BusStopCode}
+                busStopCode={props.BusStopCode}
                 firstArrival={timings[0] || "No data"}
                 secondArrival={timings[1] || "No data"}
                 thirdArrival={timings[2] || "No data"}
                 isHearted={likedBuses.some(
-                  ([code, service]) => code === BusStopCode && service === busNumber
+                  ([code, service]) => code === props.BusStopCode && service === busNumber
+
               )}
                 onHeartToggle={toggleLike}
               />
