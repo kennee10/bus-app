@@ -3,12 +3,12 @@ import { Text, FlatList, View, ActivityIndicator } from 'react-native';
 
 
 import { containerStyles } from "../../assets/styles/GlobalStyles";
-import BusComponent from '../main/BusComponent';
 import fetchBusArrival, { BusArrivalData } from '../apis/fetchBusArrival';
 import { useLikedBuses } from "../context/likedBusesContext";
+import BusComponent from '../main/BusComponent';
 
 
-const LikedBusesComponent = () => {
+const LikedBusesPage = () => {
     const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     // add more variables
@@ -49,4 +49,4 @@ const LikedBusesComponent = () => {
     );
 };
 
-export default LikedBusesComponent;
+export default LikedBusesPage;

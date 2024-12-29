@@ -6,7 +6,7 @@ import BusStopComponent from '../main/BusStopComponent';
 import { useLikedBusStops } from '../context/likedBusStopsContext';
 import { getLikedBusStopsDetails } from '../hooks/getLikedBusStopsDetails';
 
-const LikedBusStopsComponent = () => {
+const LikedBusStopsPage = () => {
   const { likedBusStops, toggleLike } = useLikedBusStops();
   const likedBusStopsDetails = getLikedBusStopsDetails();
 
@@ -34,4 +34,4 @@ const LikedBusStopsComponent = () => {
   );
 };
 
-export default LikedBusStopsComponent;
+export default LikedBusStopsPage;

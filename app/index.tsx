@@ -3,7 +3,7 @@ import { SafeAreaView, Text } from "react-native";
 
 import { containerStyles } from '../assets/styles/GlobalStyles';
 import AppInitializer from "./AppInitializer";
-import BusStopsNearbyComponent from "../components/pages/nearbyBusStops";
+import NearbyBusStopsPage from "../components/pages/Temp";
 
 export default function index() {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -34,7 +34,7 @@ export default function index() {
   // returning this somehow shows console logs
   return (
     <SafeAreaView style={containerStyles.pageContainer}>
-      <BusStopsNearbyComponent />
+      <NearbyBusStopsPage />
     </SafeAreaView>
   );
 }

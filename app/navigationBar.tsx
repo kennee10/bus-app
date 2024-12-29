@@ -6,8 +6,8 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import Index from "./index";
-import LikedBusesComponent from "../components/pages/likedBuses";
-import LikedBusStops from "../components/pages/likedBusStops";
+import LikedBusesPage from "../components/pages/LikedBusesPage";
+import LikedBusStopsPage from "../components/pages/LikedBusStopsPage";
 
 
 function NearbyScreen() {
@@ -21,7 +21,7 @@ function NearbyScreen() {
 function FavoriteBusesScreen() {
   return (
     <View style={containerStyles.globalContainer}>
-      <LikedBusesComponent />
+      <LikedBusesPage />
     </View>
   );
 }
@@ -29,7 +29,7 @@ function FavoriteBusesScreen() {
 function FavoriteBusStopsScreen() {
   return (
     <View style={containerStyles.globalContainer}>
-      <LikedBusStops />
+      <LikedBusStopsPage />
     </View>
   );
 }

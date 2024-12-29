@@ -6,7 +6,7 @@ import { GetNearbyBusStops } from '../hooks/getNearbyBusStops';
 import BusStopComponent from '../main/BusStopComponent';
 import { useLikedBusStops } from "../context/likedBusStopsContext";
 
-const NearbyBusStops = () => {
+const NearbyBusStopsPage = () => {
   const [busStops, setBusStops] = useState<{code: string; description: string; roadName: string; distance: number}[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -60,4 +60,4 @@ const NearbyBusStops = () => {
   );
 };
 
-export default NearbyBusStops;
+export default NearbyBusStopsPage;
