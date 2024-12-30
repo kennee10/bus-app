@@ -57,7 +57,7 @@ const NearbyBusStopsPage = () => {
 
   const increaseLimit = () => {
     setLimit((prevLimit) => {
-      const newLimit = Math.min((prevLimit ?? 0) + 5, nearbyBusStops.length);
+      const newLimit = Math.min((prevLimit ?? 0) + 8, nearbyBusStops.length);
       return newLimit;
     });
   };
@@ -68,15 +68,16 @@ const NearbyBusStopsPage = () => {
         <TouchableOpacity
           onPress={increaseLimit}
           style={{
-            borderRadius: scale(30),
+            borderRadius: scale(10),
             borderWidth: scale(1.5),
+            padding: scale(5),
             borderColor: 'gray',
           }}
         >
           <Ionicons 
             name="add-outline"
             color="gray"
-            size={scale(25)}
+            size={scale(23)}
           />
         </TouchableOpacity>
       </View>

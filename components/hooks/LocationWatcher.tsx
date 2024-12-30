@@ -23,7 +23,7 @@ export async function LocationWatcher(onLocationChange: (coords: Coordinates) =>
     const subscription = await Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.High,
-        distanceInterval: 10, // Trigger updates when the user moves 10 meters
+        distanceInterval: 20, // Trigger updates when the user moves 10 meters
       },
       (location) => {
         const { latitude, longitude } = location.coords;

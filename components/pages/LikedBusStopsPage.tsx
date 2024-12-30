@@ -8,7 +8,7 @@ import { getLikedBusStopsDetails } from '../hooks/getLikedBusStopsDetails';
 
 const LikedBusStopsPage = () => {
   const { likedBusStops, toggleLike } = useLikedBusStops();
-  const likedBusStopsDetails = getLikedBusStopsDetails();
+  const likedBusStopsDetails = getLikedBusStopsDetails(); // this function has access to likedBusStops too
 
   return (
     <View style={containerStyles.pageContainer}>

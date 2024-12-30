@@ -1,13 +1,15 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { View, Text, Platform } from "react-native";
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import { View } from "react-native";
+import { scale, verticalScale } from 'react-native-size-matters';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import Index from "./index";
 import LikedBusesPage from "../components/pages/LikedBusesPage";
 import LikedBusStopsPage from "../components/pages/LikedBusStopsPage";
+import AdsPage from "../components/pages/AdsPage";
 
 
 function NearbyScreen() {
@@ -37,7 +39,7 @@ function FavoriteBusStopsScreen() {
 function DonateScreen() {
   return (
     <View style={containerStyles.globalContainer}>
-      <Text>Ads</Text>
+      <AdsPage />
     </View>
   );
 }
