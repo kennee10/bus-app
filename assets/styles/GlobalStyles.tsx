@@ -31,7 +31,7 @@ export const containerStyles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      paddingTop: scale(12),
+      // paddingTop: scale(12),
       paddingBottom: scale(12),
       // backgroundColor: "red",
     },

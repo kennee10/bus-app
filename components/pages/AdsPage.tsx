@@ -1,63 +1,55 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import DraggableFlatList, {
-  RenderItemParams,
-} from "react-native-draggable-flatlist";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-
-type Item = {
-  key: string;
-  label: string;
-  backgroundColor: string;
-};
+import React, { useRef, useEffect } from "react";
+import { StyleSheet, Text, View, Animated, Easing } from "react-native";
 
 const App = () => {
-  const [data, setData] = useState<Item[]>([
-    { key: "1", label: "Item 1", backgroundColor: "#ffcccc" },
-    { key: "2", label: "Item 2", backgroundColor: "#ccffcc" },
-    { key: "3", label: "Item 3", backgroundColor: "#ccccff" },
-    { key: "4", label: "Item 4", backgroundColor: "#ffffcc" },
-  ]);
+  const scrollAnim = useRef(new Animated.Value(0)).current;
 
-  const renderItem = ({ item, drag, isActive }: RenderItemParams<Item>) => {
-    return (
-      <View
-        style={[
-          styles.item,
-          { backgroundColor: isActive ? "gray" : item.backgroundColor },
-        ]}
-      >
-        <Text
-          style={styles.text}
-          onLongPress={drag} // Use onLongPress for initiating drag
-        >
-          {item.label}
-        </Text>
-      </View>
-    );
-  };
+  useEffect(() => {
+    // Start the scroll animation
+    Animated.loop(
+      Animated.timing(scrollAnim, {
+        toValue: -250, // Adjust this to scroll the text fully off-screen
+        duration: 5000,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    ).start();
+  }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <DraggableFlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.key}
-        onDragEnd={({ data }) => {
-          // Safely update the state
-          setData(data);
-        }}
-      />
-    </GestureHandlerRootView>
+    <View style={styles.container}>
+      <View style={styles.textContainer}>
+        <Animated.View
+          style={[
+            styles.animatedText,
+            {
+              transform: [{ translateX: scrollAnim }],
+            },
+          ]}
+        >
+          <Text style={styles.text}>
+            This is a long text that will overflow and scroll.
+          </Text>
+        </Animated.View>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  item: {
-    padding: 20,
-    marginVertical: 8,
-    borderRadius: 5,
+  container: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
+    padding: 20,
+  },
+  textContainer: {
+    width: 250, // Container width should be wide enough for the text to overflow and scroll
+    backgroundColor: 'lightblue',
+    overflow: "hidden",
+  },
+  animatedText: {
+    flexDirection: "row",
   },
   text: {
     fontSize: 18,

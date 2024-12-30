@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import TextTicker from "react-native-text-ticker";
 
 import { colors, font } from '../../assets/styles/GlobalStyles';
 import BusComponent from "./BusComponent";
@@ -51,7 +52,17 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             <Text style={styles.busStopCode}>{props.BusStopCode}</Text>
           </View>
           <View style={styles.descriptionWrapper}>
-            <Text style={styles.description}>{props.Description}</Text>
+            <TextTicker 
+              style={styles.description}
+              duration={5000}
+              loop={true}
+              bounce={true}
+              repeatSpacer={30}
+              marqueeDelay={1000}
+              scrollSpeed={50}
+            >
+              {props.Description}
+            </TextTicker>
           </View>
           <View style={styles.distanceWrapper}>
             <Text style={styles.distance}>{props.Distance}m</Text>
@@ -121,7 +132,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: scale(340),
     overflow: "hidden",
-    marginTop: verticalScale(10),
+    marginBottom: verticalScale(10),
     borderRadius: scale(4),
     backgroundColor: colors.secondaryBackground,
   },
@@ -142,7 +153,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   busStopCodeWrapper: {
-    flex: 6,
+    flex: 5,
   },
   descriptionWrapper: {
     flex: 15,
@@ -156,14 +167,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   busStopCode: {
-    fontSize: scale(15),
+    fontSize: scale(14),
     lineHeight: scale(30),
     paddingLeft: scale(5),
     fontFamily: font.bold,
     color: colors.text,
   },
   description: {
-    fontSize: scale(18),
+    fontSize: scale(16),
     lineHeight: scale(30),
     fontFamily: font.bold,
     color: colors.text,
@@ -177,7 +188,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   blackSpace1: {
-    flex: 6,
+    flex: 5,
   },
   roadNameWrapper: {
     flex: 15,

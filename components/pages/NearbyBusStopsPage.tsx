@@ -8,7 +8,7 @@ import { getNearbyBusStops } from '../hooks/getNearbyBusStops';
 import BusStopComponent from '../main/BusStopComponent';
 import { useLikedBusStops } from "../context/likedBusStopsContext";
 import { LocationWatcher } from "../hooks/LocationWatcher";
-import GlobalStyles from "@/styles/GlobalStyles";
+import SearchComponent from "../main/SearchComponent";
 
 
 
@@ -68,7 +68,7 @@ const NearbyBusStopsPage = () => {
         <TouchableOpacity
           onPress={increaseLimit}
           style={{
-            borderRadius: scale(10),
+            borderRadius: scale(15),
             borderWidth: scale(1.5),
             padding: scale(5),
             borderColor: 'gray',
@@ -86,8 +86,18 @@ const NearbyBusStopsPage = () => {
 
   return (
     <SafeAreaView style={containerStyles.pageContainer}>
+      <View style={{
+        // backgroundColor: 'red',
+        width: '100%',
+        height:scale(60),
+        justifyContent: 'center'
+      }}>
+        <SearchComponent />
+      </View>
+        
+
       {nearbyBusStops.length > 0 ? (
-        <View>
+        <View style={{flex: 1}}>
             <FlatList
               data={nearbyBusStops.slice(0, limit)}
               keyExtractor={(item) => item.code}
