@@ -9,7 +9,7 @@ export default function index() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("index.tsx: isInitialized = ", isInitialized);
+  // console.log("index.tsx: isInitialized = ", isInitialized);
 
   const handleFetchComplete = () => {
     setIsInitialized(true);
@@ -20,7 +20,7 @@ export default function index() {
   };
 
   if (!isInitialized) {
-    console.log("index.tsx: initializing app")
+    // console.log("index.tsx: initializing app")
     return <AppInitializer onFetchComplete={handleFetchComplete} onError={handleError} />;
   }
 

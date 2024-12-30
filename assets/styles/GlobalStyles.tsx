@@ -16,7 +16,8 @@ export const containerStyles = StyleSheet.create({
     globalContainer: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      // backgroundColor: "red",
     },
     pageContainer: {
       flex: 1,
@@ -25,6 +26,14 @@ export const containerStyles = StyleSheet.create({
       justifyContent: 'center',
       backgroundColor: colors.background,
       // backgroundColor: 'red',
+    },
+    iconContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: scale(9),
+      paddingBottom: scale(9),
+      // backgroundColor: "red",
     },
     loadingText: {
       fontSize: scale(14),

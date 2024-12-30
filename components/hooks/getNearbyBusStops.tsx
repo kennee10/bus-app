@@ -1,6 +1,4 @@
-import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert, Linking } from 'react-native';
 
 import { calculateDistance } from './usefulFunctions';
 
