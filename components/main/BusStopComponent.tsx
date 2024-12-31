@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import TextTicker from "react-native-text-ticker";
 
 import { colors, font } from '../../assets/styles/GlobalStyles';
 import BusComponent from "./BusComponent";
@@ -47,25 +46,15 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   return (
     <View style={styles.outerContainer}>
       <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} style={styles.container}>
+        {/* Upper */}
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
             <Text style={styles.busStopCode}>{props.BusStopCode}</Text>
           </View>
           <View style={styles.descriptionWrapper}>
-            <TextTicker 
-              style={styles.description}
-              duration={5000}
-              loop={true}
-              bounce={true}
-              repeatSpacer={30}
-              marqueeDelay={1000}
-              scrollSpeed={50}
-            >
+            <Text style={styles.description}>
               {props.Description}
-            </TextTicker>
-          </View>
-          <View style={styles.distanceWrapper}>
-            <Text style={styles.distance}>{props.Distance}m</Text>
+            </Text>
           </View>
           <View style={styles.likeButtonWrapper}>
             <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
@@ -77,9 +66,11 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-
+        {/* Lower */}
         <View style={styles.lower}>
-          <View style={styles.blackSpace1}></View>
+          <View style={styles.distanceWrapper}>
+            <Text style={styles.distance}>{props.Distance}m</Text>
+          </View>
           <View style={styles.roadNameWrapper}>
             <Text style={styles.roadName}>{props.RoadName}</Text>
           </View>
@@ -152,19 +143,20 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
   },
+  // Upper
   busStopCodeWrapper: {
-    flex: 5,
+    flex: 6,
+    // backgroundColor: 'red'
   },
   descriptionWrapper: {
-    flex: 15,
-  },
-  distanceWrapper: {
-    flex: 4,
+    flex: 19,
+    // backgroundColor: 'blue'
   },
   likeButtonWrapper: {
     flex: 2,
     justifyContent: "center",
     alignItems: "center",
+    // backgroundColor: 'green'
   },
   busStopCode: {
     fontSize: scale(14),
@@ -172,6 +164,7 @@ const styles = StyleSheet.create({
     paddingLeft: scale(5),
     fontFamily: font.bold,
     color: colors.text,
+    
   },
   description: {
     fontSize: scale(16),
@@ -179,31 +172,38 @@ const styles = StyleSheet.create({
     fontFamily: font.bold,
     color: colors.text,
   },
-  distance: {
-    fontSize: scale(12),
-    lineHeight: scale(30),
-    paddingRight: scale(5),
-    textAlign: "right",
-    fontFamily: font.bold,
-    color: colors.text,
-  },
-  blackSpace1: {
-    flex: 5,
+  // Lower
+  distanceWrapper: {
+    flex: 6,
+    height: scale(25),
+    justifyContent: 'center',
+    // backgroundColor: 'red',
+    
   },
   roadNameWrapper: {
-    flex: 15,
+    flex: 19,
     height: scale(25),
+    paddingBottom: scale(2),
+    justifyContent: 'center',
+    // backgroundColor: 'blue'
   },
   blackSpace2: {
-    flex: 6,
-    alignItems: "flex-end",
-    justifyContent: "center",
-    paddingRight: scale(5),
+    flex: 2,
+    // backgroundColor: 'green'
+  },
+  distance: {
+    fontSize: scale(11),
+    paddingLeft: scale(5),
+    textAlign: "left",
+    fontFamily: font.bold,
+    color: colors.accent,
+    // backgroundColor: 'green'
   },
   roadName: {
     fontSize: scale(14),
     fontFamily: font.bold,
     color: colors.text,
+    // backgroundColor: 'green'
   },
   busesContainer: {
     flex: 1,

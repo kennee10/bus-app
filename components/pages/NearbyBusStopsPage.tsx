@@ -86,15 +86,8 @@ const NearbyBusStopsPage = () => {
 
   return (
     <SafeAreaView style={containerStyles.pageContainer}>
-      <View style={{
-        // backgroundColor: 'red',
-        width: '100%',
-        height:scale(60),
-        justifyContent: 'center'
-      }}>
-        <SearchComponent />
-      </View>
-        
+      
+      <SearchComponent />
 
       {nearbyBusStops.length > 0 ? (
         <View style={{flex: 1}}>

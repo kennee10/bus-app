@@ -27,13 +27,15 @@ export const containerStyles = StyleSheet.create({
       backgroundColor: colors.background,
       // backgroundColor: 'red',
     },
+    searchContainer: {
+      paddingBottom: scale(10),
+      width: scale(340),
+    },
     iconContainer: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      // paddingTop: scale(12),
       paddingBottom: scale(12),
-      // backgroundColor: "red",
     },
     loadingText: {
       fontSize: scale(14),

@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, FlatList, View } from 'react-native';
+import { scale } from 'react-native-size-matters';
 
 import { containerStyles } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from '../main/BusStopComponent';
@@ -11,7 +12,7 @@ const LikedBusStopsPage = () => {
   const likedBusStopsDetails = getLikedBusStopsDetails(); // this function has access to likedBusStops too
 
   return (
-    <View style={containerStyles.pageContainer}>
+    <View style={[containerStyles.pageContainer, {paddingTop:scale(10)}]}>
       {likedBusStopsDetails.length > 0 ? (
         <FlatList
           data={likedBusStopsDetails}
