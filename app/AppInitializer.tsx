@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import * as Font from 'expo-font';
 
-import { containerStyles } from "../assets/styles/GlobalStyles";
+import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import fetchBusStops from "../components/apis/fetchBusStops";
 
 
@@ -53,8 +53,11 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
   if (isFetching && !isFontsLoaded) {
     return (
       <View style={containerStyles.globalContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={containerStyles.loadingText}>Fetching bus stop data...</Text>
+        <ActivityIndicator
+          size="large"
+          color={colors.accent}
+          style={{flex:1}}
+        />
       </View>
     );
   } else {

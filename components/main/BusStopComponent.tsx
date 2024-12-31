@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     
   },
   description: {
-    fontSize: scale(16),
+    fontSize: scale(16.5),
     lineHeight: scale(30),
     fontFamily: font.bold,
     color: colors.text,
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green'
   },
   distance: {
-    fontSize: scale(11),
+    fontSize: scale(10),
     paddingLeft: scale(5),
     textAlign: "left",
     fontFamily: font.bold,

@@ -1,6 +1,7 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Platform, StatusBar } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
+import { scale } from "react-native-size-matters";
 
 import { colors } from '../assets/styles/GlobalStyles';
 import NavigationBar from "./navigationBar";
@@ -28,6 +29,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight || 42 : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight || scale(42) : 0,
   },
 });

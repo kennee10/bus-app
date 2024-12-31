@@ -62,7 +62,7 @@ export default function NavigationBar() {
           // backgroundColor: 'red',
           borderTopWidth: 0,
           height: verticalScale(45),
-          paddingBottom: scale(20)
+          paddingBottom: scale(10)
         },
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "gray",

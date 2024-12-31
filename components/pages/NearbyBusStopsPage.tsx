@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Text, FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Text, FlatList, SafeAreaView, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
 
-import { containerStyles } from '../../assets/styles/GlobalStyles';
+import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
 import { getNearbyBusStops } from '../hooks/getNearbyBusStops';
 import BusStopComponent from '../main/BusStopComponent';
 import { useLikedBusStops } from "../context/likedBusStopsContext";
@@ -15,10 +15,9 @@ import SearchComponent from "../main/SearchComponent";
 const NearbyBusStopsPage = () => {
   const [nearbyBusStops, setNearbyBusStops] = useState<{code: string; description: string; roadName: string; distance: number}[]>([]);
   const [limit, setLimit] = useState<number | undefined>();
+  const [loading, setLoading] = useState(true);
   const { likedBusStops, toggleLike } = useLikedBusStops();
   
-
-
   useEffect(() => {
 
     let subscription: { remove: any; };
@@ -37,6 +36,8 @@ const NearbyBusStopsPage = () => {
 
         } catch (error) {
           console.error("NearbyBusStopsPage.tsx: ", error);
+        } finally {
+          setLoading(false);
         }
       });
     
@@ -68,15 +69,15 @@ const NearbyBusStopsPage = () => {
         <TouchableOpacity
           onPress={increaseLimit}
           style={{
-            borderRadius: scale(15),
-            borderWidth: scale(1.5),
-            padding: scale(5),
-            borderColor: 'gray',
+            borderRadius: scale(12),
+            borderWidth: scale(1.3),
+            padding: scale(3),
+            borderColor: colors.accent,
           }}
         >
           <Ionicons 
             name="add-outline"
-            color="gray"
+            color= {colors.accent}
             size={scale(23)}
           />
         </TouchableOpacity>
@@ -85,11 +86,17 @@ const NearbyBusStopsPage = () => {
   }
 
   return (
-    <SafeAreaView style={containerStyles.pageContainer}>
+    <SafeAreaView style={[containerStyles.pageContainer]}>
       
       <SearchComponent />
 
-      {nearbyBusStops.length > 0 ? (
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.accent}
+          style={{flex:1}}
+        />
+      ) : (nearbyBusStops.length > 0 ? (
         <View style={{flex: 1}}>
             <FlatList
               data={nearbyBusStops.slice(0, limit)}
@@ -110,7 +117,8 @@ const NearbyBusStopsPage = () => {
         
       ) : (
         <Text style={containerStyles.globalTextMessage}>No Bus Stops within 2000m</Text>
-      )}
+      ))
+    }
     </SafeAreaView>
   );
 };

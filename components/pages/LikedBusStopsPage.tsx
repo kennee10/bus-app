@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, FlatList, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
@@ -8,6 +8,7 @@ import { useLikedBusStops } from '../context/likedBusStopsContext';
 import { getLikedBusStopsDetails } from '../hooks/getLikedBusStopsDetails';
 
 const LikedBusStopsPage = () => {
+  const [loading, setLoading] = useState(true);
   const { likedBusStops, toggleLike } = useLikedBusStops();
   const likedBusStopsDetails = getLikedBusStopsDetails(); // this function has access to likedBusStops too
 
