@@ -32,14 +32,16 @@ export const getLikedBusStopsDetails = () => {
 
         const storedData = await AsyncStorage.getItem("busStops");
         if (!storedData) throw new Error("No bus stop data found");
-
         const parsedData = JSON.parse(storedData);
+
+        // getting details | calculating distance
         const enhancedStops = parsedData
-          .filter((stop: BusStop) => likedBusStops.includes(stop.BusStopCode))
-          .map((stop: BusStop) => {
-            const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
-            return { ...stop, Distance: distance };
-          });
+        .filter((stop: BusStop) => likedBusStops.includes(stop.BusStopCode))
+        .map((stop: BusStop) => {
+          const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
+          return { ...stop, Distance: distance };
+        })
+        .sort((a: { BusStopCode: string; }, b: { BusStopCode: string; }) => likedBusStops.indexOf(a.BusStopCode) - likedBusStops.indexOf(b.BusStopCode));
 
         setLikedBusStopsDetails(enhancedStops);
       } catch (error) {
