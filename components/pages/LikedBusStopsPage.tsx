@@ -1,20 +1,49 @@
-import React, { useState } from "react";
-import { Text, FlatList, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Text, FlatList, View, ActivityIndicator } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
-import { containerStyles } from '../../assets/styles/GlobalStyles';
+import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from '../main/BusStopComponent';
 import { useLikedBusStops } from '../context/likedBusStopsContext';
 import { getLikedBusStopsDetails } from '../hooks/getLikedBusStopsDetails';
 
+type BusStop = {
+  BusStopCode: string;
+  Description: string;
+  RoadName: string;
+  Latitude: number;
+  Longitude: number;
+  Distance: number;
+};
+
 const LikedBusStopsPage = () => {
   const [loading, setLoading] = useState(true);
   const { likedBusStops, toggleLike } = useLikedBusStops();
-  const likedBusStopsDetails = getLikedBusStopsDetails(); // this function has access to likedBusStops too
+  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStop[]>([]); // this function has access to likedBusStops too
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const details = await getLikedBusStopsDetails(likedBusStops);
+        setLikedBusStopsDetails(details);
+      } catch (error) {
+        console.error("LikedBusStopsPage.tsx: Failed to load liked bus stops details:", error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [likedBusStops]);
+
 
   return (
     <View style={[containerStyles.pageContainer, {paddingTop:scale(10)}]}>
-      {likedBusStopsDetails.length > 0 ? (
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color={colors.accent}
+          style={{flex:1}}
+        />
+      ) : likedBusStopsDetails.length > 0 ? (
         <FlatList
           data={likedBusStopsDetails}
           keyExtractor={(item) => item.BusStopCode}
@@ -31,7 +60,8 @@ const LikedBusStopsPage = () => {
         />
       ) : (
         <Text style={containerStyles.globalTextMessage}>No Liked Bus Stops</Text>
-      )}
+      )
+    }
     </View>
   );
 };
