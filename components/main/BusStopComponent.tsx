@@ -56,12 +56,15 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
               {props.Description}
             </Text>
           </View>
-          <View style={styles.likeButtonWrapper}>
+          <View
+            style={styles.likeButtonWrapper}
+            onStartShouldSetResponder={() => true}  // Prevent touch from propagating to parent
+          > 
             <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
               <Ionicons
                 name={props.isLiked ? "star" : "star-outline"}
                 color={props.isLiked ? "gold" : "gray"}
-                size={scale(20)}
+                size={scale(21)}
               />
             </TouchableOpacity>
           </View>
@@ -153,9 +156,10 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue'
   },
   likeButtonWrapper: {
-    flex: 2,
+    flex: 2.5,
     justifyContent: "center",
     alignItems: "center",
+    // paddingRight: scale(7),
     // backgroundColor: 'green'
   },
   busStopCode: {
@@ -164,7 +168,6 @@ const styles = StyleSheet.create({
     paddingLeft: scale(5),
     fontFamily: font.bold,
     color: colors.text,
-    
   },
   description: {
     fontSize: scale(16.5),
@@ -188,7 +191,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'blue'
   },
   blackSpace2: {
-    flex: 2,
+    flex: 2.5,
     // backgroundColor: 'green'
   },
   distance: {
