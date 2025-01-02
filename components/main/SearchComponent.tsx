@@ -14,7 +14,7 @@ const SearchComponent = () => {
     <View style={styles.searchContainer}>
       <TouchableOpacity
         style={styles.searchBox}
-        onPress={() => router.push("./search")}
+        onPress={() => router.push("/(tabs)/SearchPage")}
       >
         <Ionicons name={"search"} style={styles.searchIcon}/>
         <Text style={styles.placeholderText}>Search for a bus stop...</Text>
