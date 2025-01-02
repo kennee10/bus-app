@@ -3,9 +3,9 @@ import { Text, FlatList, View, ActivityIndicator } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
 import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
-import BusStopComponent from '../main/BusStopComponent';
-import { useLikedBusStops } from '../context/likedBusStopsContext';
-import { getLikedBusStopsDetails } from '../hooks/getLikedBusStopsDetails';
+import BusStopComponent from "../../components/main/BusStopComponent"
+import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
+import { getLikedBusStopsDetails } from '../../components/hooks/getLikedBusStopsDetails';
 
 type BusStop = {
   BusStopCode: string;

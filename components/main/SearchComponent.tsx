@@ -5,6 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
 import { scale } from "react-native-size-matters";
+import { router } from "expo-router";
 
 const SearchComponent = () => {
   const navigation = useNavigation();
@@ -13,7 +14,7 @@ const SearchComponent = () => {
     <View style={styles.searchContainer}>
       <TouchableOpacity
         style={styles.searchBox}
-        // onPress={() => navigation.navigate("SearchPage")}
+        onPress={() => router.push("./search")}
       >
         <Ionicons name={"search"} style={styles.searchIcon}/>
         <Text style={styles.placeholderText}>Search for a bus stop...</Text>

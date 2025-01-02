@@ -58,7 +58,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
           </View>
           <View
             style={styles.likeButtonWrapper}
-            onStartShouldSetResponder={() => true}  // Prevent touch from propagating to parent
+            onStartShouldSetResponder={() => true} // Prevent touch from propagating to parent
           > 
             <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
               <Ionicons
@@ -80,7 +80,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
           <View style={styles.blackSpace2}>
             {isLoading ? (
-              <ActivityIndicator size="small" color="#666" />
+              <ActivityIndicator size="small" color={colors.accent} />
             ) : (
               <View></View>
             )}
@@ -92,7 +92,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
       {!isCollapsed && (
         <View style={styles.busesContainer}>
           {isLoading ? (
-            <ActivityIndicator size="large" color="#666" />
+            <ActivityIndicator size="large" color={colors.accent} />
           ) : busArrivalData && Object.keys(busArrivalData).length > 0 ? (
             Object.entries(busArrivalData).map(([busNumber, timings]) => (
               <BusComponent
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   roadName: {
     fontSize: scale(14),
     fontFamily: font.bold,
-    color: colors.text,
+    color: colors.accent,
     // backgroundColor: 'green'
   },
   busesContainer: {

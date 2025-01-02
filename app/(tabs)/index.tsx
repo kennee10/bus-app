@@ -4,12 +4,11 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
 
 import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
-import { getNearbyBusStops } from '../hooks/getNearbyBusStops';
-import BusStopComponent from '../main/BusStopComponent';
-import { useLikedBusStops } from "../context/likedBusStopsContext";
-import { LocationWatcher } from "../hooks/LocationWatcher";
-import SearchComponent from "../main/SearchComponent";
-
+import { getNearbyBusStops } from '../../components/hooks/getNearbyBusStops';
+import BusStopComponent from '../../components/main/BusStopComponent';
+import { useLikedBusStops } from "../../components/context/likedBusStopsContext";
+import { LocationWatcher } from "../../components/hooks/LocationWatcher";
+import SearchComponent from "../../components/main/SearchComponent";
 
 
 const NearbyBusStopsPage = () => {
@@ -24,6 +23,7 @@ const NearbyBusStopsPage = () => {
 
     (async () => {
       const result = await LocationWatcher(async (coords) => {
+        
         // Call getNearbyBusStops whenever coords changes
         try {
           const nearbyBusStops = await getNearbyBusStops(coords);

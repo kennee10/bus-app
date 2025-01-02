@@ -3,9 +3,9 @@ import { Text, FlatList, View, ActivityIndicator } from 'react-native';
 
 
 import { containerStyles } from "../../assets/styles/GlobalStyles";
-import fetchBusArrival, { BusArrivalData } from '../apis/fetchBusArrival';
-import { useLikedBuses } from "../context/likedBusesContext";
-import BusComponent from '../main/BusComponent';
+import fetchBusArrival, { BusArrivalData } from '../../components/apis/fetchBusArrival';
+import { useLikedBuses } from "../../components/context/likedBusesContext";
+import BusComponent from '../../components/main/BusComponent';
 
 
 const LikedBusesPage = () => {
