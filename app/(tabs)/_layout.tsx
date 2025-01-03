@@ -16,13 +16,13 @@ export default function TabsLayout() {
         tabBarLabelStyle: {
           fontSize: scale(10),
           fontFamily: "Nunito-Bold",
-          flexWrap: "wrap",
         },
         tabBarStyle: {
           backgroundColor: colors.background,
           borderTopWidth: 0,
           height: verticalScale(45),
           paddingBottom: scale(10),
+          width: "100%",
         },
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "gray",

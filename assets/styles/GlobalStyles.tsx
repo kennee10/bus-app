@@ -25,8 +25,8 @@ export const containerStyles = StyleSheet.create({
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors.background,
-      // backgroundColor: 'red',
+      // backgroundColor: colors.background,
+      backgroundColor: 'red',
     },
     iconContainer: {
       flex: 1,

@@ -92,7 +92,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
       {!isCollapsed && (
         <View style={styles.busesContainer}>
           {isLoading ? (
-            <ActivityIndicator size="large" color={colors.accent} />
+            <ActivityIndicator size="large" color="gray" />
           ) : busArrivalData && Object.keys(busArrivalData).length > 0 ? (
             Object.entries(busArrivalData).map(([busNumber, timings]) => (
               <BusComponent

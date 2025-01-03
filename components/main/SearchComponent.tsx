@@ -30,7 +30,7 @@ const SearchComponent = () => {
 const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
-    width: '100%',
+    width: scale(340),
     padding: scale(4),
     marginBottom: scale(10),
     borderRadius: scale(10),
