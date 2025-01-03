@@ -1,6 +1,5 @@
 import React from "react";
 import { TextInput, StyleSheet, TouchableOpacity, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
@@ -8,31 +7,32 @@ import { scale } from "react-native-size-matters";
 import { router } from "expo-router";
 
 const SearchComponent = () => {
-  const navigation = useNavigation();
 
   return (
-    <View style={styles.searchContainer}>
-      <TouchableOpacity
-        style={styles.searchBox}
-        onPress={() => router.push("/(tabs)/SearchPage")}
-      >
-        <Ionicons name={"search"} style={styles.searchIcon}/>
-        <Text style={styles.placeholderText}>Search for a bus stop...</Text>
-        
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      style={styles.searchContainer}
+      onPress={() => router.push("/(tabs)/SearchPage")}
+      activeOpacity={1} // Prevents "TouchableOpacity" feedback
+    >
+      <Ionicons name={"search"} style={styles.searchIcon}/>
+      
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search for a bus stop..."
+        placeholderTextColor={colors.accent}
+        editable={false}
+        pointerEvents="none"
+      />
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   searchContainer: {
-    paddingBottom: scale(10),
-    width: scale(340),
-    // backgroundColor: 'red'
-  },
-  searchBox: {
     flexDirection: 'row',
-    padding: scale(9),
+    width: '100%',
+    padding: scale(4),
+    marginBottom: scale(10),
     borderRadius: scale(10),
     borderWidth: scale(1.3),
     alignItems: 'center',
@@ -41,14 +41,16 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     fontSize: scale(20),
+    paddingLeft: scale(5),
     color: colors.accent,
   },
-  placeholderText: {
+  searchInput: {
+    flex: 1,
     color: colors.accent,
     fontFamily: font.bold,
     fontSize: scale(12),
-    marginLeft: scale(10)
-  },
+    marginLeft: scale(10),
+  }
 });
 
 export default SearchComponent;

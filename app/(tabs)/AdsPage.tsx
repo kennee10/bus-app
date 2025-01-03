@@ -1,37 +1,58 @@
-import React, { useRef, useEffect } from "react";
-import { StyleSheet, Text, View, Animated, Easing } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, View, Dimensions } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSequence,
+  withTiming,
+  Easing,
+} from "react-native-reanimated";
+import PayLahComponent from "../../components/main/PayLahComponent";
+
+const { width, height } = Dimensions.get("window");
 
 const App = () => {
-  const scrollAnim = useRef(new Animated.Value(0)).current;
+  const x = useSharedValue(0);
+  const y = useSharedValue(0);
+
+  const boxWidth = 100; // Width of the PayLahComponent
+  const boxHeight = 100; // Height of the PayLahComponent
 
   useEffect(() => {
-    // Start the scroll animation
-    Animated.loop(
-      Animated.timing(scrollAnim, {
-        toValue: -250, // Adjust this to scroll the text fully off-screen
-        duration: 5000,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      })
-    ).start();
-  }, []);
+    const bounceRandomly = () => {
+      const getRandomPosition = (max: number, boxSize: number) =>
+        Math.random() * (max - boxSize);
+
+      const move = () => {
+        x.value = withTiming(getRandomPosition(width, boxWidth), {
+          duration: 1000,
+          easing: Easing.bounce,
+        });
+        y.value = withTiming(getRandomPosition(height, boxHeight), {
+          duration: 1000,
+          easing: Easing.bounce,
+        });
+      };
+
+      const interval = setInterval(move, 1200); // Change position every 1.2 seconds
+      return () => clearInterval(interval);
+    };
+
+    bounceRandomly();
+  }, [x, y]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: x.value },
+      { translateY: y.value },
+    ],
+  }));
 
   return (
     <View style={styles.container}>
-      <View style={styles.textContainer}>
-        <Animated.View
-          style={[
-            styles.animatedText,
-            {
-              transform: [{ translateX: scrollAnim }],
-            },
-          ]}
-        >
-          <Text style={styles.text}>
-            This is a long text that will overflow and scroll.
-          </Text>
-        </Animated.View>
-      </View>
+      <Animated.View style={[styles.payLahBox, animatedStyle]}>
+        <PayLahComponent />
+      </Animated.View>
     </View>
   );
 };
@@ -41,19 +62,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    backgroundColor: "#f0f0f0",
   },
-  textContainer: {
-    width: 250, // Container width should be wide enough for the text to overflow and scroll
-    backgroundColor: 'lightblue',
-    overflow: "hidden",
-  },
-  animatedText: {
-    flexDirection: "row",
-  },
-  text: {
-    fontSize: 18,
-    fontWeight: "bold",
+  payLahBox: {
+    position: "absolute",
+    width: 100,
+    height: 100,
   },
 });
 
