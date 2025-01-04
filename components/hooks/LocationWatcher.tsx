@@ -1,12 +1,12 @@
 import * as Location from 'expo-location';
 import { Alert, Linking } from 'react-native';
 
-type Coordinates = {
+type UserCoordinates = {
     latitude: number;
     longitude: number;
   }
 
-export async function LocationWatcher(onLocationChange: (coords: Coordinates) => void) {
+export async function LocationWatcher(onLocationChange: (coords: UserCoordinates) => void) {
     // Requesting location access
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {

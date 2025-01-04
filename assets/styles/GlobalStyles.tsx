@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 export const colors = {
-    background: "black",
+    background: "#141414",
     secondaryBackground: "#35404B",
     text: "white",
     accent: "#b4c0ca",
@@ -25,8 +25,8 @@ export const containerStyles = StyleSheet.create({
       width: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      // backgroundColor: colors.background,
-      backgroundColor: 'red',
+      backgroundColor: colors.background,
+      // backgroundColor: 'red',
     },
     iconContainer: {
       flex: 1,

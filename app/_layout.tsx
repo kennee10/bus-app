@@ -12,7 +12,6 @@ import AppInitializer from "./AppInitializer";
 export default function RootLayout() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // console.log("Root layout rendering...");
 
   const handleFetchComplete = () => {
     setIsInitialized(true);

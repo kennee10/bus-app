@@ -8,12 +8,12 @@ import {
   StyleSheet,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
+import { colors, containerStyles, font } from '../assets/styles/GlobalStyles';
 import { scale } from "react-native-size-matters";
 import { router, useFocusEffect } from "expo-router";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import BusStopComponent from "@/components/main/BusStopComponent";
-import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
+import { useLikedBusStops } from './context/likedBusStopsContext';
 
 
 type BusStop = {
@@ -67,14 +67,6 @@ const SearchPage = () => {
     );
     setFilteredStops(filtered);
   }, [searchQuery, busStops]);
-
-  // const renderBusStop = ({ item }: { item: BusStop }) => (
-  //   <TouchableOpacity style={styles.itemContainer}>
-  //     <Text style={styles.busStopCode}>{item.BusStopCode}</Text>
-  //     <Text style={styles.description}>{item.Description}</Text>
-  //     <Text style={styles.roadName}>{item.RoadName}</Text>
-  //   </TouchableOpacity>
-  // );
 
   return (
     <View style={containerStyles.pageContainer}>

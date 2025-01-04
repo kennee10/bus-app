@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { calculateDistance } from './usefulFunctions';
 
-type BusStop = {
+type RawBusStop = {
   BusStopCode: string;
   Description: string;
   RoadName: string;
@@ -10,36 +10,57 @@ type BusStop = {
   Longitude: number;
 };
 
-type Coordinates = {
+type BusStopWithDist = {
+  BusStopCode: string;
+  Description: string;
+  RoadName: string;
+  Latitude: number;
+  Longitude: number;
+  Distance: number;
+};
+
+type UserCoordinates = {
   latitude: number;
   longitude: number;
 }
 
-export const getNearbyBusStops = async (coords: Coordinates): Promise<[string, string, string, number][]> => {
+export const getNearbyBusStops = async (UserCoords: UserCoordinates): Promise<BusStopWithDist[]> => {
   try {
-
     // Retrieve bus stops from local storage
-    const storedData = await AsyncStorage.getItem('busStops');
-    if (!storedData) {
+    const storedAllStops = await AsyncStorage.getItem('allBusStops');
+    if (!storedAllStops) {
       throw new Error('No bus stop data found locally.');
     }
 
+    const allBusStops: RawBusStop[] = JSON.parse(storedAllStops);
 
-    const busStops: BusStop[] = JSON.parse(storedData);
     // Create a list of nearby bus stops with their details
-    const nearbyStops: [string, string, string, number][] = 
-      busStops.map((busStop) => {
-        const distance = calculateDistance(coords.latitude, coords.longitude, busStop.Latitude, busStop.Longitude);
+    const nearbyBusStops: BusStopWithDist[] =
+      allBusStops.map((busStop) => {
+        const distance = calculateDistance(
+          UserCoords.latitude,
+          UserCoords.longitude,
+          busStop.Latitude,
+          busStop.Longitude
+        );
         if (distance <= 2000) {
-          return [busStop.BusStopCode, busStop.Description, busStop.RoadName, distance];
+          return {
+            BusStopCode: busStop.BusStopCode,
+            Description: busStop.Description,
+            RoadName: busStop.RoadName,
+            Latitude: busStop.Latitude,
+            Longitude: busStop.Longitude,
+            Distance: distance,
+          };
         }
         return null;
       })
-      .filter((stop) => stop !== null) as [string, string, string, number][]; // Filter out null values
+      .filter((busStop): busStop is BusStopWithDist => busStop !== null) // Type guard to filter out null values
+      .sort((a, b) => a.Distance - b.Distance); // Sort by distance
 
-    return nearbyStops;
+    return nearbyBusStops;
   } catch (error) {
-    console.error('Error getting nearby bus stops:', error);
+    console.error('getNearbyBusStops.tsx: Error getting nearby bus stops: ', error);
     throw error; // Re-throw the error to indicate failure
   }
 };

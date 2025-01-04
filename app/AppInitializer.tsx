@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import * as Font from 'expo-font';
 
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
-import fetchBusStops from "../components/apis/fetchBusStops";
+import fetchAllBusStops from "../components/apis/fetchAllBusStops";
 
 
 interface AppInitializerProps {
@@ -19,7 +19,7 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        await fetchBusStops();
+        await fetchAllBusStops();
         onFetchComplete(); // Notify parent about success
 
       } catch (error) {
