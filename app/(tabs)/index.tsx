@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Text, FlatList, SafeAreaView, TouchableOpacity, View, ActivityIndicator, TextInput, StyleSheet } from 'react-native';
+import { 
+  Text, 
+  FlatList, 
+  SafeAreaView, 
+  TouchableOpacity, 
+  View, 
+  ActivityIndicator, 
+  TextInput, 
+  StyleSheet 
+} from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
+import { calculateDistance } from "../../components/hooks/usefulFunctions";
 
 import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
 import { getNearbyBusStops } from '../../components/hooks/getNearbyBusStops';
@@ -30,8 +40,9 @@ type BusStopWithDist = {
 const NearbyBusStopsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [busStops, setBusStops] = useState<RawBusStop[]>([]);
-  const [filteredStops, setFilteredStops] = useState<BusStopWithDist[]>([]);
   const [nearbyBusStops, setNearbyBusStops] = useState<BusStopWithDist[]>([]);
+  const [userCoords, setUserCoords] = useState<{latitude: number, longitude: number } | null>(null);
+  const [filteredStops, setFilteredStops] = useState<BusStopWithDist[]>([]);
   const [limit, setLimit] = useState<number>(8);
   const [loading, setLoading] = useState(true);
   const { likedBusStops, toggleLike } = useLikedBusStops();
@@ -41,12 +52,20 @@ const NearbyBusStopsPage = () => {
 
     (async () => {
       const result = await LocationWatcher(async (coords) => {
+        setUserCoords({ latitude: coords.latitude, longitude: coords.longitude });
+
         try {
           const nearbyStops = await getNearbyBusStops(coords);
           setNearbyBusStops(nearbyStops);
           setLimit(Math.min(8, nearbyStops.length));
+
+          const storedBusStops = await AsyncStorage.getItem("busStops");
+          if (storedBusStops) {
+            const parsedStops = JSON.parse(storedBusStops) as RawBusStop[];
+            setBusStops(parsedStops);
+          }
         } catch (error) {
-          console.error("Error fetching nearby bus stops:", error);
+          console.error("Error fetching nearby/all bus stops:", error);
         } finally {
           setLoading(false);
         }
@@ -67,7 +86,7 @@ const NearbyBusStopsPage = () => {
   }, []);
 
   const increaseLimit = () => {
-    setLimit((prevLimit) => Math.min(prevLimit + 8, nearbyBusStops.length));
+    setLimit((prevLimit) => Math.min(prevLimit + 8, filteredStops.length));
   };
 
   const renderFooter = () => {
@@ -92,27 +111,38 @@ const NearbyBusStopsPage = () => {
     );
   };
 
-  useEffect(() => {
-    const fetchBusStops = async () => {
-      const storedBusStops = await AsyncStorage.getItem("busStops");
-      if (storedBusStops) {
-        const parsedStops = JSON.parse(storedBusStops) as RawBusStop[];
-        setBusStops(parsedStops);
-      }
-    };
-
-    fetchBusStops();
-  }, []);
 
   useEffect(() => {
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    const filtered = nearbyBusStops.filter(
-      (stop) =>
-        stop.BusStopCode.toLowerCase().includes(lowerCaseQuery) ||
-        stop.Description.toLowerCase().includes(lowerCaseQuery)
-    );
-    setFilteredStops(filtered);
-  }, [searchQuery, nearbyBusStops]);
+    if (searchQuery.trim() === "") {
+      setFilteredStops(nearbyBusStops); // Default to nearby bus stops if no query
+    } else {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      const matchedStops = busStops
+        .filter(
+          (stop) =>
+            stop.BusStopCode.toLowerCase().includes(lowerCaseQuery) ||
+            stop.Description.toLowerCase().includes(lowerCaseQuery) ||
+            stop.RoadName.toLowerCase().includes(lowerCaseQuery)
+        )
+        .map((stop) => {
+          const distance = userCoords
+            ? calculateDistance(
+                userCoords.latitude,
+                userCoords.longitude,
+                stop.Latitude,
+                stop.Longitude
+              )
+            : Infinity; // if user coordinates are unavailable
+        
+          return {
+            ...stop,
+            Distance: distance,
+          };
+        });
+
+      setFilteredStops(matchedStops);
+    }
+  }, [searchQuery, busStops, nearbyBusStops]);
 
   return (
     <SafeAreaView style={containerStyles.pageContainer}>
@@ -148,12 +178,21 @@ const NearbyBusStopsPage = () => {
                 onLikeToggle={toggleLike}
               />
             )}
-            ListFooterComponent={filteredStops.length > limit ? renderFooter : null}
+            ListFooterComponent={
+              filteredStops.length > limit ? renderFooter : null
+            }
           />
         ) : (
-          <Text style={containerStyles.globalTextMessage}>
-            No bus stops match your search
-          </Text>
+          (nearbyBusStops.length > 0 ? (
+              <View style={containerStyles.pageContainer}>
+                <Text style={containerStyles.globalTextMessage}>No bus stops match your search</Text>
+              </View>
+            ) : (
+              <View style={containerStyles.pageContainer}>
+                <Text style={containerStyles.globalTextMessage}>No bus stops within 2000m</Text>
+              </View>
+            )
+          )
         ))
       )}
     </SafeAreaView>

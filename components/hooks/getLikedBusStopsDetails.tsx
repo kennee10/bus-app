@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import { calculateDistance } from "./usefulFunctions";
 
-type BusStop = {
+type BusStopWithDistance = {
   BusStopCode: string;
   Description: string;
   RoadName: string;
@@ -11,7 +11,7 @@ type BusStop = {
   Distance: number;
 };
 
-export const getLikedBusStopsDetails = async (likedBusStops: string[]): Promise<BusStop[]> => {
+export const getLikedBusStopsDetails = async (likedBusStops: string[]): Promise<BusStopWithDistance[]> => {
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -30,13 +30,13 @@ export const getLikedBusStopsDetails = async (likedBusStops: string[]): Promise<
 
     // Get details and calculate distance
     const enhancedStops = parsedData
-      .filter((stop: BusStop) => likedBusStops.includes(stop.BusStopCode))
-      .map((stop: BusStop) => {
+      .filter((stop: BusStopWithDistance) => likedBusStops.includes(stop.BusStopCode))
+      .map((stop: BusStopWithDistance) => {
         const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
         return { ...stop, Distance: distance };
       })
       .sort(
-        (a: BusStop, b: BusStop) =>
+        (a: BusStopWithDistance, b: BusStopWithDistance) =>
           likedBusStops.indexOf(a.BusStopCode) - likedBusStops.indexOf(b.BusStopCode)
       );
 

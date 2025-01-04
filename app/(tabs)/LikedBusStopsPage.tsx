@@ -7,7 +7,7 @@ import BusStopComponent from "../../components/main/BusStopComponent"
 import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
 import { getLikedBusStopsDetails } from '../../components/hooks/getLikedBusStopsDetails';
 
-type BusStop = {
+type BusStopWithDist = {
   BusStopCode: string;
   Description: string;
   RoadName: string;
@@ -18,8 +18,8 @@ type BusStop = {
 
 const LikedBusStopsPage = () => {
   const [loading, setLoading] = useState(true);
+  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStopWithDist[]>([]); // this function has access to likedBusStops too
   const { likedBusStops, toggleLike } = useLikedBusStops();
-  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStop[]>([]); // this function has access to likedBusStops too
 
   useEffect(() => {
     (async () => {
@@ -59,7 +59,7 @@ const LikedBusStopsPage = () => {
           )}
         />
       ) : (
-        <Text style={containerStyles.globalTextMessage}>No Liked Bus Stops</Text>
+        <Text style={containerStyles.globalTextMessage}>No liked bus stops</Text>
       )
     }
     </View>
