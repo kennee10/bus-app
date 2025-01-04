@@ -2,8 +2,8 @@ import { containerStyles } from "@/assets/styles/GlobalStyles";
 import React from "react";
 import { TouchableOpacity, Text, Linking } from "react-native";
 
-const PayLahComponent: React.FC = () => {
-    const url = "https://www.dbs.com.sg/personal/mobile/paylink/index.html?tranRef=xEhaZBzqPd";
+const PayPalComponent: React.FC = () => {
+    const url = "https://www.paypal.com/paypalme/kennee10";
 
     const handlePress = async () => {
         const supported = await Linking.canOpenURL(url);
@@ -11,7 +11,7 @@ const PayLahComponent: React.FC = () => {
         if (supported) {
             await Linking.openURL(url);
         } else {
-            console.error("PayLahComponent.tsx: error opening url")
+            console.error("PayPalComponent.tsx: error opening url")
         }
     };
 
@@ -20,9 +20,9 @@ const PayLahComponent: React.FC = () => {
             onPress={handlePress}
             style={containerStyles.button}
         >
-            <Text style={containerStyles.globalTextMessage}>Donate via PayLah</Text>
+            <Text style={containerStyles.globalTextMessage}>Donate via PayPal</Text>
         </TouchableOpacity>
     )
 };
 
-export default PayLahComponent;
+export default PayPalComponent;

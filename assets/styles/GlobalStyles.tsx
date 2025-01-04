@@ -6,6 +6,7 @@ export const colors = {
     secondaryBackground: "#35404B",
     text: "white",
     accent: "#b4c0ca",
+    highlight: "red",
   };
   
 export const font = {
@@ -18,7 +19,6 @@ export const containerStyles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: colors.background
-      // backgroundColor: "red",
     },
     pageContainer: {
       flex: 1,
@@ -26,7 +26,19 @@ export const containerStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.background,
-      // backgroundColor: 'red',
+    },
+    button: {
+      backgroundColor: colors.secondaryBackground, // Background color
+      padding: scale(10), // Padding inside the button
+      borderRadius: scale(5), // Rounded corners
+      justifyContent: "center", // Center content vertically
+      alignItems: "center", // Center content horizontally
+      shadowColor: "#000", // Shadow color
+      shadowOffset: { width: 0, height: 2 }, // Shadow offset
+      shadowOpacity: 0.25, // Shadow opacity
+      shadowRadius: 3.84, // Shadow radius
+      elevation: 5, // Shadow for Android
+      margin: scale(5)
     },
     iconContainer: {
       flex: 1,

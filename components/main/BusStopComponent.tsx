@@ -16,6 +16,7 @@ type BusStopComponentProps = {
   Distance: string;
   isLiked: boolean;
   onLikeToggle: (busStopCode: string) => void;
+  searchQuery: string; // Add searchQuery as a prop
 };
 
 const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
@@ -52,9 +53,21 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             <Text style={styles.busStopCode}>{props.BusStopCode}</Text>
           </View>
           <View style={styles.descriptionWrapper}>
-            <Text style={styles.description}>
-              {props.Description}
-            </Text>
+          <Text style={styles.description}>
+            {props.searchQuery
+              ? props.Description.split(new RegExp(`(${props.searchQuery})`, 'i')).map((part, index) =>
+                  part.toLowerCase() === props.searchQuery.toLowerCase() ? (
+                    <Text key={index} style={styles.highlight}>
+                      {part}
+                    </Text>
+                  ) : (
+                    part
+                  )
+                )
+              : props.Description}
+          </Text>
+
+
           </View>
           <View
             style={styles.likeButtonWrapper}
@@ -122,6 +135,10 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
 
 const styles = StyleSheet.create({
+  highlight: {
+    color: colors.highlight,
+    fontFamily: font.bold,
+  },  
   outerContainer: {
     flex: 1,
     width: scale(340),

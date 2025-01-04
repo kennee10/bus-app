@@ -176,6 +176,7 @@ const NearbyBusStopsPage = () => {
                 Distance={item.Distance.toFixed(0)}
                 isLiked={likedBusStops.includes(item.BusStopCode)}
                 onLikeToggle={toggleLike}
+                searchQuery={searchQuery}
               />
             )}
             ListFooterComponent={
