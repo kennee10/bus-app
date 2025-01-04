@@ -1,10 +1,11 @@
 import React from "react";
-import { View , Text} from "react-native";
+import { View , Text, Image, StyleSheet} from "react-native";
 
 import { containerStyles } from "@/assets/styles/GlobalStyles";
 import PayLahComponent from "../../components/main/PayLahComponent";
 import PayPalComponent from "@/components/main/PayPalComponent";
 import { scale } from "react-native-size-matters";
+import paynowQR from "../../assets/images/paynow.jpg"
 
 
 const App = () => {
@@ -16,8 +17,18 @@ const App = () => {
           <PayLahComponent />
           <PayPalComponent />
         </View>
+        <View style={{marginTop: scale(10)}}>
+          <Image source={paynowQR} style={styles.image} />
+        </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+  },
+});
 
 export default App;

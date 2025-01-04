@@ -3,7 +3,7 @@ import React from "react";
 import { TouchableOpacity, Text, Linking } from "react-native";
 
 const PayLahComponent: React.FC = () => {
-    const url = "https://www.dbs.com.sg/personal/mobile/paylink/index.html?tranRef=xEhaZBzqPd";
+    const url = "https://www.dbs.com.sg/personal/mobile/paylink/index.html?tranRef=xEhaZBzqPd"; // 5th jan 2025
 
     const handlePress = async () => {
         const supported = await Linking.canOpenURL(url);
