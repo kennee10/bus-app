@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },  
   outerContainer: {
     flex: 1,
-    width: scale(340),
+    width: "100%",
     overflow: "hidden",
     marginBottom: verticalScale(10),
     borderRadius: scale(4),

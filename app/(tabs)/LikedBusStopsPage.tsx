@@ -24,6 +24,7 @@ const LikedBusStopsPage = () => {
   useEffect(() => {
     (async () => {
       try {
+        console.log('getting liked bus stops')
         const details = await getLikedBusStopsDetails(likedBusStops);
         setLikedBusStopsDetails(details);
       } catch (error) {
@@ -36,32 +37,35 @@ const LikedBusStopsPage = () => {
 
 
   return (
-    <View style={[containerStyles.pageContainer, {paddingTop:scale(10)}]}>
-      {loading ? (
-        <ActivityIndicator
-          size="large"
-          color={colors.accent}
-          style={{flex:1}}
-        />
-      ) : likedBusStopsDetails.length > 0 ? (
-        <FlatList
-          data={likedBusStopsDetails}
-          keyExtractor={(item) => item.BusStopCode}
-          renderItem={({ item }) => (
-            <BusStopComponent
-              BusStopCode={item.BusStopCode}
-              Description={item.Description}
-              RoadName={item.RoadName}
-              Distance={item.Distance.toFixed(0)}
-              isLiked={likedBusStops.includes(item.BusStopCode)}
-              onLikeToggle={() => toggleLike(item.BusStopCode)}
-            />
-          )}
-        />
-      ) : (
-        <Text style={containerStyles.globalTextMessage}>No liked bus stops</Text>
-      )
-    }
+    <View style={containerStyles.pageContainer}>
+      <View style={[containerStyles.innerPageContainer, {marginTop: scale(10)}]}>
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.accent}
+            style={{flex:1}}
+          />
+        ) : likedBusStopsDetails.length > 0 ? (
+          <FlatList
+            data={likedBusStopsDetails}
+            keyExtractor={(item) => item.BusStopCode}
+            renderItem={({ item }) => (
+              <BusStopComponent
+                BusStopCode={item.BusStopCode}
+                Description={item.Description}
+                RoadName={item.RoadName}
+                Distance={item.Distance.toFixed(0)}
+                isLiked={likedBusStops.includes(item.BusStopCode)}
+                onLikeToggle={() => toggleLike(item.BusStopCode)}
+                searchQuery=""
+              />
+            )}
+          />
+        ) : (
+          <Text style={containerStyles.globalTextMessage}>No liked bus stops</Text>
+        )
+      }
+      </View>
     </View>
   );
 };

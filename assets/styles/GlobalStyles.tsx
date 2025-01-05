@@ -16,6 +16,7 @@ export const font = {
 export const containerStyles = StyleSheet.create({
     globalContainer: {
       flex: 1,
+      width: "100%",
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: colors.background
@@ -26,6 +27,12 @@ export const containerStyles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.background,
+      // backgroundColor: 'red',
+    },
+    innerPageContainer: {
+      flex: 1,
+      width: '97%',
+      // backgroundColor: 'green',
     },
     button: {
       backgroundColor: colors.secondaryBackground, // Background color

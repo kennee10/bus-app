@@ -144,8 +144,10 @@ const NearbyBusStopsPage = () => {
     }
   }, [searchQuery, busStops, nearbyBusStops]);
 
+
   return (
-    <SafeAreaView style={containerStyles.pageContainer}>
+    <View style={containerStyles.pageContainer}>
+      <View style={containerStyles.innerPageContainer}>
       <View style={styles.searchContainer}>
         <Ionicons name="search" style={styles.searchIcon} />
         <TextInput
@@ -165,7 +167,8 @@ const NearbyBusStopsPage = () => {
         />
       ) : (
         (filteredStops.length > 0 ? (
-          <FlatList
+          // <View style={containerStyles.globalContainer}>
+            <FlatList
             data={filteredStops.slice(0, limit)}
             keyExtractor={(item) => item.BusStopCode}
             renderItem={({ item }) => (
@@ -183,6 +186,8 @@ const NearbyBusStopsPage = () => {
               filteredStops.length > limit ? renderFooter : null
             }
           />
+          // </View>
+          
         ) : (
           (nearbyBusStops.length > 0 ? (
               <View style={containerStyles.pageContainer}>
@@ -196,15 +201,17 @@ const NearbyBusStopsPage = () => {
           )
         ))
       )}
-    </SafeAreaView>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
-    width: scale(340),
+    width: "100%",
     padding: scale(4),
+    marginTop: scale(5),
     marginBottom: scale(10),
     borderRadius: scale(10),
     borderWidth: scale(1.3),

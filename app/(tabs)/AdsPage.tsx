@@ -13,13 +13,13 @@ const App = () => {
   return (
     <View style={containerStyles.pageContainer}>
       <Text style={[containerStyles.globalTextMessage, {marginBottom: scale(10)}]}>just kidding, i hate ads</Text>
-        <View style={{flexDirection: 'row'}}>
-          <PayLahComponent />
-          <PayPalComponent />
-        </View>
-        <View style={{marginTop: scale(10)}}>
-          <Image source={paynowQR} style={styles.image} />
-        </View>
+      <View style={{flexDirection: 'row'}}>
+        <PayLahComponent />
+        <PayPalComponent />
+      </View>
+      <View style={{marginTop: scale(10)}}>
+        <Image source={paynowQR} style={styles.image} />
+      </View>
     </View>
   );
 };
