@@ -1,13 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from "react-native";
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import { scale, verticalScale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { colors, font } from '../../assets/styles/GlobalStyles';
 import BusComponent from "./BusComponent";
-import fetchBusArrival, { BusArrivalData } from "../apis/fetchBusArrival";
-// FROM CONTEXT
+import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
+
+
+type BusArrivalInfo = {
+  OriginCode: string;
+  DestinationCode: string;
+  EstimatedArrival: string;
+  Monitored: number;
+  Latitude: string;
+  Longitude: string;
+  VisitNumber: string;
+  Load: string;
+  Feature: string;
+  Type: string;
+};
+
+type BusService = {
+  ServiceNo: string;
+  Operator: string;
+  nextBuses: BusArrivalInfo[];
+};
 
 type BusStopComponentProps = {
   BusStopCode: string;
@@ -16,63 +35,67 @@ type BusStopComponentProps = {
   Distance: string;
   isLiked: boolean;
   onLikeToggle: (busStopCode: string) => void;
-  searchQuery: string; // Add searchQuery as a prop
+  searchQuery: string;
 };
 
+
 const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(true); // Initial state is collapsed
+  const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]); // Array of BusService
   const [isLoading, setIsLoading] = useState(true);
-  // FROM CONTEXT
   const { likedBuses, toggleLike } = useLikedBuses();
 
-
-  // Refresh bus arrival timings
   useEffect(() => {
-    const intervalId = setInterval(async () => {
+    let intervalId;
+
+    const fetchAndSetBusArrivalData = async () => {
       try {
+        // setIsLoading(true);
         const data = await fetchBusArrival(props.BusStopCode);
-        setBusArrivalData(data); // Set the fetched bus data
+        setBusArrivalData(data);
       } catch (error) {
-        console.error("BusStopComponent.tsx: Failed to fetch bus data, error: ", error);
+        console.error("Failed to fetch bus data:", error);
       } finally {
         setIsLoading(false);
       }
-    }, 5000); // 5 seconds
+    };
 
-    return () => clearInterval(intervalId); // Cleanup
-  }, [props.BusStopCode]);
+    // Fetch data immediately when the component mounts
+    fetchAndSetBusArrivalData();
 
+    // Set up the interval to fetch data every 5 seconds
+    intervalId = setInterval(fetchAndSetBusArrivalData, 5000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   return (
     <View style={styles.outerContainer}>
       <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} style={styles.container}>
-        {/* Upper */}
+        {/* Upper Section */}
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
             <Text style={styles.busStopCode}>{props.BusStopCode}</Text>
           </View>
           <View style={styles.descriptionWrapper}>
-          <Text style={styles.description}>
-            {props.searchQuery
-              ? props.Description.split(new RegExp(`(${props.searchQuery})`, 'i')).map((part, index) =>
-                  part.toLowerCase() === props.searchQuery.toLowerCase() ? (
-                    <Text key={index} style={styles.highlight}>
-                      {part}
-                    </Text>
-                  ) : (
-                    part
+            <Text style={styles.description}>
+              {props.searchQuery
+                ? props.Description.split(new RegExp(`(${props.searchQuery})`, 'i')).map((part, index) =>
+                    part.toLowerCase() === props.searchQuery.toLowerCase() ? (
+                      <Text key={index} style={styles.highlight}>
+                        {part}
+                      </Text>
+                    ) : (
+                      part
+                    )
                   )
-                )
-              : props.Description}
-          </Text>
-
-
+                : props.Description}
+            </Text>
           </View>
-          <View
-            style={styles.likeButtonWrapper}
-            onStartShouldSetResponder={() => true} // Prevent touch from propagating to parent
-          > 
+          <View style={styles.likeButtonWrapper}>
             <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
               <Ionicons
                 name={props.isLiked ? "star" : "star-outline"}
@@ -82,7 +105,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-        {/* Lower */}
+        {/* Lower Section */}
         <View style={styles.lower}>
           <View style={styles.distanceWrapper}>
             <Text style={styles.distance}>{props.Distance}m</Text>
@@ -90,12 +113,11 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
           <View style={styles.roadNameWrapper}>
             <Text style={styles.roadName}>{props.RoadName}</Text>
           </View>
-
           <View style={styles.blackSpace2}>
             {isLoading ? (
               <ActivityIndicator size="small" color={colors.accent} />
             ) : (
-              <View></View>
+              <View />
             )}
           </View>
         </View>
@@ -106,19 +128,16 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
         <View style={styles.busesContainer}>
           {isLoading ? (
             <ActivityIndicator size="large" color="gray" />
-          ) : busArrivalData && Object.keys(busArrivalData).length > 0 ? (
-            Object.entries(busArrivalData).map(([busNumber, timings]) => (
+          ) : busArrivalData.length > 0 && busArrivalData[0].nextBuses.length > 0 ? (
+            busArrivalData.map((busService, index) => (
               <BusComponent
-                key={busNumber}
-                busNumber={busNumber}
+                key={index}
+                busNumber={busService.ServiceNo}
                 busStopCode={props.BusStopCode}
-                firstArrival={timings[0] || "No data"}
-                secondArrival={timings[1] || "No data"}
-                thirdArrival={timings[2] || "No data"}
+                nextBuses={busService.nextBuses} // Pass all nextBuses for this service
                 isHearted={likedBuses.some(
-                  ([code, service]) => code === props.BusStopCode && service === busNumber
-
-              )}
+                  ([code, service]) => code === props.BusStopCode && service === busService.ServiceNo
+                )}
                 onHeartToggle={toggleLike}
               />
             ))
@@ -133,12 +152,11 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   );
 };
 
-
 const styles = StyleSheet.create({
   highlight: {
     color: colors.highlight,
     fontFamily: font.bold,
-  },  
+  },
   outerContainer: {
     flex: 1,
     width: "100%",
@@ -163,21 +181,16 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
   },
-  // Upper
   busStopCodeWrapper: {
     flex: 6,
-    // backgroundColor: 'red'
   },
   descriptionWrapper: {
     flex: 19,
-    // backgroundColor: 'blue'
   },
   likeButtonWrapper: {
     flex: 2.5,
     justifyContent: "center",
     alignItems: "center",
-    // paddingRight: scale(7),
-    // backgroundColor: 'green'
   },
   busStopCode: {
     fontSize: scale(14),
@@ -192,24 +205,19 @@ const styles = StyleSheet.create({
     fontFamily: font.bold,
     color: colors.text,
   },
-  // Lower
   distanceWrapper: {
     flex: 6,
     height: scale(25),
     justifyContent: 'center',
-    // backgroundColor: 'red',
-    
   },
   roadNameWrapper: {
     flex: 19,
     height: scale(25),
     paddingBottom: scale(2),
     justifyContent: 'center',
-    // backgroundColor: 'blue'
   },
   blackSpace2: {
     flex: 2.5,
-    // backgroundColor: 'green'
   },
   distance: {
     fontSize: scale(10),
@@ -217,13 +225,11 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontFamily: font.bold,
     color: colors.accent,
-    // backgroundColor: 'green'
   },
   roadName: {
     fontSize: scale(14),
     fontFamily: font.bold,
     color: colors.accent,
-    // backgroundColor: 'green'
   },
   busesContainer: {
     flex: 1,

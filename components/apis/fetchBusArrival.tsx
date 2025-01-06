@@ -1,76 +1,75 @@
-export type BusArrivalData = {
-  [busNumber: string]: string[];
+type BusArrivalInfo = {
+  OriginCode: string;
+  DestinationCode: string;
+  EstimatedArrival: string;
+  Monitored: number;
+  Latitude: string;
+  Longitude: string;
+  VisitNumber: string;
+  Load: string;
+  Feature: string;
+  Type: string;
 };
 
-const fetchBusArrival = async (busStopCode: string): Promise<BusArrivalData> => {
-  const myHeaders = new Headers();
-  myHeaders.append("AccountKey", "+szqz/rrQeO8c8ZsrgNWLg==");
+type BusService = {
+  ServiceNo: string;
+  Operator: string;
+  nextBuses: BusArrivalInfo[];
+};
 
-  const requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow" as RequestRedirect,
-  };
 
-  const getTimeDifference = (estimatedArrival: string): string => {
-    const arrivalTime = new Date(estimatedArrival);
-    const currentTime = new Date();
-    
-    if (isNaN(arrivalTime.getTime())) {
-      return "Invalid time"; // Return a fallback message if the time is invalid
-    }
-
-    const timeDifference = Math.max(0, (arrivalTime.getTime() - currentTime.getTime()) / 1000); // in seconds
-    
-    const minutes = Math.floor(timeDifference / 60);
-    const seconds = Math.floor(timeDifference % 60);
-    
-    return `${minutes}min ${seconds}s`; // return formatted time
-  };
+export default async function fetchBusArrival(busStopCode: string): Promise<BusService[]> {
+  const apiKey = "+szqz/rrQeO8c8ZsrgNWLg==";
+  const url = `https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=${busStopCode}`;
 
   try {
-    const response = await fetch(
-      `https://datamall2.mytransport.sg/ltaodataservice/v3/BusArrival?BusStopCode=${busStopCode}`,
-      requestOptions
-    );
-    
-    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    
-    const data = await response.json();
-    
-    const busArrivalData: BusArrivalData = data.Services.reduce((acc: BusArrivalData, service: any) => {
-      const busNumber = service.ServiceNo;
-      
-      const timings: string[] = [];
-      
-      // Safely extract the timings
-      if (service.NextBus && service.NextBus.EstimatedArrival) {
-        timings.push(getTimeDifference(service.NextBus.EstimatedArrival));
-      } else {
-        timings.push("-");
-      }
-      
-      if (service.NextBus2 && service.NextBus2.EstimatedArrival) {
-        timings.push(getTimeDifference(service.NextBus2.EstimatedArrival));
-      } else {
-        timings.push("-");
-      }
+    const response = await fetch(url, {
+      headers: {
+        AccountKey: apiKey,
+        accept: "application/json",
+      },
+    });
 
-      if (service.NextBus3 && service.NextBus3.EstimatedArrival) {
-        timings.push(getTimeDifference(service.NextBus3.EstimatedArrival));
-      } else {
-        timings.push("-");
-      }
+    if (!response.ok) {
+      throw new Error(`Error fetching bus arrivals: ${response.status}`);
+    }
 
-      acc[busNumber] = timings;
-      return acc;
-    }, {});
+    const textResponse = await response.text();  // Get the raw response as text
+    const data = JSON.parse(textResponse);  // Parse the response text to JSON
 
-    return busArrivalData;
+    const busServices: BusService[] = data.Services.map((service: any) => {
+      const nextBuses: BusArrivalInfo[] = [];
+
+      // Object.keys(service) Retrieves all property names (keys) of the service object, e.g., ["ServiceNo", "Operator", "NextBus", ...]
+      Object.keys(service).forEach((key) => {
+        if (key.startsWith("NextBus") && service[key]) {
+          const busData = service[key];
+
+          nextBuses.push({
+            OriginCode: busData.OriginCode,
+            DestinationCode: busData.DestinationCode,
+            EstimatedArrival: busData.EstimatedArrival,
+            Monitored: busData.Monitored !== undefined ? busData.Monitored : 0, // Handle missing `Monitored`
+            Latitude: busData.Latitude,
+            Longitude: busData.Longitude,
+            VisitNumber: busData.VisitNumber,
+            Load: busData.Load,
+            Feature: busData.Feature,
+            Type: busData.Type,
+          });
+        }
+      });
+
+      return {
+        ServiceNo: service.ServiceNo,
+        Operator: service.Operator,
+        nextBuses,
+      };
+    });
+
+    return busServices;
   } catch (error) {
-    console.error("fetchBusArrival.tsx: Error fetching bus arrival data, error: ", error);
+    console.error("Error fetching bus arrival data:", error);
     throw error;
   }
-};
-
-export default fetchBusArrival;
+}
