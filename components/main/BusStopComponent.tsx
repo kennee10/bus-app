@@ -95,11 +95,14 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
                 : props.Description}
             </Text>
           </View>
-          <View style={styles.likeButtonWrapper}>
+          <View
+            style={styles.likeButtonWrapper}
+            onStartShouldSetResponder={() => true} // Prevent touch from propagating to parent
+          >
             <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
               <Ionicons
                 name={props.isLiked ? "star" : "star-outline"}
-                color={props.isLiked ? "gold" : "gray"}
+                color={props.isLiked ? colors.warning : colors.onSurfaceSecondary2}
                 size={scale(21)}
               />
             </TouchableOpacity>
@@ -115,7 +118,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
           </View>
           <View style={styles.blackSpace2}>
             {isLoading ? (
-              <ActivityIndicator size="small" color={colors.accent} />
+              <ActivityIndicator size="small" color={colors.onSurfaceSecondary} />
             ) : (
               <View />
             )}
@@ -127,7 +130,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
       {!isCollapsed && (
         <View style={styles.busesContainer}>
           {isLoading ? (
-            <ActivityIndicator size="large" color="gray" />
+            <ActivityIndicator size="large" color={colors.onSurfaceSecondary} />
           ) : busArrivalData.length > 0 && busArrivalData[0].nextBuses.length > 0 ? (
             busArrivalData.map((busService, index) => (
               <BusComponent
@@ -154,7 +157,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
 const styles = StyleSheet.create({
   highlight: {
-    color: colors.highlight,
+    color: colors.primary,
     fontFamily: font.bold,
   },
   outerContainer: {
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginBottom: verticalScale(10),
     borderRadius: scale(4),
-    backgroundColor: colors.secondaryBackground,
+    backgroundColor: colors.surface,
   },
   container: {
     flex: 1,
@@ -197,13 +200,13 @@ const styles = StyleSheet.create({
     lineHeight: scale(30),
     paddingLeft: scale(5),
     fontFamily: font.bold,
-    color: colors.text,
+    color: colors.onSurface,
   },
   description: {
     fontSize: scale(16.5),
     lineHeight: scale(30),
     fontFamily: font.bold,
-    color: colors.text,
+    color: colors.onSurface,
   },
   distanceWrapper: {
     flex: 6,
@@ -224,21 +227,21 @@ const styles = StyleSheet.create({
     paddingLeft: scale(5),
     textAlign: "left",
     fontFamily: font.bold,
-    color: colors.accent,
+    color: colors.onSurfaceSecondary,
   },
   roadName: {
     fontSize: scale(14),
     fontFamily: font.bold,
-    color: colors.accent,
+    color: colors.onSurfaceSecondary,
   },
   busesContainer: {
     flex: 1,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.surface,
   },
   noBusesText: {
     flex: 1,
     fontFamily: font.bold,
-    color: "red",
+    color: colors.info,
     textAlign: "center",
   },
 });

@@ -55,7 +55,7 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
       <View style={containerStyles.globalContainer}>
         <ActivityIndicator
           size="large"
-          color={colors.accent}
+          color={colors.onBackgroundSecondary}
           style={{flex:1}}
         />
       </View>

@@ -2,11 +2,34 @@ import { StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 export const colors = {
-    background: "#141414",
-    secondaryBackground: "#35404B",
+    background: "#1E1F22",
+    surface: "#2B2D31",
+    surface2: "#313338",
+    
+    onBackground: "#FFFFFF",
+    onSurface: "#FFFFFF",
+    onBackgroundSecondary: "#84848A",
+    onSurfaceSecondary: "#AFAFB2",
+    onSurfaceSecondary2: "gray",
+
+    primary: "#aa88ef",
+    secondary: "",
+
+    accent: "#1EB980",
+    accent2: "#045D56",
+    accent3: "#FF6859",
+    accent4: "#FFCF44",
+
+
+    info: 'purple',
+    warning: '#FFCF44',
+    error: '#FF6859',
+    
+
+    
+    // might not use
     text: "white",
-    accent: "#b4c0ca",
-    highlight: "red",
+    secondaryBackground: "#35404B",
   };
   
 export const font = {
@@ -35,7 +58,7 @@ export const containerStyles = StyleSheet.create({
       // backgroundColor: 'green',
     },
     button: {
-      backgroundColor: colors.secondaryBackground, // Background color
+      backgroundColor: colors.surface, // Background color
       padding: scale(10), // Padding inside the button
       borderRadius: scale(5), // Rounded corners
       justifyContent: "center", // Center content vertically
@@ -55,18 +78,18 @@ export const containerStyles = StyleSheet.create({
     },
     loadingText: {
       fontSize: scale(14),
-      color: "#333"
+      color: colors.onBackgroundSecondary
     },
     globalTextMessage: {
       fontSize: scale(14),
       fontFamily: font.bold,
-      color: "white",
+      color: colors.onBackground,
       textAlign: "center",
     },
     globalErrorText: {
       fontSize: scale(14),
       fontFamily: font.bold,
-      color: "red",
+      color: colors.error,
       textAlign: "center",
     },
   });

@@ -98,12 +98,12 @@ const NearbyBusStopsPage = () => {
             borderRadius: scale(12),
             borderWidth: scale(1.3),
             padding: scale(3),
-            borderColor: colors.accent,
+            borderColor: colors.primary,
           }}
         >
           <Ionicons 
             name="add-outline"
-            color={colors.accent}
+            color={colors.primary}
             size={scale(23)}
           />
         </TouchableOpacity>
@@ -153,7 +153,7 @@ const NearbyBusStopsPage = () => {
         <TextInput
           style={styles.searchInput}
           placeholder="Search for a bus stop..."
-          placeholderTextColor={colors.accent}
+          placeholderTextColor={colors.onSurfaceSecondary}
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
@@ -162,7 +162,7 @@ const NearbyBusStopsPage = () => {
       {loading ? (
         <ActivityIndicator
           size="large"
-          color={colors.accent}
+          color={colors.onBackgroundSecondary}
           style={{ flex: 1 }}
         />
       ) : (
@@ -210,24 +210,25 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     width: "100%",
-    padding: scale(4),
+    overflow: "hidden",
     marginTop: scale(5),
     marginBottom: scale(10),
     borderRadius: scale(10),
     borderWidth: scale(1.3),
     alignItems: "center",
-    backgroundColor: colors.secondaryBackground,
-    borderColor: colors.accent,
+    backgroundColor: colors.surface,
+    borderColor: colors.onBackgroundSecondary,
   },
   searchIcon: {
-    fontSize: scale(20),
-    paddingLeft: scale(5),
-    color: colors.accent,
+    fontSize: scale(18),
+    paddingLeft: scale(10),
+    color: colors.primary,
   },
   searchInput: {
     flex: 1,
-    color: colors.accent,
+    color: colors.onSurfaceSecondary,
     fontFamily: font.bold,
+    height: scale(40),
     fontSize: scale(12),
     marginLeft: scale(10),
   },

@@ -42,7 +42,7 @@ const LikedBusStopsPage = () => {
         {loading ? (
           <ActivityIndicator
             size="large"
-            color={colors.accent}
+            color={colors.onBackgroundSecondary}
             style={{flex:1}}
           />
         ) : likedBusStopsDetails.length > 0 ? (
@@ -62,7 +62,10 @@ const LikedBusStopsPage = () => {
             )}
           />
         ) : (
-          <Text style={containerStyles.globalTextMessage}>No liked bus stops</Text>
+          <View style={containerStyles.pageContainer}>
+            <Text style={containerStyles.globalTextMessage}>No liked bus stops</Text>
+          </View>
+          
         )
       }
       </View>
