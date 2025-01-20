@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { 
   Text, 
   FlatList, 
@@ -12,6 +12,8 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
 import { calculateDistance } from "../../components/hooks/usefulFunctions";
+import { Keyboard } from 'react-native';
+import { BackHandler } from 'react-native';
 
 import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
 import { getNearbyBusStops } from '../../components/hooks/getNearbyBusStops';
@@ -45,7 +47,30 @@ const NearbyBusStopsPage = () => {
   const [filteredStops, setFilteredStops] = useState<BusStopWithDist[]>([]);
   const [limit, setLimit] = useState<number>(8);
   const [loading, setLoading] = useState(true);
+  const inputRef = useRef<TextInput>(null);
   const { likedBusStops, toggleLike } = useLikedBusStops();
+
+  const searchIconPress = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }
+
+  useEffect(() => {
+    const backAction = () => {
+      console.log("back button")
+        Keyboard.dismiss(); // Dismiss the keyboard
+        // Add any other logic for handling back button press
+        return true; // Prevent default back button behavior
+    };
+
+    const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+    );
+
+    return () => backHandler.remove();
+}, []);
 
   useEffect(() => {
     let subscription: { remove: () => void } | null = null;
@@ -144,19 +169,33 @@ const NearbyBusStopsPage = () => {
     }
   }, [searchQuery, busStops, nearbyBusStops]);
 
+  const clearSearchQuery = () => {
+    setSearchQuery("");
+  }
+
 
   return (
     <View style={containerStyles.pageContainer}>
       <View style={containerStyles.innerPageContainer}>
       <View style={styles.searchContainer}>
-        <Ionicons name="search" style={styles.searchIcon} />
+        <TouchableOpacity onPress={searchIconPress} activeOpacity={1}>
+          <Ionicons name="search" style={styles.searchIcon} />
+        </TouchableOpacity>
+        
         <TextInput
+          ref= {inputRef}
           style={styles.searchInput}
           placeholder="Search for a bus stop..."
           placeholderTextColor={colors.onSurfaceSecondary}
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
+        {searchQuery != "" && (
+          <TouchableOpacity onPress={clearSearchQuery}>
+            <Ionicons name="close-outline" style={styles.crossIcon} />
+          </TouchableOpacity>
+        )}
+        
       </View>
 
       {loading ? (
@@ -221,8 +260,15 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     fontSize: scale(18),
-    paddingLeft: scale(10),
+    padding: scale(10),
     color: colors.secondary2,
+    // backgroundColor: 'red'
+  },
+  crossIcon: {
+    fontSize: scale(24),
+    color: colors.secondary2,
+    padding: scale(7),
+    // backgroundColor: 'red'
   },
   searchInput: {
     flex: 1,
@@ -230,7 +276,6 @@ const styles = StyleSheet.create({
     fontFamily: font.bold,
     height: scale(40),
     fontSize: scale(12),
-    marginLeft: scale(10),
   },
 });
 
