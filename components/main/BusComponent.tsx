@@ -73,9 +73,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: scale(5),
+    paddingLeft: scale(5),
+    paddingRight: scale(5),
+    margin: scale(2.5),
+    borderRadius: scale(4),
     backgroundColor: colors.surface2,
     // backgroundColor: "#FFE4E1",
+    
     // shadow stuff
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -92,9 +96,9 @@ const styles = StyleSheet.create({
   },
   busNumber: {
     fontFamily: "Arial",
-    fontSize: scale(16),
+    fontSize: scale(19),
     fontWeight: "bold",
-    color: colors.onSurface
+    color: colors.secondary
   },
 
   busInfoWrapper: {
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     marginRight: scale(14),
-    // backgroundColor: 'red'
+    // backgroundColor: 'lightslategrey'
   },
 
   likeButtonWrapper: {

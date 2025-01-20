@@ -7,29 +7,33 @@ export const colors = {
     surface2: "#313338",
     
     onBackground: "#FFFFFF",
-    onSurface: "#FFFFFF",
     onBackgroundSecondary: "#84848A",
+    onBackgroundSecondary2: "#5b5c5f",
+    
+    onSurface: "#FFFFFF",
     onSurfaceSecondary: "#AFAFB2",
     onSurfaceSecondary2: "gray",
+    
+    onSurface2: "#FFFFFF",
+    onSurface2Secondary: "#bdbdbd",
+    
 
-    primary: "#aa88ef",
-    secondary: "",
+    primary: "#a17ee4",
+    secondary: "#b19aeb",
+    secondary2: "#ccbff3",
 
-    accent: "#1EB980",
-    accent2: "#045D56",
-    accent3: "#FF6859",
-    accent4: "#FFCF44",
+    accent: "#1EB980", // green
+    accent2: "#045D56", // dark green
+    accent3: "#FF6859", // red
+    // accent4: "#f99a07", // orange
+    accent4: "#f3d251",
 
 
-    info: 'purple',
-    warning: '#FFCF44',
+    info: 'gray',
+    // warning: '#f3d251', // #FFCF44
+    warning: '#f99a07',
     error: '#FF6859',
-    
 
-    
-    // might not use
-    text: "white",
-    secondaryBackground: "#35404B",
   };
   
 export const font = {

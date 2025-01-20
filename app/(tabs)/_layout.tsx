@@ -25,7 +25,7 @@ export default function TabsLayout() {
           width: "100%",
         },
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.onBackgroundSecondary,
+        tabBarInactiveTintColor: colors.onBackgroundSecondary2,
       }}
     >
       <Tabs.Screen

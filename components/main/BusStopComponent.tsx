@@ -102,7 +102,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
               <Ionicons
                 name={props.isLiked ? "star" : "star-outline"}
-                color={props.isLiked ? colors.warning : colors.onSurfaceSecondary2}
+                color={props.isLiked ? colors.accent4 : colors.onSurfaceSecondary2}
                 size={scale(21)}
               />
             </TouchableOpacity>
@@ -145,9 +145,12 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
               />
             ))
           ) : (
-            <Text style={styles.noBusesText}>
-              No buses are currently in operation.
-            </Text>
+            <View style={styles.noBusesWrapper}>
+              <Text style={styles.noBusesText}>
+                No buses are currently in operation.
+              </Text>
+            </View>
+            
           )}
         </View>
       )}
@@ -164,7 +167,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     overflow: "hidden",
-    marginBottom: verticalScale(10),
+    padding: scale(1),
+    marginBottom: verticalScale(7),
     borderRadius: scale(4),
     backgroundColor: colors.surface,
   },
@@ -238,10 +242,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.surface,
   },
+  noBusesWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    margin: scale(2.5),
+    paddingTop: scale(10),
+    paddingBottom: scale(10),
+    borderRadius: scale(4),
+    backgroundColor: colors.surface2,
+    // shadow stuff
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
   noBusesText: {
     flex: 1,
     fontFamily: font.bold,
-    color: colors.info,
+    color: colors.warning,
     textAlign: "center",
   },
 });

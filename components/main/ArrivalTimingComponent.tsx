@@ -43,17 +43,20 @@ const getBusLoad = (load: string): JSX.Element => {
       </>
     );
   } else {
-    return <EntypoIcons name="help-with-circle" color={colors.warning} size={scale(10)} />;
+    return <EntypoIcons name="help-with-circle" color={colors.info} size={scale(9)} />;
   }
 };
 
 const getBusType = (type: string): JSX.Element => {
   if (type === "SD") {
-    return <MaterialCommunityIcons name="bus-side" color={colors.accent} size={scale(17)} />
+    return <MaterialCommunityIcons name="bus-side" color={colors.accent} size={scale(15)} />
   } else if (type === "DD") {
-    return <MaterialCommunityIcons name="bus-double-decker" color={colors.accent} size={scale(17)} />
+    return <MaterialCommunityIcons name="bus-double-decker" color={colors.accent} size={scale(15)} />
   } else {
-    return <MaterialIcons name="bus-alert" color={colors.warning} size={scale(13)} />
+      return <MaterialIcons name="bus-alert" color={colors.info} size={scale(11)}
+                style={{
+                  bottom: scale(1.3)
+                }}/>
   }
 }
 
@@ -90,16 +93,19 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
 }) => {
   const { EstimatedArrival, Monitored, Latitude, Longitude, Load, Type } = arrivalInfo;
 
+  const { mins, secs } = calculateTimeLeft(EstimatedArrival);
+
   return (
     <View style={styles.container}>
-      {Monitored === 0 && (
+      
+      {Monitored === 0 && mins !== "-" && (
         <View style={styles.monitoredWrapper}>
-        <Ionicons
-          name="warning-outline"
-          color={colors.warning}
-          size={scale(13)}
-        />
-      </View>
+          <Ionicons
+            name="warning-outline"
+            color={colors.warning}
+            size={scale(11.5)}
+          />
+        </View>
       )}
       
       
@@ -108,23 +114,23 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
           <Text
             style={[
               styles.mins,
-              calculateTimeLeft(EstimatedArrival).mins === "Arr" && styles.arrivalText
+              mins === "Arr" && styles.arrivalText
             ]}
             adjustsFontSizeToFit
             numberOfLines={1}
           >
-            {calculateTimeLeft(EstimatedArrival).mins}
+            {mins}
           </Text>
 
         </View>
-        {calculateTimeLeft(EstimatedArrival).secs !== "" && (
+        {secs !== "" && (
           <View style={styles.secsWrapper}>
           <Text
             style={styles.secs}
             adjustsFontSizeToFit
             numberOfLines={1}
           >
-            {calculateTimeLeft(EstimatedArrival).secs}
+            {secs}
           </Text>
         </View>
         )}
@@ -145,23 +151,17 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: scale(60),
-    height: scale(60),
-    padding: scale(7),
+    // width: scale(60),
+    // height: scale(60),
+    padding: scale(5),
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: "white",
-    // borderRadius: scale(4),
-    // borderWidth: scale(1.3)
-    // shadow stuff
-    // elevation: 2,
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 4,
   },
   monitoredWrapper : {
-
+    position: "absolute",
+    top: scale(5),
+    right: 0,
   },
   timingWrapper: {
     width: scale(50),
@@ -175,9 +175,9 @@ const styles = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
   mins: {
-    fontSize: scale(20),
+    fontSize: scale(18),
     fontWeight: "bold",
-    color: colors.onSurface,
+    color: colors.onSurface2Secondary,
   },
   arrivalText: {
     color: colors.accent3,
@@ -188,10 +188,10 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   secs: {
-    fontSize: scale(6),
+    fontSize: scale(5.5),
     fontWeight: "bold",
     marginBottom: scale(4),
-    color: colors.onSurface,
+    color: colors.onSurface2Secondary,
     // backgroundColor: 'darkseagreen'
   },
   addInfoWrapper: {
@@ -203,11 +203,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flexDirection: 'column',
     padding: scale(5),
-    backgroundColor: 'green'
+    // backgroundColor: 'green'
   },
   busTypeWrapper: {
     justifyContent: 'center',
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
   },
 
 
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   circle: {
     width: scale(3),        // Width of the circle
     height: scale(3),       // Height of the circle
-    borderRadius: scale(10), // Half of the width/height to create a perfect circle
+    // borderRadius: scale(10), // Half of the width/height to create a perfect circle
     backgroundColor: colors.accent3, // Color of the circle
     margin: scale(0.6)
   },

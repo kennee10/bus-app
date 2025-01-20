@@ -98,12 +98,12 @@ const NearbyBusStopsPage = () => {
             borderRadius: scale(12),
             borderWidth: scale(1.3),
             padding: scale(3),
-            borderColor: colors.primary,
+            borderColor: colors.secondary2,
           }}
         >
           <Ionicons 
             name="add-outline"
-            color={colors.primary}
+            color={colors.secondary2}
             size={scale(23)}
           />
         </TouchableOpacity>
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   searchIcon: {
     fontSize: scale(18),
     paddingLeft: scale(10),
-    color: colors.primary,
+    color: colors.secondary2,
   },
   searchInput: {
     flex: 1,
