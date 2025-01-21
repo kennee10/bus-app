@@ -49,14 +49,18 @@ const getBusLoad = (load: string): JSX.Element => {
 
 const getBusType = (type: string): JSX.Element => {
   if (type === "SD") {
-    return <MaterialCommunityIcons name="bus-side" color={colors.accent} size={scale(15)} />
+    return <MaterialCommunityIcons name="bus-side" color={colors.accent} size={scale(13.5)} />
   } else if (type === "DD") {
-    return <MaterialCommunityIcons name="bus-double-decker" color={colors.accent} size={scale(15)} />
+    return <MaterialCommunityIcons name="bus-double-decker" color={colors.accent} size={scale(13.5)} />
+  } else if (type === "BD") {
+    return (
+    <View style={{flexDirection: 'row'}}>
+      <MaterialCommunityIcons name="bus-articulated-end" color={colors.accent} size={scale(13.5)} />
+      <MaterialCommunityIcons name="bus-articulated-front" color={colors.accent} size={scale(13.5)} style={{right: scale(4)}}/>
+    </View>
+    )
   } else {
-      return <MaterialIcons name="bus-alert" color={colors.info} size={scale(11)}
-                style={{
-                  bottom: scale(1.3)
-                }}/>
+      return <MaterialIcons name="bus-alert" color={colors.info} size={scale(11)} style={{bottom: scale(1.1)}}/>
   }
 }
 
@@ -76,7 +80,7 @@ function calculateTimeLeft(estimatedArrival?: string): {mins: string , secs: str
   // Calculate the difference in milliseconds
   const difference = arrivalTime.getTime() - now.getTime();
 
-  if (difference <= 0) {
+  if (difference <= 10000) {
     return {mins: "Arr", secs: ""};; // If the time has passed or is now
   }
 
@@ -114,7 +118,8 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
           <Text
             style={[
               styles.mins,
-              mins === "Arr" && styles.arrivalText
+              mins === "Arr" && styles.arrivalText,
+              mins === '0' && styles.arrivalText
             ]}
             adjustsFontSizeToFit
             numberOfLines={1}
@@ -126,7 +131,10 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
         {secs !== "" && (
           <View style={styles.secsWrapper}>
           <Text
-            style={styles.secs}
+            style={[
+              styles.secs,
+              mins === '0' && styles.arrivalText
+            ]}
             adjustsFontSizeToFit
             numberOfLines={1}
           >
@@ -167,7 +175,7 @@ const styles = StyleSheet.create({
     width: scale(50),
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: scale(4)
+    marginBottom: scale(3),
     // backgroundColor: 'yellow',
   },
   minsWrapper : {
@@ -175,7 +183,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
   mins: {
-    fontSize: scale(18),
+    fontSize: scale(18.5),
     fontWeight: "bold",
     color: colors.onSurface2Secondary,
   },
@@ -188,7 +196,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   secs: {
-    fontSize: scale(5.5),
+    fontSize: scale(5.8),
     fontWeight: "bold",
     marginBottom: scale(4),
     color: colors.onSurface2Secondary,
@@ -216,7 +224,7 @@ const styles = StyleSheet.create({
     width: scale(3),        // Width of the circle
     height: scale(3),       // Height of the circle
     // borderRadius: scale(10), // Half of the width/height to create a perfect circle
-    backgroundColor: colors.accent3, // Color of the circle
+    backgroundColor: colors.accent5, // Color of the circle
     margin: scale(0.6)
   },
   

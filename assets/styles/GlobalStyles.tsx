@@ -2,9 +2,9 @@ import { StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 export const colors = {
-    background: "#1E1F22",
-    surface: "#2B2D31",
-    surface2: "#313338",
+    background: "#0d0d0d",
+    surface: "#26292e",
+    surface2: "#2c2e33",
     
     onBackground: "#FFFFFF",
     onBackgroundSecondary: "#84848A",
@@ -27,6 +27,7 @@ export const colors = {
     accent3: "#FF6859", // red
     // accent4: "#f99a07", // orange
     accent4: "#f3d251",
+    accent5: "#2fa7f3",
 
 
     info: 'gray',

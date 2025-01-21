@@ -7,11 +7,14 @@ import {
   View, 
   ActivityIndicator, 
   TextInput, 
-  StyleSheet 
+  StyleSheet,
+  Modal,
+  Button
 } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
 import { calculateDistance } from "../../components/hooks/usefulFunctions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Keyboard } from 'react-native';
 import { BackHandler } from 'react-native';
 
@@ -20,7 +23,7 @@ import { getNearbyBusStops } from '../../components/hooks/getNearbyBusStops';
 import BusStopComponent from '../../components/main/BusStopComponent';
 import { useLikedBusStops } from "../../components/context/likedBusStopsContext";
 import { LocationWatcher } from "../../components/hooks/LocationWatcher";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import InfoModalComponent from "../../components/main/InfoModalComponent";
 
 type RawBusStop = {
   BusStopCode: string;
@@ -48,13 +51,9 @@ const NearbyBusStopsPage = () => {
   const [limit, setLimit] = useState<number>(8);
   const [loading, setLoading] = useState(true);
   const inputRef = useRef<TextInput>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStops, toggleLike } = useLikedBusStops();
 
-  const searchIconPress = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }
 
   useEffect(() => {
     const backAction = () => {
@@ -136,7 +135,6 @@ const NearbyBusStopsPage = () => {
     );
   };
 
-
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredStops(nearbyBusStops); // Default to nearby bus stops if no query
@@ -169,34 +167,62 @@ const NearbyBusStopsPage = () => {
     }
   }, [searchQuery, busStops, nearbyBusStops]);
 
+  const searchIconPress = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }
+
   const clearSearchQuery = () => {
     setSearchQuery("");
+    Keyboard.dismiss()
   }
 
 
   return (
     <View style={containerStyles.pageContainer}>
       <View style={containerStyles.innerPageContainer}>
-      <View style={styles.searchContainer}>
-        <TouchableOpacity onPress={searchIconPress} activeOpacity={1}>
-          <Ionicons name="search" style={styles.searchIcon} />
-        </TouchableOpacity>
-        
-        <TextInput
-          ref= {inputRef}
-          style={styles.searchInput}
-          placeholder="Search for a bus stop..."
-          placeholderTextColor={colors.onSurfaceSecondary}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        {searchQuery != "" && (
-          <TouchableOpacity onPress={clearSearchQuery}>
-            <Ionicons name="close-outline" style={styles.crossIcon} />
-          </TouchableOpacity>
-        )}
-        
-      </View>
+        <View style={styles.headerContainer}>
+          <View style={styles.searchContainer}>
+            
+            {searchQuery === "" ? (
+                <TouchableOpacity onPress={searchIconPress} activeOpacity={1}>
+                  <Ionicons name="search" style={styles.searchIcon} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={clearSearchQuery}>
+                  <Ionicons name="arrow-back" style={styles.searchIcon} />
+                </TouchableOpacity>
+                
+              )}
+
+            <TextInput
+              ref= {inputRef}
+              style={styles.searchInput}
+              placeholder="Search for a bus stop..."
+              placeholderTextColor={colors.onSurfaceSecondary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+
+            {searchQuery === "" ? (
+              <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+                <Ionicons name="information-circle-outline" style={styles.infoIcon} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={clearSearchQuery}>
+                <Ionicons name="close-outline" style={styles.crossIcon} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      
+      
+      {/* MODAL */}
+      <InfoModalComponent 
+        isVisible={isModalVisible} 
+        onClose={() => setIsModalVisible(false)}
+      />
 
       {loading ? (
         <ActivityIndicator
@@ -246,9 +272,13 @@ const NearbyBusStopsPage = () => {
 };
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   searchContainer: {
     flexDirection: "row",
-    width: "100%",
     overflow: "hidden",
     marginTop: scale(5),
     marginBottom: scale(10),
@@ -276,6 +306,12 @@ const styles = StyleSheet.create({
     fontFamily: font.bold,
     height: scale(40),
     fontSize: scale(12),
+  },
+  infoIcon: {
+    fontSize: scale(22),
+    color: colors.secondary2,
+    padding: scale(7),
+    // backgroundColor: 'red'
   },
 });
 

@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingLeft: scale(5),
-    paddingRight: scale(5),
+    paddingLeft: scale(8),
+    paddingRight: scale(8),
     margin: scale(2.5),
     borderRadius: scale(4),
     backgroundColor: colors.surface2,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   busNumberWrapper: {
     flex: 2,
     alignItems: "center",
-    marginRight: scale(14),
+    marginRight: scale(16),
     // backgroundColor: "green"
   },
   busNumber: {
