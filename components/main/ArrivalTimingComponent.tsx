@@ -6,6 +6,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import EntypoIcons from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 
 
@@ -24,23 +25,26 @@ type ArrivalTimingComponentProps = {
 
 const getBusLoad = (load: string): JSX.Element => {
   if (load === "SEA") {
-    return <View style={styles.circle} />
+    // return <View style={styles.circle} />
+    return <View style={{flexDirection: 'row'}}>
+              <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+          </View>
   } else if (load === "SDA") {
     // Return two dot-single elements for SDA
     return (
-      <>
-        <View style={styles.circle} />
-        <View style={styles.circle} />
-      </>
+        <View style={{flexDirection: 'row'}}>
+          <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+          <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+        </View>
     );
   } else if (load === "LSD") {
     // Return three dot-single elements for LSD
     return (
-      <>
-        <View style={styles.circle} />
-        <View style={styles.circle} />
-        <View style={styles.circle} />
-      </>
+      <View style={{flexDirection: 'row'}}>
+        <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+        <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+        <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+      </View>
     );
   } else {
     return <EntypoIcons name="help-with-circle" color={colors.info} size={scale(9)} />;
@@ -107,7 +111,7 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
           <Ionicons
             name="warning-outline"
             color={colors.warning}
-            size={scale(11.5)}
+            size={scale(8.8)}
           />
         </View>
       )}
@@ -168,8 +172,8 @@ const styles = StyleSheet.create({
   },
   monitoredWrapper : {
     position: "absolute",
-    top: scale(5),
-    right: 0,
+    top: scale(4),
+    right: scale(6),
   },
   timingWrapper: {
     width: scale(50),
@@ -224,20 +228,9 @@ const styles = StyleSheet.create({
     width: scale(3),        // Width of the circle
     height: scale(3),       // Height of the circle
     // borderRadius: scale(10), // Half of the width/height to create a perfect circle
-    backgroundColor: colors.accent5, // Color of the circle
+    backgroundColor: colors.accent6, // Color of the circle
     margin: scale(0.6)
   },
-  
-  // IF want to position absolutely
-  // secs: {
-  //   position: 'absolute',
-  //   bottom: scale(-1),
-  //   right: scale(6),
-  //   fontSize: scale(6),
-  //   fontWeight: "bold",
-  //   marginBottom: scale(4),
-  //   // backgroundColor: 'darkseagreen'
-  // },
 });
 
 export default ArrivalTimingComponent;

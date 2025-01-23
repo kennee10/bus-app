@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import * as Font from 'expo-font';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import fetchAllBusStops from "../components/apis/fetchAllBusStops";
@@ -49,7 +50,19 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
     loadFonts();
   }, []);
 
+  const clearLikedBusesData = async () => {
+    try {
+      // Remove the old data for 'likedBuses'
+      await AsyncStorage.removeItem('likedBuses');
+      console.log('Old likedBuses data cleared successfully!');
+    } catch (error) {
+      console.log('Failed to clear likedBuses data:', error);
+    }
+  };
+  // Call this function when needed
+  // clearLikedBusesData();
 
+  // If still loading
   if (isFetching && !isFontsLoaded) {
     return (
       <View style={containerStyles.globalContainer}>

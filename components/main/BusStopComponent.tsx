@@ -43,14 +43,14 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(true); // Initial state is collapsed
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]); // Array of BusService
   const [isLoading, setIsLoading] = useState(true);
-  const { likedBuses, toggleLike } = useLikedBuses();
+  const { likedBuses, toggleLike, createGroup } = useLikedBuses();
 
+  // GETTING ARRIVAL DATA
   useEffect(() => {
     let intervalId;
 
     const fetchAndSetBusArrivalData = async () => {
       try {
-        // setIsLoading(true);
         const data = await fetchBusArrival(props.BusStopCode);
         setBusArrivalData(data);
       } catch (error) {
@@ -62,14 +62,11 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
     // Fetch data immediately when the component mounts
     fetchAndSetBusArrivalData();
-
     // Set up the interval to fetch data every 5 seconds
     intervalId = setInterval(fetchAndSetBusArrivalData, 5000);
 
     // Cleanup function to clear the interval when the component unmounts
-    return () => {
-      clearInterval(intervalId);
-    };
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -137,9 +134,9 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
                 key={index}
                 busNumber={busService.ServiceNo}
                 busStopCode={props.BusStopCode}
-                nextBuses={busService.nextBuses} // Pass all nextBuses for this service
-                isHearted={likedBuses.some(
-                  ([code, service]) => code === props.BusStopCode && service === busService.ServiceNo
+                nextBuses={busService.nextBuses}
+                isHearted={Object.values(likedBuses).some(
+                  (group) => group[props.BusStopCode]?.includes(busService.ServiceNo)
                 )}
                 onHeartToggle={toggleLike}
               />
@@ -167,7 +164,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     overflow: "hidden",
-    padding: scale(1),
+    padding: scale(2),
     marginBottom: verticalScale(7),
     borderRadius: scale(4),
     backgroundColor: colors.surface,

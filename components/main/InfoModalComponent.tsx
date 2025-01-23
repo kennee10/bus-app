@@ -36,15 +36,44 @@ const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => 
 
           <View style={styles.infoContainer}>
               
-              {/* Bus Number */}
-            <View style={styles.busNumberInfoContainer}>
+            {/* Bus Number */}
+            <View style={styles.oneInfoContainer}>
                 <View style={styles.busNumberContainer}>
                     <Text style={styles.busNumber} adjustsFontSizeToFit numberOfLines={1}>950</Text>
                 </View>
                 <View style={styles.infoTextContainer}>
-                    <Text style={styles.infoText}>Bus Number</Text>
+                    <Text style={styles.infoText}>Bus number</Text>
+                    <Text style={styles.warningText}>Buses not displayed are not in operation</Text>
                 </View>
+            </View>
+
+            {/* Monitored */}
+            <View style={styles.oneInfoContainer}>
+                <View style={styles.monitoredWrapper}>
+                  <Ionicons
+                    name="warning-outline"
+                    color={colors.warning}
+                    size={scale(11.5)}
+                  />
                 </View>
+                <View style={styles.infoTextContainer}>
+                    <Text style={styles.infoText}>Arrival time is estimated,Live location of bus is unknown</Text>
+                </View>
+            </View>
+
+            {/* Bus Type */}
+            <View style={styles.oneInfoContainer}>
+                <View style={styles.monitoredWrapper}>
+                  <Ionicons
+                    name="warning-outline"
+                    color={colors.warning}
+                    size={scale(11.5)}
+                  />
+                </View>
+                <View style={styles.infoTextContainer}>
+                    <Text style={styles.infoText}>Arrival time is estimated,Live location of bus is unknown</Text>
+                </View>
+            </View>
 
           </View>
         </View>
@@ -56,7 +85,7 @@ const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => 
 const styles = StyleSheet.create({
     modalOverlay: {
         flex: 1,
-        backgroundColor: "rgba(0, 0, 0, 0.45)",
+        backgroundColor: colors.modalBackgroundOpacity,
         justifyContent: "center",
         alignItems: "center",
       },
@@ -92,22 +121,22 @@ const styles = StyleSheet.create({
       infoContainer: {
         flexDirection: "column",
         alignItems: "flex-start",
+        gap: scale(20),
         paddingLeft: scale(20),
         paddingRight: scale(20),
         paddingBottom: scale(20)
       },
       
-      
-      busNumberInfoContainer: {
+      // BUS NUMBER
+      oneInfoContainer: {
         flexDirection: "row",
-        alignItems: "center",
+        justifyContent: "center",
+        // backgroundColor: 'yellow'
       },
 
       busNumberContainer: {
         flex: 2,
         // backgroundColor: 'red'
-
-        
       },
     
       busNumber: {
@@ -121,14 +150,28 @@ const styles = StyleSheet.create({
       infoTextContainer: {
         flex: 6,
         // backgroundColor: 'yellow'
-
-        
       },
       infoText: {
         fontSize: scale(13),
         fontFamily: font.bold,
         color: colors.onSurface,
         textAlign: "left",
+      },
+      warningText: {
+        fontSize: scale(13),
+        fontFamily: font.bold,
+        color: colors.warning,
+        textAlign: "left",
+      },
+
+      // MONITORED
+      monitoredInfoContainer: {
+        flexDirection: "row",
+      },
+
+      monitoredWrapper: {
+        flex: 2,
+        // backgroundColor: 'red'
       },
 });
 

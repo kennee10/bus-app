@@ -1,52 +1,74 @@
-import React, { useState, useEffect } from "react";
-import { Text, FlatList, View, ActivityIndicator } from 'react-native';
-
-
-import { containerStyles } from "../../assets/styles/GlobalStyles";
-import fetchBusArrival, { BusArrivalData } from '../../components/apis/fetchBusArrival';
+import React from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useLikedBuses } from "../../components/context/likedBusesContext";
-import BusComponent from '../../components/main/BusComponent';
-
+import LikedBusesBusStopComponent from "../../components/main/LikedBusesBusStopComponent";
+import { colors, font } from "../../assets/styles/GlobalStyles";
 
 const LikedBusesPage = () => {
-    const [busArrivalData, setBusArrivalData] = useState<BusArrivalData | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    // add more variables
+  const { likedBuses } = useLikedBuses();
 
-    const { likedBuses, toggleLike} = useLikedBuses();
+  const groups = Object.entries(likedBuses); // Convert the likedBuses object to an array of [groupName, groupData]
 
-    useEffect(() => {
-        const intervalId = setInterval(async () => {
-          setIsLoading(true);
-    
-          try {
-            // Loop through likedBuses and fetch arrival for each bus
-            for (const entry of likedBuses) {
-              const busId = entry[0];  // Get the first element of the entry (bus ID)
-              const data = await fetchBusArrival(busId);  // Call fetchBusArrival for each bus ID
-              setBusArrivalData(data)
-            }
-          } catch (error) {
-            console.error('Error fetching bus arrival:', error);
-          } finally {
-            setIsLoading(false); // Set loading to false once the process is done
-          }
-        }, 5000); // 5 seconds
-    
-        return () => clearInterval(intervalId); // Cleanup on component unmount
-      }, [likedBuses]);
-
-
-    return (
-        <View style={containerStyles.pageContainer}>
-            {likedBuses.length > 0 ? (
-              <Text style={containerStyles.globalTextMessage}>{JSON.stringify(likedBuses)}</Text>
-            ) : (
-              <Text style={containerStyles.globalTextMessage}>No liked buses</Text>
-            )
-          }
+  return (
+    <View style={styles.container}>
+      {groups.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>You haven't liked any buses yet!</Text>
         </View>
-    );
+      ) : (
+        <FlatList
+          data={groups}
+          keyExtractor={([groupName]) => groupName}
+          renderItem={({ item: [groupName, groupData] }) => (
+            <View style={styles.groupContainer}>
+              {/* Group Title */}
+              <Text style={styles.groupTitle}>{groupName}</Text>
+
+              {/* Display liked buses within this group */}
+              {Object.entries(groupData).map(([busStopCode, likedServices]) => (
+                <LikedBusesBusStopComponent
+                  key={busStopCode}
+                  busStopCode={busStopCode}
+                  likedBuses={likedServices} // Pass the array of liked service numbers
+                />
+              ))}
+            </View>
+          )}
+        />
+      )}
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 18,
+    fontFamily: font.bold,
+    color: colors.onSurfaceSecondary,
+    textAlign: "center",
+    marginHorizontal: 20,
+  },
+  groupContainer: {
+    marginBottom: 24,
+  },
+  groupTitle: {
+    fontSize: 20,
+    fontFamily: font.bold,
+    color: colors.primary,
+    marginBottom: 12,
+    textTransform: "capitalize",
+  },
+});
 
 export default LikedBusesPage;

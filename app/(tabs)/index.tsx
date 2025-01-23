@@ -211,7 +211,7 @@ const NearbyBusStopsPage = () => {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={clearSearchQuery}>
-                <Ionicons name="close-outline" style={styles.crossIcon} />
+                <Ionicons name="close-circle" style={styles.crossIcon} />
               </TouchableOpacity>
             )}
           </View>

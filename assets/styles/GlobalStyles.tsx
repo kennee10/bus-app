@@ -28,12 +28,15 @@ export const colors = {
     // accent4: "#f99a07", // orange
     accent4: "#f3d251",
     accent5: "#2fa7f3",
+    accent6: "sienna",
 
 
     info: 'gray',
     // warning: '#f3d251', // #FFCF44
     warning: '#f99a07',
     error: '#FF6859',
+
+    modalBackgroundOpacity: "rgba(0, 0, 0, 0.45)",
 
   };
   
@@ -89,6 +92,12 @@ export const containerStyles = StyleSheet.create({
       fontSize: scale(14),
       fontFamily: font.bold,
       color: colors.onBackground,
+      textAlign: "center",
+    },
+    globalWarningText: {
+      fontSize: scale(14),
+      fontFamily: font.bold,
+      color: colors.warning,
       textAlign: "center",
     },
     globalErrorText: {
