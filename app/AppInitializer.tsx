@@ -54,9 +54,9 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
     try {
       // Remove the old data for 'likedBuses'
       await AsyncStorage.removeItem('likedBuses');
-      console.log('Old likedBuses data cleared successfully!');
+      console.log('AppInitializer.tsx: Old likedBuses data cleared successfully!');
     } catch (error) {
-      console.log('Failed to clear likedBuses data:', error);
+      console.log('AppInitializer.tsx: Failed to clear likedBuses data:', error);
     }
   };
   // Call this function when needed
@@ -64,6 +64,7 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
 
   // If still loading
   if (isFetching && !isFontsLoaded) {
+    console.log(`AppInitializer.tsx: loading fonts and`)
     return (
       <View style={containerStyles.globalContainer}>
         <ActivityIndicator
@@ -74,6 +75,7 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
       </View>
     );
   } else {
+    console.log(`AppInitializer.tsx: isFetching: ${isFetching} | isFontsLoaded: ${isFontsLoaded}`)
     return null;
   }
 };

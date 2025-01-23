@@ -242,6 +242,8 @@ const styles = StyleSheet.create({
     paddingLeft: scale(8),
     paddingRight: scale(8),
     margin: scale(2.5),
+    marginLeft: scale(5),
+    marginRight: scale(5),
     borderRadius: scale(4),
     backgroundColor: colors.surface2,
     // backgroundColor: "#FFE4E1",

@@ -30,6 +30,8 @@ export const colors = {
     accent5: "#2fa7f3",
     accent6: "sienna",
 
+    borderToPress: "rgba(255, 255, 255, 0.15)",
+
 
     info: 'gray',
     // warning: '#f3d251', // #FFCF44

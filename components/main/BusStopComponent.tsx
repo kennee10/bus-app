@@ -78,7 +78,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             <Text style={styles.busStopCode}>{props.BusStopCode}</Text>
           </View>
           <View style={styles.descriptionWrapper}>
-            <Text style={styles.description}>
+            <Text style={styles.description} adjustsFontSizeToFit numberOfLines={1}>
               {props.searchQuery
                 ? props.Description.split(new RegExp(`(${props.searchQuery})`, 'i')).map((part, index) =>
                     part.toLowerCase() === props.searchQuery.toLowerCase() ? (
@@ -168,6 +168,8 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(7),
     borderRadius: scale(4),
     backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.borderToPress,
   },
   container: {
     flex: 1,
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   busStopCodeWrapper: {
-    flex: 6,
+    flex: 6.1,
   },
   descriptionWrapper: {
     flex: 19,
@@ -199,7 +201,7 @@ const styles = StyleSheet.create({
   busStopCode: {
     fontSize: scale(14),
     lineHeight: scale(30),
-    paddingLeft: scale(5),
+    paddingLeft: scale(7),
     fontFamily: font.bold,
     color: colors.onSurface,
   },
@@ -210,7 +212,7 @@ const styles = StyleSheet.create({
     color: colors.onSurface,
   },
   distanceWrapper: {
-    flex: 6,
+    flex: 6.1,
     height: scale(25),
     justifyContent: 'center',
   },
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
   },
   distance: {
     fontSize: scale(10),
-    paddingLeft: scale(5),
+    paddingLeft: scale(7),
     textAlign: "left",
     fontFamily: font.bold,
     color: colors.onSurfaceSecondary,
