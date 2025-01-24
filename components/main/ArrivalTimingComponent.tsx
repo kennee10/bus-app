@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { scale } from "react-native-size-matters";
 import { colors, font } from '../../assets/styles/GlobalStyles';
@@ -7,7 +7,6 @@ import EntypoIcons from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
-
 
 
 type BusArrivalInfo = {
@@ -68,7 +67,6 @@ const getBusType = (type: string): JSX.Element => {
   }
 }
 
-
 function calculateTimeLeft(estimatedArrival?: string): {mins: string , secs: string} {
   if (!estimatedArrival) {
     return {mins: "-", secs: ""}; // Return "N/A" if EstimatedArrival is empty or undefined
@@ -100,8 +98,37 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
   arrivalInfo,
 }) => {
   const { EstimatedArrival, Monitored, Latitude, Longitude, Load, Type } = arrivalInfo;
-
   const { mins, secs } = calculateTimeLeft(EstimatedArrival);
+
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [isDotVisible, setDotVisible] = useState(true);
+
+  useEffect(() => {
+    if (EstimatedArrival) {
+      setLastUpdated(new Date());
+    }
+  }, [EstimatedArrival]);
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setDotVisible((prev) => !prev);
+  //   }, 1000); // Toggle visibility every second for blinking effect
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
+  const determineDotColor = () => {
+    if (!lastUpdated) return colors.onSurface2Secondary; // Default color if no updates yet
+
+    const now = new Date();
+    const secondsSinceUpdate = (now.getTime() - lastUpdated.getTime()) / 1000;
+
+    if (secondsSinceUpdate <= 30) return colors.accent; // Green dot
+    if (secondsSinceUpdate <= 60) return colors.warning; // Yellow dot
+    return colors.error; // Red dot
+  };
+
+  const dotColor = determineDotColor();
 
   return (
     <View style={styles.container}>
@@ -115,6 +142,11 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
           />
         </View>
       )}
+
+      {/* Blinking Dot */}
+      <View style={styles.dotWrapper}>
+        {isDotVisible && <FontAwesome6 name="circle" color={dotColor} size={scale(6)} />}
+      </View>
       
       
       <View style={styles.timingWrapper}>
@@ -163,18 +195,12 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    // width: scale(60),
-    // height: scale(60),
     padding: scale(5),
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: "white",
   },
-  monitoredWrapper : {
-    position: "absolute",
-    top: scale(4),
-    right: scale(6),
-  },
+  
   timingWrapper: {
     width: scale(50),
     flexDirection: 'row',
@@ -191,9 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.onSurface2Secondary,
   },
-  arrivalText: {
-    color: colors.accent3,
-  },
+  
   secsWrapper : {
     justifyContent: 'flex-end',
     marginLeft: scale(2),
@@ -206,6 +230,20 @@ const styles = StyleSheet.create({
     color: colors.onSurface2Secondary,
     // backgroundColor: 'darkseagreen'
   },
+  dotWrapper: {
+    position: "absolute",
+    top: scale(4),
+    right: scale(6),
+  },
+  arrivalText: {
+    color: colors.accent3,
+  },
+  monitoredWrapper : {
+    position: "absolute",
+    top: scale(4),
+    right: scale(6),
+  },
+  
   addInfoWrapper: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -223,14 +261,6 @@ const styles = StyleSheet.create({
   },
 
 
-
-  circle: {
-    width: scale(3),        // Width of the circle
-    height: scale(3),       // Height of the circle
-    // borderRadius: scale(10), // Half of the width/height to create a perfect circle
-    backgroundColor: colors.accent6, // Color of the circle
-    margin: scale(0.6)
-  },
 });
 
 export default ArrivalTimingComponent;

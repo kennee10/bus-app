@@ -4,52 +4,60 @@ import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { scale } from "react-native-size-matters";
 import { Stack } from "expo-router";
 
-import { colors, containerStyles } from '../assets/styles/GlobalStyles';
+import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
 import { LikedBusesProvider } from "../components/context/likedBusesContext";
 import AppInitializer from "./AppInitializer";
 
 export default function RootLayout() {
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false); // Tracks whether initialization is complete
+  const [error, setError] = useState<string | null>(null); // Tracks errors during initialization
 
-  const handleFetchComplete = () => {
-    setIsInitialized(true);
+  const handleInitializationComplete = () => {
+    setIsInitialized(true); // Mark initialization as complete
   };
+
   const handleError = (errorMessage: string) => {
-    setError(errorMessage);
+    setError(errorMessage); // Store the error message
   };
-  
+
+  // If not initialized, show the AppInitializer
   if (!isInitialized) {
-    console.log("_layout.tsx: (root) Initializing app");
-    return <AppInitializer onFetchComplete={handleFetchComplete} onError={handleError} />
+    console.log("_layout.tsx: Initializing app...");
+    return (
+      <AppInitializer
+        onInitializationComplete={handleInitializationComplete}
+        onError={handleError}
+      />
+    );
   }
 
+  // If there's an error, show an error message
   if (error) {
     return (
-      <SafeAreaView>
+      <SafeAreaView style={containerStyles.globalContainer}>
         <Text style={containerStyles.globalErrorText}>{error}</Text>
       </SafeAreaView>
     );
   }
 
+  // Render the app after initialization
   return (
     <>
       <ExpoStatusBar style="light" backgroundColor={colors.background} />
-      
       <SafeAreaView style={styles.safeArea}>
         <LikedBusStopsProvider>
           <LikedBusesProvider>
             <Stack
               screenOptions={{
-                headerShown: false
-              }}>
-              <Stack.Screen name="(tabs)"/>
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen name="(tabs)" />
             </Stack>
           </LikedBusesProvider>
         </LikedBusStopsProvider>
       </SafeAreaView>
-      
     </>
   );
 }

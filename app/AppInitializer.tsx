@@ -1,36 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
-import * as Font from 'expo-font';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Font from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import fetchAllBusStops from "../components/apis/fetchAllBusStops";
 
-
 interface AppInitializerProps {
-  onFetchComplete: () => void;
-  onError: (error: string) => void;
+  onInitializationComplete: () => void; // Called when both fetching and font loading are complete
+  onError: (error: string) => void; // Called when an error occurs
 }
 
-const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onError }) => {
-  const [isFetching, setIsFetching] = useState(true);
-  const [isFontsLoaded, setFontsLoaded] = useState(false);
+const AppInitializer: React.FC<AppInitializerProps> = ({
+  onInitializationComplete,
+  onError,
+}) => {
+  const [isFetchingComplete, setFetchingComplete] = useState(false);
+  const [isFontLoadingComplete, setFontLoadingComplete] = useState(false);
 
   // Fetch all bus stops
   useEffect(() => {
-    const initializeApp = async () => {
+    const fetchBusStops = async () => {
       try {
         await fetchAllBusStops();
-        onFetchComplete(); // Notify parent about success
-
+        setFetchingComplete(true); // Fetching complete
       } catch (error) {
-        onError(error instanceof Error ? error.message : "Unknown error occurred");
-      } finally {
-        setIsFetching(false); // For loading indicator
+        onError(error instanceof Error ? error.message : "Unknown error occurred during fetching");
       }
     };
 
-    initializeApp();
+    fetchBusStops();
   }, []);
 
   // Load fonts
@@ -38,18 +37,26 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
     const loadFonts = async () => {
       try {
         await Font.loadAsync({
-          'SpaceMono-Regular': require('../assets/fonts/SpaceMono-Regular.ttf'),
-          'Nunito-Bold': require('../assets/fonts/Nunito/Nunito-Bold.ttf')
+          "SpaceMono-Regular": require("../assets/fonts/SpaceMono-Regular.ttf"),
+          "Nunito-Bold": require("../assets/fonts/Nunito/Nunito-Bold.ttf"),
         });
-        setFontsLoaded(true);
+        setFontLoadingComplete(true); // Fonts loaded successfully
       } catch (error) {
-        console.error("Error loading fonts:", error);
+        onError("Error loading fonts");
       }
     };
 
     loadFonts();
   }, []);
 
+  // Check if both tasks are complete
+  useEffect(() => {
+    if (isFetchingComplete && isFontLoadingComplete) {
+      onInitializationComplete(); // Notify parent that initialization is complete
+    }
+  }, [isFetchingComplete, isFontLoadingComplete]);
+
+  // CLEAR LIKED BUSES DATA
   const clearLikedBusesData = async () => {
     try {
       // Remove the old data for 'likedBuses'
@@ -62,22 +69,16 @@ const AppInitializer: React.FC<AppInitializerProps> = ({ onFetchComplete, onErro
   // Call this function when needed
   // clearLikedBusesData();
 
-  // If still loading
-  if (isFetching && !isFontsLoaded) {
-    console.log(`AppInitializer.tsx: loading fonts and`)
-    return (
-      <View style={containerStyles.globalContainer}>
-        <ActivityIndicator
-          size="large"
-          color={colors.onBackgroundSecondary}
-          style={{flex:1}}
-        />
-      </View>
-    );
-  } else {
-    console.log(`AppInitializer.tsx: isFetching: ${isFetching} | isFontsLoaded: ${isFontsLoaded}`)
-    return null;
-  }
+  // Loading indicator
+  return (
+    <View style={containerStyles.globalContainer}>
+      <ActivityIndicator
+        size="large"
+        color={colors.onBackgroundSecondary}
+        style={{ flex: 1 }}
+      />
+    </View>
+  );
 };
 
 export default AppInitializer;

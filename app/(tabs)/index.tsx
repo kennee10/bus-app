@@ -123,6 +123,7 @@ const NearbyBusStopsPage = () => {
             borderWidth: scale(1.3),
             padding: scale(3),
             borderColor: colors.secondary2,
+            opacity: 0.7,
           }}
         >
           <Ionicons 
@@ -292,6 +293,7 @@ const styles = StyleSheet.create({
     fontSize: scale(18),
     padding: scale(10),
     color: colors.secondary2,
+    opacity: 0.8,
     // backgroundColor: 'red'
   },
   crossIcon: {
@@ -311,6 +313,7 @@ const styles = StyleSheet.create({
     fontSize: scale(22),
     color: colors.secondary2,
     padding: scale(7),
+    opacity: 0.8,
     // backgroundColor: 'red'
   },
 });
