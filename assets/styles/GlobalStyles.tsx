@@ -29,6 +29,7 @@ export const colors = {
     accent4: "#f3d251",
     accent5: "#2fa7f3",
     accent6: "sienna",
+    accent7: "khaki",
 
     borderToPress: "rgba(255, 255, 255, 0.15)",
     busIcon: "powderblue",
@@ -69,7 +70,7 @@ export const containerStyles = StyleSheet.create({
       // backgroundColor: 'green',
     },
     button: {
-      backgroundColor: colors.surface, // Background color
+      backgroundColor: colors.surface2, // Background color
       padding: scale(10), // Padding inside the button
       borderRadius: scale(5), // Rounded corners
       justifyContent: "center", // Center content vertically

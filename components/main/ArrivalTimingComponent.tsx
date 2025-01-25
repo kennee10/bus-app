@@ -53,14 +53,14 @@ const getBusLoad = (load: string): JSX.Element => {
 
 const getBusType = (type: string): JSX.Element => {
   if (type === "SD") {
-    return <MaterialCommunityIcons name="bus-side" color={colors.busIcon} size={scale(13.5)} />
+    return <MaterialCommunityIcons name="bus-side" color={colors.busIcon} size={scale(13)} />
   } else if (type === "DD") {
-    return <MaterialCommunityIcons name="bus-double-decker" color={colors.busIcon} size={scale(13.5)} />
+    return <MaterialCommunityIcons name="bus-double-decker" color={colors.busIcon} size={scale(13)} />
   } else if (type === "BD") {
     return (
     <View style={{flexDirection: 'row'}}>
-      <MaterialCommunityIcons name="bus-articulated-end" color={colors.busIcon} size={scale(13.5)} />
-      <MaterialCommunityIcons name="bus-articulated-front" color={colors.busIcon} size={scale(13.5)} style={{right: scale(4)}}/>
+      <MaterialCommunityIcons name="bus-articulated-end" color={colors.busIcon} size={scale(13)} />
+      <MaterialCommunityIcons name="bus-articulated-front" color={colors.busIcon} size={scale(13)} style={{right: scale(4)}}/>
     </View>
     )
   } else {
@@ -119,10 +119,10 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
       
       {Monitored === 0 && mins !== "-" && (
         <View style={styles.monitoredWrapper}>
-          <Ionicons
-            name="warning-outline"
-            color={colors.warning}
-            size={scale(8.8)}
+          <MaterialCommunityIcons
+            name="clock-alert"
+            color={colors.accent7}
+            size={scale(8)}
           />
         </View>
       )}
@@ -132,7 +132,7 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
         <View style={styles.dotWrapper}>
         <View style={{
           width: scale(1.5),
-          height: scale(5),
+          height: scale(6),
           borderRadius: scale(5), // Makes it a circle
           backgroundColor: dotColor
         }} />
@@ -236,6 +236,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: scale(4),
     right: scale(6),
+    opacity: 0.7
   },
   
   addInfoWrapper: {
