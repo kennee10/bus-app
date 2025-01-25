@@ -16,6 +16,7 @@ type BusArrivalInfo = {
   Longitude: string;
   Load: string;
   Type: string;
+  lastUpdated?: Date;
 };
 
 type ArrivalTimingComponentProps = {
@@ -52,14 +53,14 @@ const getBusLoad = (load: string): JSX.Element => {
 
 const getBusType = (type: string): JSX.Element => {
   if (type === "SD") {
-    return <MaterialCommunityIcons name="bus-side" color={colors.accent} size={scale(13.5)} />
+    return <MaterialCommunityIcons name="bus-side" color={colors.busIcon} size={scale(13.5)} />
   } else if (type === "DD") {
-    return <MaterialCommunityIcons name="bus-double-decker" color={colors.accent} size={scale(13.5)} />
+    return <MaterialCommunityIcons name="bus-double-decker" color={colors.busIcon} size={scale(13.5)} />
   } else if (type === "BD") {
     return (
     <View style={{flexDirection: 'row'}}>
-      <MaterialCommunityIcons name="bus-articulated-end" color={colors.accent} size={scale(13.5)} />
-      <MaterialCommunityIcons name="bus-articulated-front" color={colors.accent} size={scale(13.5)} style={{right: scale(4)}}/>
+      <MaterialCommunityIcons name="bus-articulated-end" color={colors.busIcon} size={scale(13.5)} />
+      <MaterialCommunityIcons name="bus-articulated-front" color={colors.busIcon} size={scale(13.5)} style={{right: scale(4)}}/>
     </View>
     )
   } else {
@@ -97,25 +98,8 @@ function calculateTimeLeft(estimatedArrival?: string): {mins: string , secs: str
 const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
   arrivalInfo,
 }) => {
-  const { EstimatedArrival, Monitored, Latitude, Longitude, Load, Type } = arrivalInfo;
+  const { EstimatedArrival, Monitored, Latitude, Longitude, Load, Type, lastUpdated } = arrivalInfo;
   const { mins, secs } = calculateTimeLeft(EstimatedArrival);
-
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [isDotVisible, setDotVisible] = useState(true);
-
-  useEffect(() => {
-    if (EstimatedArrival) {
-      setLastUpdated(new Date());
-    }
-  }, [EstimatedArrival]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setDotVisible((prev) => !prev);
-  //   }, 1000); // Toggle visibility every second for blinking effect
-
-  //   return () => clearInterval(interval);
-  // }, []);
 
   const determineDotColor = () => {
     if (!lastUpdated) return colors.onSurface2Secondary; // Default color if no updates yet
@@ -123,8 +107,8 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
     const now = new Date();
     const secondsSinceUpdate = (now.getTime() - lastUpdated.getTime()) / 1000;
 
-    if (secondsSinceUpdate <= 30) return colors.accent; // Green dot
-    if (secondsSinceUpdate <= 60) return colors.warning; // Yellow dot
+    if (secondsSinceUpdate <= 15) return colors.accent; // Green dot
+    if (secondsSinceUpdate <= 45) return colors.warning; // Yellow dot
     return colors.error; // Red dot
   };
 
@@ -144,9 +128,19 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
       )}
 
       {/* Blinking Dot */}
-      <View style={styles.dotWrapper}>
-        {isDotVisible && <FontAwesome6 name="circle" color={dotColor} size={scale(6)} />}
+      {Monitored === 1 && mins !== "-" && (
+        <View style={styles.dotWrapper}>
+        <View style={{
+          width: scale(1.5),
+          height: scale(5),
+          borderRadius: scale(5), // Makes it a circle
+          backgroundColor: dotColor
+        }} />
       </View>
+      )}
+
+      
+      
       
       
       <View style={styles.timingWrapper}>
@@ -232,8 +226,8 @@ const styles = StyleSheet.create({
   },
   dotWrapper: {
     position: "absolute",
-    top: scale(4),
-    right: scale(6),
+    top: scale(5.5),
+    left: scale(8),
   },
   arrivalText: {
     color: colors.accent3,

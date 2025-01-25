@@ -8,7 +8,6 @@ import BusComponent from "./BusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
 
-
 type BusArrivalInfo = {
   OriginCode: string;
   DestinationCode: string;
@@ -20,6 +19,7 @@ type BusArrivalInfo = {
   Load: string;
   Feature: string;
   Type: string;
+  lastUpdated?: Date; // Individual lastUpdated timestamp
 };
 
 type BusService = {
@@ -38,12 +38,11 @@ type BusStopComponentProps = {
   searchQuery: string;
 };
 
-
 const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(true); // Initial state is collapsed
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]); // Array of BusService
   const [isLoading, setIsLoading] = useState(true);
-  const { likedBuses, toggleLike, createGroup } = useLikedBuses();
+  const { likedBuses, toggleLike } = useLikedBuses();
 
   // GETTING ARRIVAL DATA
   useEffect(() => {
@@ -51,8 +50,34 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
     const fetchAndSetBusArrivalData = async () => {
       try {
-        const data = await fetchBusArrival(props.BusStopCode);
-        setBusArrivalData(data);
+        const fetchedData = await fetchBusArrival(props.BusStopCode);
+
+        // Update the lastUpdated field for each BusArrivalInfo
+        const updatedData = fetchedData.map((service: BusService) => ({
+          ...service,
+          nextBuses: service.nextBuses.map((bus: BusArrivalInfo) => {
+            // Find the corresponding existing BusArrivalInfo
+            const existingBusService = busArrivalData.find(
+              (existingService) => existingService.ServiceNo === service.ServiceNo
+            );
+            const existingBus = existingBusService?.nextBuses.find(
+              (existing) =>
+                existing.Latitude === bus.Latitude &&
+                existing.Longitude === bus.Longitude &&
+                existing.VisitNumber === bus.VisitNumber
+            );
+
+            return {
+              ...bus,
+              lastUpdated:
+                existingBus && existingBus.EstimatedArrival === bus.EstimatedArrival
+                  ? existingBus.lastUpdated // Retain existing timestamp if arrival hasn't changed
+                  : new Date(), // Update timestamp if arrival has changed
+            };
+          }),
+        }));
+
+        setBusArrivalData(updatedData);
       } catch (error) {
         console.error("Failed to fetch bus data:", error);
       } finally {
@@ -67,7 +92,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, []);
+  }, [busArrivalData]);
 
   return (
     <View style={styles.outerContainer}>
@@ -147,7 +172,6 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
                 No buses are currently in operation.
               </Text>
             </View>
-            
           )}
         </View>
       )}

@@ -136,6 +136,7 @@ type NextBusInfo = {
   Load: string;
   Feature: string;
   Type: string;
+  lastUpdated?: Date;
 };
 
 type BusComponentProps = {

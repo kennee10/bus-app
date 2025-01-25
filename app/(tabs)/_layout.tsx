@@ -10,11 +10,11 @@ export default function TabsLayout() {
 
   return (
     <Tabs
-    initialRouteName="LikedBusesPage"
+      initialRouteName="LikedBusesPage"
       screenOptions={{
         headerShown: false,
         tabBarLabelStyle: {
-          fontSize: scale(10),
+          fontSize: scale(9),
           fontFamily: "Nunito-Bold",
         },
         tabBarStyle: {
@@ -32,8 +32,12 @@ export default function TabsLayout() {
         name="index"
         options={{
           tabBarLabel: "Nearby",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="location-sharp" color={color} size={size} />
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? "location" : "location-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
@@ -41,8 +45,12 @@ export default function TabsLayout() {
         name="LikedBusesPage"
         options={{
           tabBarLabel: "Buses",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart" color={color} size={size} />
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? "heart" : "heart-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
@@ -50,17 +58,25 @@ export default function TabsLayout() {
         name="LikedBusStopsPage"
         options={{
           tabBarLabel: "Bus Stops",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="star" color={color} size={size} />
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? "star" : "star-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="AdsPage"
+        name="MorePage"
         options={{
-          tabBarLabel: "Ads",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="battery-charging" color={color} size={size} />
+          tabBarLabel: "More",
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? "ellipsis-horizontal" : "ellipsis-horizontal-outline"}
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
