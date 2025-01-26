@@ -34,7 +34,7 @@ type LikedBusesBusStopComponentProps = {
 const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (props) => {
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { toggleLike } = useLikedBuses();
+  const { likedBuses, toggleLike } = useLikedBuses();
 
   // GETTING ARRIVAL DATA
   useEffect(() => {
@@ -52,7 +52,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
               const existingBusService = latestBusArrivalData.find(
                 (existingService) => existingService.ServiceNo === service.ServiceNo
               );
-              // compares same index nextBuses in existing and new bus
+              // compares same index nextBuses in existing and new
               const existingBus = existingBusService?.nextBuses[index];
     
               return {
@@ -81,7 +81,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
       intervalId = setInterval(fetchAndSetBusArrivalData, 3000);
       
       return () => clearInterval(intervalId);
-    }, []);
+    }, [likedBuses]);
 
   return (
     <View style={styles.container}>

@@ -1,13 +1,50 @@
-import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useLikedBuses } from "../../components/context/likedBusesContext";
 import LikedBusesBusStopComponent from "../../components/main/LikedBusesBusStopComponent";
 import { colors, font } from "../../assets/styles/GlobalStyles";
+import { scale } from "react-native-size-matters";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LikedBusesPage = () => {
   const { likedBuses } = useLikedBuses();
+  const [collapsedGroups, setCollapsedGroups] = useState<{[key: string]: boolean}>({});
 
-  const groups = Object.entries(likedBuses); // Convert the likedBuses object to an array of [groupName, groupData]
+  const groups = Object.entries(likedBuses || {});
+
+  useEffect(() => {
+    const loadCollapsedState = async () => {
+      try {
+        const savedState = await AsyncStorage.getItem('groupCollapseState');
+        if (savedState) {
+          setCollapsedGroups(JSON.parse(savedState));
+        } else {
+          const initialState = Object.fromEntries(
+            groups.map(([groupName]) => [groupName, true])
+          );
+          setCollapsedGroups(initialState);
+        }
+      } catch (error) {
+        console.error('Failed to load collapsed state', error);
+      }
+    };
+
+    loadCollapsedState();
+  }, [likedBuses]);
+
+  const toggleGroupCollapse = async (groupName: string) => {
+    setCollapsedGroups(prev => {
+      const newState = {
+        ...prev,
+        [groupName]: !prev[groupName]
+      };
+      
+      AsyncStorage.setItem('groupCollapseState', JSON.stringify(newState));
+      
+      return newState;
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -21,16 +58,27 @@ const LikedBusesPage = () => {
           keyExtractor={([groupName]) => groupName}
           renderItem={({ item: [groupName, groupData] }) => (
             <View style={styles.groupContainer}>
-              {/* Group Title */}
-              <Text style={styles.groupTitle}>{groupName}</Text>
+              <TouchableOpacity 
+                style={styles.groupTitleContainer} 
+                onPress={() => toggleGroupCollapse(groupName)}
+              >
+                <Text style={styles.groupTitle}>{groupName}</Text>
+                <View style={styles.arrowContainer}>
+                  <Ionicons 
+                    name={collapsedGroups[groupName] ? "chevron-down" : "chevron-up"} 
+                    size={24} 
+                    color={colors.primary}
+                  />
+                </View>
+                
+              </TouchableOpacity>
 
-              {/* Display liked buses within this group */}
-              {Object.entries(groupData).map(([busStopCode, likedServices]) => (
+              {!collapsedGroups[groupName] && Object.entries(groupData).map(([busStopCode, likedServices]) => (
                 <LikedBusesBusStopComponent
                   key={busStopCode}
                   busStopCode={busStopCode}
                   groupName={groupName}
-                  likedServices={likedServices} // Pass the array of liked service numbers
+                  likedServices={likedServices}
                 />
               ))}
             </View>
@@ -63,12 +111,22 @@ const styles = StyleSheet.create({
   groupContainer: {
     marginBottom: 24,
   },
+  groupTitleContainer: {
+    flexDirection: 'row',
+    marginBottom: scale(12),
+    alignItems: "center",
+  },
   groupTitle: {
-    fontSize: 20,
+    flex: 10,
+    fontSize: scale(15),
+    padding: scale(5),
     fontFamily: font.bold,
     color: colors.primary,
-    marginBottom: 12,
     textTransform: "capitalize",
+  },
+  arrowContainer: {
+    flex: 1,
+    alignItems:"center",
   },
 });
 
