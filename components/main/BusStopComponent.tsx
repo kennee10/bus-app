@@ -40,59 +40,58 @@ type BusStopComponentProps = {
 
 const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(true); // Initial state is collapsed
-  const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]); // Array of BusService
+  const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { likedBuses, toggleLike } = useLikedBuses();
 
   // GETTING ARRIVAL DATA
   useEffect(() => {
-    let intervalId;
-
+    let intervalId; 
+    let latestBusArrivalData = busArrivalData; // Create a local reference
+    
     const fetchAndSetBusArrivalData = async () => {
       try {
         const fetchedData = await fetchBusArrival(props.BusStopCode);
-
-        // Update the lastUpdated field for each BusArrivalInfo
+  
         const updatedData = fetchedData.map((service: BusService) => ({
           ...service,
-          nextBuses: service.nextBuses.map((bus: BusArrivalInfo) => {
-            // Find the corresponding existing BusArrivalInfo
-            const existingBusService = busArrivalData.find(
+          nextBuses: service.nextBuses.map((bus: BusArrivalInfo, index: number) => {
+            // Use local reference instead of state
+            const existingBusService = latestBusArrivalData.find(
               (existingService) => existingService.ServiceNo === service.ServiceNo
             );
-            const existingBus = existingBusService?.nextBuses.find(
-              (existing) =>
-                existing.Latitude === bus.Latitude &&
-                existing.Longitude === bus.Longitude &&
-                existing.VisitNumber === bus.VisitNumber
-            );
-
+  
+            const existingBus = existingBusService?.nextBuses[index];
+  
             return {
               ...bus,
               lastUpdated:
-                existingBus && existingBus.EstimatedArrival === bus.EstimatedArrival
-                  ? existingBus.lastUpdated // Retain existing timestamp if arrival hasn't changed
-                  : new Date(), // Update timestamp if arrival has changed
+                existingBus && 
+                existingBus.EstimatedArrival === bus.EstimatedArrival && 
+                existingBus.Latitude === bus.Latitude && 
+                existingBus.Longitude === bus.Longitude
+                  ? existingBus.lastUpdated
+                  : new Date(),
             };
           }),
         }));
-
+  
+        latestBusArrivalData = updatedData; // Update local reference
         setBusArrivalData(updatedData);
       } catch (error) {
-        console.error("Failed to fetch bus data:", error);
+        console.error("BusStopComponent.tsx: Failed to fetch bus data:", error);
       } finally {
         setIsLoading(false);
       }
     };
-
-    // Fetch data immediately when the component mounts
+    
     fetchAndSetBusArrivalData();
-    // Set up the interval to fetch data every 5 seconds
-    intervalId = setInterval(fetchAndSetBusArrivalData, 5000);
-
-    // Cleanup function to clear the interval when the component unmounts
+    intervalId = setInterval(fetchAndSetBusArrivalData, 3000);
+    
     return () => clearInterval(intervalId);
-  }, [busArrivalData]);
+  }, []);
+
+  
 
   return (
     <View style={styles.outerContainer}>
@@ -253,12 +252,12 @@ const styles = StyleSheet.create({
     fontSize: scale(10),
     paddingLeft: scale(7),
     textAlign: "left",
-    fontFamily: font.bold,
+    fontFamily: font.semiBold,
     color: colors.onSurfaceSecondary,
   },
   roadName: {
     fontSize: scale(14),
-    fontFamily: font.bold,
+    fontFamily: font.semiBold,
     color: colors.onSurfaceSecondary,
   },
   busesContainer: {

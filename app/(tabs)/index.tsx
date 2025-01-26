@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     color: colors.onSurfaceSecondary,
-    fontFamily: font.bold,
+    fontFamily: font.semiBold,
     height: scale(40),
     fontSize: scale(12),
   },

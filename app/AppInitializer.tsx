@@ -38,6 +38,8 @@ const AppInitializer: React.FC<AppInitializerProps> = ({
       try {
         await Font.loadAsync({
           "SpaceMono-Regular": require("../assets/fonts/SpaceMono-Regular.ttf"),
+          "Nunito-Medium": require("../assets/fonts/Nunito/Nunito-Medium.ttf"),
+          "Nunito-SemiBold": require("../assets/fonts/Nunito/Nunito-SemiBold.ttf"),
           "Nunito-Bold": require("../assets/fonts/Nunito/Nunito-Bold.ttf"),
         });
         setFontLoadingComplete(true); // Fonts loaded successfully

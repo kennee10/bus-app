@@ -29,7 +29,8 @@ const LikedBusesPage = () => {
                 <LikedBusesBusStopComponent
                   key={busStopCode}
                   busStopCode={busStopCode}
-                  likedBuses={likedServices} // Pass the array of liked service numbers
+                  groupName={groupName}
+                  likedServices={likedServices} // Pass the array of liked service numbers
                 />
               ))}
             </View>

@@ -24,6 +24,7 @@ const LikedBusesContext = createContext<LikedBusesContextType | undefined>(undef
 
 // Provider component
 export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  
   const [likedBuses, setLikedBuses] = useState<GroupedLikedBuses>({ pinned: {} });
 
   // Load liked buses from AsyncStorage on initial render
@@ -52,7 +53,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
 
       // Update the group
       const updatedGroup = { ...group, [busStopCode]: updatedBusServices };
-      if (updatedBusServices.length === 0) delete updatedGroup[busStopCode]; // Remove key if empty
+      if (updatedBusServices.length === 0) delete updatedGroup[busStopCode]; // Remove busStopCode key if empty
 
       // Update the main likedBuses state
       const updatedLikedBuses = { ...likedBuses, [groupName]: updatedGroup };
@@ -64,7 +65,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       // Update state
       setLikedBuses(updatedLikedBuses);
     } catch (error) {
-      console.log('Failed to toggle like for bus: ', error);
+      console.log('likedBusesContext.tsx: Failed to toggle like for bus: ', error);
     }
   };
 
@@ -72,7 +73,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
   const createGroup = async (groupName: string) => {
     try {
       if (likedBuses[groupName]) {
-        console.log('Group already exists:', groupName);
+        console.log('likedBusesContext.tsx: Group already exists:', groupName);
         return;
       }
 

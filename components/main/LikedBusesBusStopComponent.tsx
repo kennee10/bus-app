@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { colors, font } from "../../assets/styles/GlobalStyles";
-import BusComponent from "./BusComponent";
+import LikedBusesBusComponent from "./LikedBusesBusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
-
-type LikedBusesBusStopComponentProps = {
-  busStopCode: string;
-  likedBuses: string[]; // Array of liked service numbers
-};
+import { useLikedBuses } from "../context/likedBusesContext";
 
 type BusArrivalInfo = {
   OriginCode: string;
@@ -20,6 +16,7 @@ type BusArrivalInfo = {
   Load: string;
   Feature: string;
   Type: string;
+  lastUpdated?: Date; // Individual lastUpdated timestamp
 };
 
 type BusService = {
@@ -28,48 +25,79 @@ type BusService = {
   nextBuses: BusArrivalInfo[];
 };
 
-const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = ({
-  busStopCode,
-  likedBuses,
-}) => {
+type LikedBusesBusStopComponentProps = {
+  busStopCode: string;
+  groupName: string;
+  likedServices: string[]; // Array of liked service numbers
+};
+
+const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (props) => {
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { toggleLike } = useLikedBuses();
 
   // GETTING ARRIVAL DATA
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchBusArrival(busStopCode, likedBuses); // Fetch only liked buses
-        setBusArrivalData(data);
-      } catch (error) {
-        console.error("Error fetching bus arrivals:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    // Fetch data immediately when the component mounts
-    fetchData();
-    // Set up the interval to fetch data every 5 seconds
-    const intervalId = setInterval(fetchData, 5000);
+      let intervalId; 
+      let latestBusArrivalData = busArrivalData; // Create a local reference
+      
+      const fetchAndSetBusArrivalData = async () => {
+        try {
+          const fetchedData = await fetchBusArrival(props.busStopCode, props.likedServices);
     
-    // Cleanup interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [busStopCode, likedBuses]);
+          const updatedData = fetchedData.map((service: BusService) => ({
+            ...service,
+            nextBuses: service.nextBuses.map((bus: BusArrivalInfo, index: number) => {
+              // Use local reference instead of state
+              const existingBusService = latestBusArrivalData.find(
+                (existingService) => existingService.ServiceNo === service.ServiceNo
+              );
+              // compares same index nextBuses in existing and new bus
+              const existingBus = existingBusService?.nextBuses[index];
+    
+              return {
+                ...bus,
+                lastUpdated:
+                  existingBus && 
+                  existingBus.EstimatedArrival === bus.EstimatedArrival && 
+                  existingBus.Latitude === bus.Latitude && 
+                  existingBus.Longitude === bus.Longitude
+                    ? existingBus.lastUpdated
+                    : new Date(),
+              };
+            }),
+          }));
+    
+          latestBusArrivalData = updatedData; // Update local reference
+          setBusArrivalData(updatedData);
+        } catch (error) {
+          console.error("BusStopComponent.tsx: Failed to fetch bus data:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      fetchAndSetBusArrivalData();
+      intervalId = setInterval(fetchAndSetBusArrivalData, 3000);
+      
+      return () => clearInterval(intervalId);
+    }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.busStopTitle}>Bus Stop: {busStopCode}</Text>
+      <Text style={styles.busStopTitle}>Bus Stop: {props.busStopCode}</Text>
       {isLoading ? (
         <ActivityIndicator size="large" color={colors.onSurfaceSecondary} />
       ) : busArrivalData.length > 0 ? (
         busArrivalData.map((busService) => (
-          <BusComponent
+          <LikedBusesBusComponent
             key={busService.ServiceNo}
             busNumber={busService.ServiceNo}
-            busStopCode={busStopCode}
+            busStopCode={props.busStopCode}
+            groupName={props.groupName}
             nextBuses={busService.nextBuses}
             isHearted={true} // Since these are liked buses
-            onHeartToggle={() => {}} // No-op for now
+            onHeartToggle={toggleLike} // No-op for now
           />
         ))
       ) : (

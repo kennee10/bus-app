@@ -20,7 +20,7 @@ const PayLahComponent: React.FC = () => {
             onPress={handlePress}
             style={containerStyles.button}
         >
-            <Text style={containerStyles.globalTextMessage}>Donate via PayLah</Text>
+            <Text style={containerStyles.globalTextMessage}>PayLah</Text>
         </TouchableOpacity>
     )
 };

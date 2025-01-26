@@ -5,7 +5,6 @@ import { colors, font } from '../../assets/styles/GlobalStyles';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import EntypoIcons from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 
@@ -28,7 +27,7 @@ const getBusLoad = (load: string): JSX.Element => {
     // return <View style={styles.circle} />
     return <View style={{flexDirection: 'row'}}>
               <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
-          </View>
+            </View>
   } else if (load === "SDA") {
     // Return two dot-single elements for SDA
     return (
@@ -107,8 +106,8 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
     const now = new Date();
     const secondsSinceUpdate = (now.getTime() - lastUpdated.getTime()) / 1000;
 
-    if (secondsSinceUpdate <= 15) return colors.accent; // Green dot
-    if (secondsSinceUpdate <= 45) return colors.warning; // Yellow dot
+    if (secondsSinceUpdate <= 5) return colors.accent; // Green dot
+    if (secondsSinceUpdate <= 20) return colors.warning; // Yellow dot
     return colors.error; // Red dot
   };
 
@@ -130,12 +129,12 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
       {/* Blinking Dot */}
       {Monitored === 1 && mins !== "-" && (
         <View style={styles.dotWrapper}>
-        <View style={{
-          width: scale(1.5),
-          height: scale(6),
-          borderRadius: scale(5), // Makes it a circle
-          backgroundColor: dotColor
-        }} />
+          <View style={{
+            width: scale(1.5),
+            height: scale(6),
+            borderRadius: scale(5), // Makes it a circle
+            backgroundColor: dotColor
+          }} />
       </View>
       )}
 

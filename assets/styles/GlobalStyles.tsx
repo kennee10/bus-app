@@ -32,6 +32,7 @@ export const colors = {
     accent7: "khaki",
 
     borderToPress: "rgba(255, 255, 255, 0.15)",
+    borderToPress2: "rgba(255, 255, 255, 0.1)",
     busIcon: "powderblue",
 
 
@@ -45,6 +46,8 @@ export const colors = {
   };
   
 export const font = {
+  medium: "Nunito-Medium",
+  semiBold: "Nunito-SemiBold",
   bold: "Nunito-Bold"
 }
 

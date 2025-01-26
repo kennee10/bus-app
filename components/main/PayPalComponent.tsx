@@ -20,7 +20,7 @@ const PayPalComponent: React.FC = () => {
             onPress={handlePress}
             style={containerStyles.button}
         >
-            <Text style={containerStyles.globalTextMessage}>Donate via PayPal</Text>
+            <Text style={containerStyles.globalTextMessage}>PayPal</Text>
         </TouchableOpacity>
     )
 };
