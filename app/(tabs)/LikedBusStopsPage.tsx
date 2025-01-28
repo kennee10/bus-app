@@ -5,7 +5,7 @@ import { scale } from 'react-native-size-matters';
 import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from "../../components/main/BusStopComponent"
 import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
-import { getLikedBusStopsDetails } from '../../components/hooks/getLikedBusStopsDetails';
+import { getBusStopsDetails } from '../../components/hooks/getBusStopsDetails';
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -13,7 +13,7 @@ type BusStopWithDist = {
   RoadName: string;
   Latitude: number;
   Longitude: number;
-  Distance: number;
+  Distance: string;
 };
 
 const LikedBusStopsPage = () => {
@@ -24,8 +24,8 @@ const LikedBusStopsPage = () => {
   useEffect(() => {
     (async () => {
       try {
-        console.log('getting liked bus stops')
-        const details = await getLikedBusStopsDetails(likedBusStops);
+        // console.log('LikedBusStopsPage.tsx: getting liked bus stops')
+        const details = await getBusStopsDetails(likedBusStops);
         setLikedBusStopsDetails(details);
       } catch (error) {
         console.error("LikedBusStopsPage.tsx: Failed to load liked bus stops details:", error);
@@ -54,7 +54,7 @@ const LikedBusStopsPage = () => {
                 BusStopCode={item.BusStopCode}
                 Description={item.Description}
                 RoadName={item.RoadName}
-                Distance={item.Distance.toFixed(0)}
+                Distance={item.Distance}
                 isLiked={likedBusStops.includes(item.BusStopCode)}
                 onLikeToggle={() => toggleLike(item.BusStopCode)}
                 searchQuery=""

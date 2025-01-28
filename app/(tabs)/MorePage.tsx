@@ -29,7 +29,7 @@ const App = () => {
   };
 
   return (
-    <View style={containerStyles.pageContainer}>
+    <View style={[containerStyles.pageContainer, {justifyContent: "flex-start", paddingTop: scale(15)}]}>
       <View style={[styles.oneContainer]}>
         <Text style={styles.heading}>Contact Me</Text>
         <View style={styles.content}>
@@ -47,7 +47,7 @@ const App = () => {
             style={containerStyles.button}>
               <Text style={containerStyles.globalTextMessage}>PayNow</Text>
           </TouchableOpacity>
-          <PayLahComponent />
+          {/* <PayLahComponent /> */}
           <PayPalComponent />
         </View>
           
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: scale(1),
     borderColor: colors.borderToPress2,
-    margin: scale(10),
-    width: "90%"
+    margin: scale(7.5),
+    width: "95%"
   },
 
   content: {

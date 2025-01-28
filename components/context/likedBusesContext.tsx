@@ -16,7 +16,13 @@ type LikedBusesContextType = {
     busStopCode: string,
     serviceNo: string
   ) => Promise<void>;
+  toggleUnlike: (
+    groupName: string,
+    busStopCode: string,
+    serviceNo: string
+  ) => Promise<void>;
   createGroup: (groupName: string) => Promise<void>;
+  deleteGroup: (groupName: string) => Promise<void>;
 };
 
 // Create Context
@@ -24,7 +30,6 @@ const LikedBusesContext = createContext<LikedBusesContextType | undefined>(undef
 
 // Provider component
 export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  
   const [likedBuses, setLikedBuses] = useState<GroupedLikedBuses>({ pinned: {} });
 
   // Load liked buses from AsyncStorage on initial render
@@ -35,62 +40,127 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
         const parsedLikedBuses = storedLikedBuses ? JSON.parse(storedLikedBuses) : { pinned: {} };
         setLikedBuses(parsedLikedBuses);
       } catch (error) {
-        console.log('Failed to load liked buses: ', error);
+        console.error('Failed to load liked buses: ', error);
       }
     };
     loadLikedBuses();
   }, []);
 
-  // Function to toggle like/unlike a bus within a group
-  const toggleLike = async (groupName: string, busStopCode: string, serviceNo: string) => {
+  // Helper function to save to AsyncStorage
+  const saveToStorage = async (updatedLikedBuses: GroupedLikedBuses) => {
     try {
-      const group = likedBuses[groupName] || {};
-      const busServices = group[busStopCode] || [];
-
-      const updatedBusServices = busServices.includes(serviceNo)
-        ? busServices.filter((service) => service !== serviceNo) // Unlike the bus
-        : [...busServices, serviceNo]; // Like the bus
-
-      // Update the group
-      const updatedGroup = { ...group, [busStopCode]: updatedBusServices };
-      if (updatedBusServices.length === 0) delete updatedGroup[busStopCode]; // Remove busStopCode key if empty
-
-      // Update the main likedBuses state
-      const updatedLikedBuses = { ...likedBuses, [groupName]: updatedGroup };
-      if (Object.keys(updatedGroup).length === 0) delete updatedLikedBuses[groupName]; // Remove group if empty
-
-      // Persist to AsyncStorage
       await AsyncStorage.setItem('likedBuses', JSON.stringify(updatedLikedBuses));
-
-      // Update state
       setLikedBuses(updatedLikedBuses);
     } catch (error) {
-      console.log('likedBusesContext.tsx: Failed to toggle like for bus: ', error);
+      console.error('Failed to save to storage: ', error);
+      throw new Error('Failed to save changes');
+    }
+  };
+
+  // Function to toggle like a bus within a group
+  const toggleLike = async (groupName: string, busStopCode: string, serviceNo: string) => {
+    try {
+      if (!likedBuses[groupName]) {
+        throw new Error(`Group ${groupName} does not exist`);
+      }
+  
+      const group = likedBuses[groupName];
+      const busServices = group[busStopCode] || [];
+  
+      // Add the serviceNo only if it's not already in the list
+      const updatedBusServices = busServices.includes(serviceNo)
+        ? busServices // Do nothing if the service is already liked
+        : [...busServices, serviceNo]; // Like the bus
+  
+      // Update the group
+      const updatedGroup = { ...group, [busStopCode]: updatedBusServices };
+  
+      // Update the main likedBuses state
+      const updatedLikedBuses = { ...likedBuses, [groupName]: updatedGroup };
+  
+      await saveToStorage(updatedLikedBuses);
+    } catch (error) {
+      console.error('Failed to like bus: ', error);
+      throw error;
+    }
+  };
+  
+
+  // Function to toggle unlike a bus from all groups
+  const toggleUnlike = async (groupName: string, busStopCode: string, serviceNo: string) => {
+    try {
+      const updatedLikedBuses = { ...likedBuses };
+      let changes = false;
+
+      // Remove the service from the specified group and busStopCode
+      if (updatedLikedBuses[groupName]?.[busStopCode]) {
+        const services = updatedLikedBuses[groupName][busStopCode];
+        const updatedServices = services.filter(service => service !== serviceNo);
+        
+        if (updatedServices.length === 0) {
+          delete updatedLikedBuses[groupName][busStopCode];
+        } else {
+          updatedLikedBuses[groupName][busStopCode] = updatedServices;
+        }
+
+        if (Object.keys(updatedLikedBuses[groupName]).length === 0 && groupName !== 'pinned') {
+          delete updatedLikedBuses[groupName];
+        }
+        
+        changes = true;
+      }
+
+      if (changes) {
+        await saveToStorage(updatedLikedBuses);
+      }
+    } catch (error) {
+      console.error('Failed to unlike bus: ', error);
+      throw error;
     }
   };
 
   // Function to create a new group
   const createGroup = async (groupName: string) => {
     try {
+      if (groupName === 'pinned') {
+        throw new Error('Cannot create a group named "pinned" as it is reserved');
+      }
+
       if (likedBuses[groupName]) {
-        console.log('likedBusesContext.tsx: Group already exists:', groupName);
-        return;
+        throw new Error(`Group ${groupName} already exists`);
       }
 
       const updatedLikedBuses = { ...likedBuses, [groupName]: {} };
-
-      // Persist to AsyncStorage
-      await AsyncStorage.setItem('likedBuses', JSON.stringify(updatedLikedBuses));
-
-      // Update state
-      setLikedBuses(updatedLikedBuses);
+      await saveToStorage(updatedLikedBuses);
     } catch (error) {
-      console.log('Failed to create group:', error);
+      console.error('Failed to create group: ', error);
+      throw error;
+    }
+  };
+
+  // Function to delete a group
+  const deleteGroup = async (groupName: string) => {
+    try {
+      if (groupName === 'pinned') {
+        throw new Error('Cannot delete the pinned group');
+      }
+
+      if (!likedBuses[groupName]) {
+        throw new Error(`Group ${groupName} does not exist`);
+      }
+
+      const updatedLikedBuses = { ...likedBuses };
+      delete updatedLikedBuses[groupName];
+      
+      await saveToStorage(updatedLikedBuses);
+    } catch (error) {
+      console.error('Failed to delete group: ', error);
+      throw error;
     }
   };
 
   return (
-    <LikedBusesContext.Provider value={{ likedBuses, toggleLike, createGroup }}>
+    <LikedBusesContext.Provider value={{ likedBuses, toggleLike, toggleUnlike, createGroup, deleteGroup }}>
       {children}
     </LikedBusesContext.Provider>
   );
@@ -100,7 +170,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
 export const useLikedBuses = (): LikedBusesContextType => {
   const context = useContext(LikedBusesContext);
   if (!context) {
-    throw new Error('likedBusesContext.tsx: useLikedBuses must be used within a LikeBusesProvider');
+    throw new Error('useLikedBuses must be used within a LikeBusesProvider');
   }
   return context;
 };

@@ -54,7 +54,7 @@ const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => 
                 </View>
                 
                 <View style={styles.rightSide}>
-                  <Text style={styles.infoText}>Updated {'<'} 15 seconds ago</Text>
+                  <Text style={styles.infoText}>Live Location Updated {'<'} 15 seconds ago</Text>
                 </View>
 
               </View>
@@ -71,7 +71,7 @@ const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => 
                   </View>
                   
                   <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>Updated {'<'} 45 seconds ago</Text>
+                    <Text style={styles.infoText}>Live Location Updated 15 - 45 seconds ago</Text>
                   </View>
                   
                 </View>

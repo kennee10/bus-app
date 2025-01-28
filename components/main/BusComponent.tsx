@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, FlatList, Alert } from "react-native";
 import { scale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors } from '../../assets/styles/GlobalStyles';
+import { colors, font } from '../../assets/styles/GlobalStyles';
 import ArrivalTimingComponent from "./ArrivalTimingComponent";
 import { useLikedBuses } from "../context/likedBusesContext";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 type NextBusInfo = {
   OriginCode: string;
@@ -33,7 +34,7 @@ type BusComponentProps = {
 };
 
 const BusComponent: React.FC<BusComponentProps> = (props) => {
-  const { likedBuses, toggleLike, createGroup } = useLikedBuses();
+  const { likedBuses, toggleLike, createGroup, deleteGroup } = useLikedBuses();
   const [isModalVisible, setModalVisible] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
 
@@ -49,12 +50,52 @@ const BusComponent: React.FC<BusComponentProps> = (props) => {
   };
 
   const handleCreateGroup = async () => {
-    console.log("called handleCreateGroup")
     if (newGroupName.trim()) {
       await createGroup(newGroupName.trim());
       setNewGroupName("");
     }
   };
+
+  const handleDeleteGroup = (groupName: string) => {
+    Alert.alert(
+      "Delete Group",
+      `Are you sure you want to delete "${groupName}"?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
+            await deleteGroup(groupName);
+          },
+          style: "destructive"
+        }
+      ]
+    );
+  };
+
+  const renderGroupItem = ({ item }: { item: string }) => (
+    <View style={styles.groupItem}>
+      <TouchableOpacity
+        style={styles.groupItemContent}
+        onPress={() => handleGroupSelect(item)}
+      >
+        <Text style={styles.groupText}>{item}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeleteGroup(item)}
+      >
+        <Ionicons 
+          name="trash-outline" 
+          size={scale(15)} 
+          color={colors.onSurfaceSecondary2}
+        />
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -76,7 +117,7 @@ const BusComponent: React.FC<BusComponentProps> = (props) => {
       <View style={styles.likeButtonWrapper}>
         <TouchableOpacity onPress={handleHeartPress}>
           <Ionicons
-            name={props.isHearted ? "heart" : "heart-outline"}
+            name="heart-outline"
             color={props.isHearted ? colors.accent5 : colors.onSurfaceSecondary2}
             size={scale(18)}
           />
@@ -84,36 +125,46 @@ const BusComponent: React.FC<BusComponentProps> = (props) => {
       </View>
 
       {/* Modal for Group Selection */}
-      <Modal visible={isModalVisible} transparent animationType="slide">
-        <View style={styles.modalContainer}>
+      <Modal visible={isModalVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Select a Group</Text>
-            <FlatList
-              data={groupNames}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.groupItem}
-                  onPress={() => handleGroupSelect(item)}
+            <View style={styles.modalHeader}>
+              <View style={styles.modalHeaderText}>
+                <Text style={styles.modalTitle}>Select a Group</Text>
+              </View>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Ionicons name="close-circle" style={styles.modalCrossIcon} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalBody}>
+              <FlatList
+                data={groupNames}
+                keyExtractor={(item) => item}
+                renderItem={renderGroupItem}
+                style={styles.flatList}
+                ItemSeparatorComponent={() => <View style={{height: scale(7)}}/>}
+              />
+
+              <View style={styles.modalFooter}>
+                <TextInput
+                  style={styles.input}
+                  multiline={true}
+                  placeholder="Create new group (eg. Home -> Work)"
+                  placeholderTextColor={colors.onSurfaceSecondary2}
+                  value={newGroupName}
+                  onChangeText={setNewGroupName}
+                  onSubmitEditing={handleCreateGroup}
+                />
+
+                <TouchableOpacity 
+                  style={styles.createButton} 
+                  onPress={handleCreateGroup}
                 >
-                  <Text style={styles.groupText}>{item}</Text>
+                  <FontAwesome6 name="check" color={colors.onSurface} size={scale(14)}/>
                 </TouchableOpacity>
-              )}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Create new group"
-              value={newGroupName}
-              onChangeText={setNewGroupName}
-              onSubmitEditing={handleCreateGroup}
-            />
-            <TouchableOpacity style={styles.closeButton} onPress={() => handleCreateGroup()}>
-              <Text style={styles.closeButtonText}>Create Group</Text>
-            </TouchableOpacity>
+              </View>
+            </View>
             
-            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Ionicons name="close-outline" style={styles.modalCrossIcon}/>
-            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -122,6 +173,7 @@ const BusComponent: React.FC<BusComponentProps> = (props) => {
 };
 
 const styles = StyleSheet.create({
+  // ... keeping existing styles ...
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -133,9 +185,6 @@ const styles = StyleSheet.create({
     marginRight: scale(5),
     borderRadius: scale(4),
     backgroundColor: colors.surface2,
-    // backgroundColor: "#FFE4E1",
-    
-    // shadow stuff
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -162,57 +211,91 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
-  modalContainer: {
+  modalOverlay: {
     flex: 1,
+    backgroundColor: colors.modalBackgroundOpacity,
     justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-  modalContent: {
-    margin: 20,
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
     alignItems: "center",
   },
+  modalContent: {
+    width: "90%",
+    backgroundColor: colors.surface3,
+    borderRadius: scale(6),
+    borderWidth: scale(1),
+    borderColor: colors.borderToPress2,
+    padding: scale(10),
+    opacity: 0.99,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: scale(5),
+  },
+  modalHeaderText: {
+    flex: 1,
+  },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  groupItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    width: "100%",
-  },
-  groupText: {
-    fontSize: 16,
-  },
-  input: {
-    width: "100%",
-    padding: 10,
-    marginTop: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-  },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: colors.accent5,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "white",
-    fontWeight: "bold",
+    fontSize: scale(15),
+    fontFamily: font.bold,
+    color: colors.onSurface,
   },
   modalCrossIcon: {
-    fontSize: scale(24),
+    fontSize: scale(25),
     color: colors.secondary2,
-    padding: scale(7),
-    // backgroundColor: 'red'
+  },
+  modalBody: {
+    padding: scale(5),
+  },
+  flatList: {
+    width: "100%",
+  },
+  groupItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.surface2,
+    borderRadius: scale(4),
+    paddingTop: scale(8),
+    paddingBottom: scale(8),
+    paddingLeft: scale(10),
+    width: "100%",
+  },
+  groupItemContent: {
+    flex: 1,
+  },
+  groupText: {
+    fontSize: scale(14),
+    color: colors.primary,
+    fontFamily: font.semiBold,
+  },
+  deleteButton: {
+    padding: scale(10),
+  },
+  modalFooter: {
+    flexDirection: "row",
+    marginTop: scale(20),
+  },
+  input: {
+    flex: 10,
+    padding: scale(10),
+    marginRight: scale(5),
+    borderWidth: 1,
+    borderColor: colors.onSurfaceSecondary2,
+    borderRadius: scale(4),
+    color: colors.onSurface,
+    fontFamily: font.medium,
+  },
+  createButton: {
+    flex: 1.5,
+    backgroundColor: colors.primary,
+    borderRadius: scale(4),
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
 export default BusComponent;
-

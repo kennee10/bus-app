@@ -3,8 +3,9 @@ import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
 export const colors = {
     background: "#0d0d0d",
-    surface: "#26292e",
-    surface2: "#2c2e33",
+    surface: "#212429",
+    surface2: "#292b30",
+    surface3: "#1d1f24",
     
     onBackground: "#FFFFFF",
     onBackgroundSecondary: "#84848A",
@@ -15,7 +16,7 @@ export const colors = {
     onSurfaceSecondary2: "gray",
     
     onSurface2: "#FFFFFF",
-    onSurface2Secondary: "#bdbdbd",
+    onSurface2Secondary: "#bdbdbd", // brighter than gray
     
 
     primary: "#a17ee4",

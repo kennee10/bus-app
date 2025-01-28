@@ -44,7 +44,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const { likedBuses, toggleLike } = useLikedBuses();
 
-  // GETTING ARRIVAL DATA
+  // Getting bus timings
   useEffect(() => {
     let intervalId; 
     let latestBusArrivalData = busArrivalData; // Create a local reference
@@ -91,7 +91,6 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
     return () => clearInterval(intervalId);
   }, []);
 
-  
 
   return (
     <View style={styles.outerContainer}>
@@ -168,7 +167,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
           ) : (
             <View style={styles.noBusesWrapper}>
               <Text style={styles.noBusesText}>
-                No buses are currently in operation.
+                No buses are currently in operation
               </Text>
             </View>
           )}

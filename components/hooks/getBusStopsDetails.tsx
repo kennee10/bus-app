@@ -8,10 +8,10 @@ type BusStopWithDistance = {
   RoadName: string;
   Latitude: number;
   Longitude: number;
-  Distance: number;
+  Distance: string;
 };
 
-export const getLikedBusStopsDetails = async (likedBusStops: string[]): Promise<BusStopWithDistance[]> => {
+export const getBusStopsDetails = async (likedBusStops: string[]): Promise<BusStopWithDistance[]> => {
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -32,7 +32,7 @@ export const getLikedBusStopsDetails = async (likedBusStops: string[]): Promise<
     const enhancedStops = parsedData
       .filter((stop: BusStopWithDistance) => likedBusStops.includes(stop.BusStopCode))
       .map((stop: BusStopWithDistance) => {
-        const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude);
+        const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude).toFixed(0);
         return { ...stop, Distance: distance };
       })
       .sort(
@@ -42,7 +42,7 @@ export const getLikedBusStopsDetails = async (likedBusStops: string[]): Promise<
 
     return enhancedStops;
   } catch (error) {
-    console.error("getLikedBusStopsDetails.tsx: Error fetching liked bus stops: ", error);
+    console.error("getBusStopsDetails.tsx: Error fetching liked bus stops: ", error);
     return [];
   }
 };

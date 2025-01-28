@@ -106,8 +106,8 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
     const now = new Date();
     const secondsSinceUpdate = (now.getTime() - lastUpdated.getTime()) / 1000;
 
-    if (secondsSinceUpdate <= 5) return colors.accent; // Green dot
-    if (secondsSinceUpdate <= 20) return colors.warning; // Yellow dot
+    if (secondsSinceUpdate <= 15) return colors.accent; // Green dot
+    if (secondsSinceUpdate <= 45) return colors.warning; // Yellow dot
     return colors.error; // Red dot
   };
 

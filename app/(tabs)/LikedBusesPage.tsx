@@ -3,16 +3,27 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useLikedBuses } from "../../components/context/likedBusesContext";
 import LikedBusesBusStopComponent from "../../components/main/LikedBusesBusStopComponent";
-import { colors, font } from "../../assets/styles/GlobalStyles";
+import { colors, containerStyles, font } from "../../assets/styles/GlobalStyles";
 import { scale } from "react-native-size-matters";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails"
+
+type BusStopWithDist = {
+  BusStopCode: string;
+  Description: string;
+  RoadName: string;
+  Latitude: number;
+  Longitude: number;
+  Distance: number;
+};
 
 const LikedBusesPage = () => {
   const { likedBuses } = useLikedBuses();
   const [collapsedGroups, setCollapsedGroups] = useState<{[key: string]: boolean}>({});
-
+  const [busStopDetails, setBusStopDetails] = useState<{[key: string]: BusStopWithDist}>({});
   const groups = Object.entries(likedBuses || {});
 
+  // Group collapse State
   useEffect(() => {
     const loadCollapsedState = async () => {
       try {
@@ -45,9 +56,42 @@ const LikedBusesPage = () => {
       return newState;
     });
   };
+  
+  // Get bus stop details
+  useEffect(() => {
+    const fetchBusStopDetails = async () => {
+      try {
+        // Extract unique bus stop codes from all groups
+        const busStopCodes = new Set<string>();
+        Object.values(likedBuses || {}).forEach(groupData => {
+          Object.keys(groupData).forEach(busStopCode => {
+            busStopCodes.add(busStopCode);
+          });
+        });
+
+        // Only fetch if there are bus stops to fetch
+        if (busStopCodes.size > 0) {
+          const details = await getBusStopsDetails(Array.from(busStopCodes));
+          
+          // Convert array to object for easier lookup
+          const detailsMap = details.reduce((acc, busStop) => ({
+            ...acc,
+            [busStop.BusStopCode]: busStop
+          }), {});
+          
+          setBusStopDetails(detailsMap);
+        }
+      } catch (error) {
+        console.error('Failed to fetch bus stop details:', error);
+      }
+    };
+
+    fetchBusStopDetails();
+  }, [likedBuses]);
 
   return (
-    <View style={styles.container}>
+    <View style={containerStyles.pageContainer}>
+      <View style={[containerStyles.innerPageContainer, {marginTop: scale(10)}]}>
       {groups.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>You haven't liked any buses yet!</Text>
@@ -70,7 +114,6 @@ const LikedBusesPage = () => {
                     color={colors.primary}
                   />
                 </View>
-                
               </TouchableOpacity>
 
               {!collapsedGroups[groupName] && Object.entries(groupData).map(([busStopCode, likedServices]) => (
@@ -79,42 +122,40 @@ const LikedBusesPage = () => {
                   busStopCode={busStopCode}
                   groupName={groupName}
                   likedServices={likedServices}
+                  busStopDetails={busStopDetails[busStopCode]}
                 />
               ))}
             </View>
           )}
         />
       )}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
   emptyContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   emptyText: {
-    fontSize: 18,
+    fontSize: scale(15),
+    marginHorizontal: scale(20),
     fontFamily: font.bold,
     color: colors.onSurfaceSecondary,
     textAlign: "center",
-    marginHorizontal: 20,
   },
   groupContainer: {
-    marginBottom: 24,
+    marginBottom: scale(10),
+    borderRadius: scale(4),
+    backgroundColor: colors.surface3,
   },
   groupTitleContainer: {
     flexDirection: 'row',
-    marginBottom: scale(12),
     alignItems: "center",
+    padding: scale(4),
   },
   groupTitle: {
     flex: 10,
@@ -122,7 +163,6 @@ const styles = StyleSheet.create({
     padding: scale(5),
     fontFamily: font.bold,
     color: colors.primary,
-    textTransform: "capitalize",
   },
   arrowContainer: {
     flex: 1,
