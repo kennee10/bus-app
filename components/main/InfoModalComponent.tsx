@@ -23,7 +23,7 @@ const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => 
     <Modal
       visible={isVisible}
       transparent={true}
-      animationType="none"
+      animationType="fade"
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>

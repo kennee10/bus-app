@@ -173,7 +173,6 @@ const BusComponent: React.FC<BusComponentProps> = (props) => {
 };
 
 const styles = StyleSheet.create({
-  // ... keeping existing styles ...
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -219,6 +218,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "90%",
+    maxHeight: "80%",
     backgroundColor: colors.surface3,
     borderRadius: scale(6),
     borderWidth: scale(1),
@@ -250,18 +250,18 @@ const styles = StyleSheet.create({
   },
   modalBody: {
     padding: scale(5),
+    maxHeight: scale(300),
   },
   flatList: {
     width: "100%",
+    maxHeight: scale(220),
   },
   groupItem: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: colors.surface2,
     borderRadius: scale(4),
-    paddingTop: scale(8),
-    paddingBottom: scale(8),
-    paddingLeft: scale(10),
+    padding: scale(10),
     width: "100%",
   },
   groupItemContent: {
@@ -273,7 +273,6 @@ const styles = StyleSheet.create({
     fontFamily: font.semiBold,
   },
   deleteButton: {
-    padding: scale(10),
   },
   modalFooter: {
     flexDirection: "row",

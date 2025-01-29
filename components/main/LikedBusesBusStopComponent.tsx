@@ -99,24 +99,28 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
 
   return (
     <View style={styles.outerContainer}>
-      <View style={styles.upper}>
-        <View style={styles.busStopCodeWrapper}>
-          <Text style={styles.busStopCode}>{props.busStopCode}</Text>
+      {!isLoading && (
+        <View>
+          <View style={styles.upper}>
+            <View style={styles.busStopCodeWrapper}>
+              <Text style={styles.busStopCode}>{props.busStopCode}</Text>
+            </View>
+            <View style={styles.descriptionWrapper}>
+              <Text style={styles.description} adjustsFontSizeToFit numberOfLines={1}>
+                {props.busStopDetails?.Description}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.lower}>
+            <View style={styles.distanceWrapper}>
+              <Text style={styles.distance}>{props.busStopDetails?.Distance}m</Text>
+            </View>
+            <View style={styles.roadNameWrapper}>
+              <Text style={styles.roadName}>{props.busStopDetails?.RoadName}</Text>
+            </View>
+          </View>
         </View>
-        <View style={styles.descriptionWrapper}>
-          <Text style={styles.description} adjustsFontSizeToFit numberOfLines={1}>
-            {props.busStopDetails?.Description}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.lower}>
-        <View style={styles.distanceWrapper}>
-          <Text style={styles.distance}>{props.busStopDetails?.Distance}m</Text>
-        </View>
-        <View style={styles.roadNameWrapper}>
-          <Text style={styles.roadName}>{props.busStopDetails?.RoadName}</Text>
-        </View>
-      </View>
+      )}
 
       <View style={styles.servicesContainer}>
         {isLoading ? (
@@ -135,23 +139,23 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
           ))
         ) : (
           <Text style={styles.noBusesText}>
-            No buses are currently in operation
+            No liked buses are currently in operation
           </Text>
         )}
       </View>
 
       {/* Buses not in operation */}
-      {busesNotInOperation.length > 0 && (
+      {busesNotInOperation.length > 0 && !isLoading && (
         <View style={styles.notInOperationContainer}>
-        <View style={styles.notInOperationGrid}>
-          {busesNotInOperation.map((busService) => (
-            <View key={busService} style={styles.notInOperationBox}>
-              <View style={styles.diagonalLine} />
-              <Text style={styles.notInOperationText}>{busService}</Text>
-            </View>
-          ))}
+          <View style={styles.notInOperationGrid}>
+            {busesNotInOperation.map((busService) => (
+              <View key={busService} style={styles.notInOperationBox}>
+                <View style={styles.diagonalLine} />
+                <Text style={styles.notInOperationText}>{busService}</Text>
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
       )}
     </View>
   );
@@ -234,35 +238,6 @@ const styles = StyleSheet.create({
     color: colors.warning,
     textAlign: "center",
   },
-  // notInOperationContainer: {
-  //   marginTop: scale(8),
-  //   backgroundColor: colors.surface2,
-  //   padding: scale(8),
-  //   borderRadius: scale(4),
-  // },
-  // notInOperationTitle: {
-  //   fontSize: scale(11),
-  //   fontFamily: font.semiBold,
-  //   color: colors.onSurfaceSecondary,
-  //   marginBottom: scale(6),
-  // },
-  // notInOperationList: {
-  //   flexDirection: "row",
-  //   flexWrap: "wrap",
-  //   gap: scale(4),
-  // },
-  // notInOperationBox: {
-    // padding: scale(8),
-    // borderRadius: scale(4),
-    // backgroundColor: colors.surface,
-    // justifyContent: "center",
-    // alignItems: "center",
-  // },
-  // notInOperationText: {
-  //   fontSize: scale(10),
-  //   fontFamily: font.bold,
-  //   color: colors.onSurfaceSecondary,
-  // },
   notInOperationContainer: {
     marginTop: scale(8),
     padding: scale(8),

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useLikedBuses } from "../../components/context/likedBusesContext";
 import LikedBusesBusStopComponent from "../../components/main/LikedBusesBusStopComponent";
@@ -18,7 +18,7 @@ type BusStopWithDist = {
 };
 
 const LikedBusesPage = () => {
-  const { likedBuses } = useLikedBuses();
+  const { likedBuses, deleteGroup } = useLikedBuses();
   const [collapsedGroups, setCollapsedGroups] = useState<{[key: string]: boolean}>({});
   const [busStopDetails, setBusStopDetails] = useState<{[key: string]: BusStopWithDist}>({});
   const groups = Object.entries(likedBuses || {});
@@ -89,6 +89,26 @@ const LikedBusesPage = () => {
     fetchBusStopDetails();
   }, [likedBuses]);
 
+  const handleDeleteGroup = (groupName: string) => {
+      Alert.alert(
+        "Delete Group",
+        `Are you sure you want to delete "${groupName}"?`,
+        [
+          {
+            text: "Cancel",
+            style: "cancel"
+          },
+          {
+            text: "Delete",
+            onPress: async () => {
+              await deleteGroup(groupName);
+            },
+            style: "destructive"
+          }
+        ]
+      );
+    };
+
   return (
     <View style={containerStyles.pageContainer}>
       <View style={[containerStyles.innerPageContainer, {marginTop: scale(10)}]}>
@@ -106,25 +126,48 @@ const LikedBusesPage = () => {
                 style={styles.groupTitleContainer} 
                 onPress={() => toggleGroupCollapse(groupName)}
               >
-                <Text style={styles.groupTitle}>{groupName}</Text>
                 <View style={styles.arrowContainer}>
                   <Ionicons 
                     name={collapsedGroups[groupName] ? "chevron-down" : "chevron-up"} 
-                    size={24} 
+                    size={scale(18)} 
                     color={colors.primary}
                   />
                 </View>
+                <Text style={styles.groupTitle}>{groupName}</Text>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDeleteGroup(groupName)}
+                >
+                  <Ionicons 
+                    name="trash-outline" 
+                    size={scale(18)} 
+                    color={colors.onSurfaceSecondary2}
+                  />
+                </TouchableOpacity>
               </TouchableOpacity>
 
-              {!collapsedGroups[groupName] && Object.entries(groupData).map(([busStopCode, likedServices]) => (
-                <LikedBusesBusStopComponent
-                  key={busStopCode}
-                  busStopCode={busStopCode}
-                  groupName={groupName}
-                  likedServices={likedServices}
-                  busStopDetails={busStopDetails[busStopCode]}
-                />
-              ))}
+            
+              {!collapsedGroups[groupName] && (
+                Object.keys(groupData).length > 0 ? (
+                  Object.entries(groupData).map(([busStopCode, likedServices]) => (
+                    <LikedBusesBusStopComponent
+                      key={busStopCode}
+                      busStopCode={busStopCode}
+                      groupName={groupName}
+                      likedServices={likedServices}
+                      busStopDetails={busStopDetails[busStopCode]}
+                    />
+                  ))
+                ) : (
+                  <View style={styles.noLikedBusesInGroupTextWrapper}>
+                    <Text style={styles.noLikedBusesInGroupText}>
+                      No liked buses in this group
+                    </Text>
+                  </View>
+                  
+                )
+              )}
+
             </View>
           )}
         />
@@ -155,18 +198,44 @@ const styles = StyleSheet.create({
   groupTitleContainer: {
     flexDirection: 'row',
     alignItems: "center",
-    padding: scale(4),
-  },
-  groupTitle: {
-    flex: 10,
-    fontSize: scale(15),
-    padding: scale(5),
-    fontFamily: font.bold,
-    color: colors.primary,
+    padding: scale(10),
+    paddingLeft: 0,
   },
   arrowContainer: {
     flex: 1,
     alignItems:"center",
+    // backgroundColor: 'red'
+  },
+  groupTitle: {
+    flex: 10,
+    fontSize: scale(15),
+    marginLeft: scale(6),
+    fontFamily: font.bold,
+    color: colors.primary,
+    // backgroundColor: 'yellow'
+  },
+  deleteButton: {
+  },
+  noLikedBusesInGroupTextWrapper: {
+    alignItems: "center",
+    justifyContent: "center",
+    margin: scale(5),
+    paddingTop: scale(10),
+    paddingBottom: scale(10),
+    borderRadius: scale(4),
+    backgroundColor: colors.surface2,
+    // shadow stuff
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  noLikedBusesInGroupText: {
+    flex: 1,
+    fontFamily: font.bold,
+    color: colors.onSurfaceSecondary,
+    textAlign: "center",
   },
 });
 
