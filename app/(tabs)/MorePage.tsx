@@ -1,21 +1,27 @@
 import React, { useState } from "react";
-import { View , Text, Image, StyleSheet, TouchableOpacity, Modal, Linking} from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Linking, Dimensions } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
+import ImageViewer from 'react-native-image-zoom-viewer';
 import { colors, containerStyles, font } from "@/assets/styles/GlobalStyles";
 import PayLahComponent from "../../components/main/PayLahComponent";
 import PayPalComponent from "@/components/main/PayPalComponent";
 import { scale } from "react-native-size-matters";
-import paynowQR from "../../assets/images/paynow.jpg"
+import paynowQR from "../../assets/images/paynow.jpg";
+import MRTMap from "../../assets/images/MRTMap.jpg";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const App = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isPayNowVisible, setIsPayNowVisible] = useState(false);
+  const [isMRTMapVisible, setIsMRTMapVisible] = useState(false);
 
-  const onPayPalPress = () => {
-    setIsVisible(true);
-  }
+  const onPayNowPress = () => {
+    setIsPayNowVisible(true);
+  };
+
+  const onMRTMapPress = () => {
+    setIsMRTMapVisible(true);
+  };
 
   const onEmailPress = () => {
     const email = "kennee100@gmail.com";
@@ -29,12 +35,12 @@ const App = () => {
   };
 
   return (
-    <View style={[containerStyles.pageContainer, {justifyContent: "flex-start", paddingTop: scale(15)}]}>
+    <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: scale(15) }]}>
       <View style={[styles.oneContainer]}>
         <Text style={styles.heading}>Contact Me</Text>
         <View style={styles.content}>
           <TouchableOpacity onPress={() => onEmailPress()}>
-            <MaterialCommunityIcons name="email" color={colors.onSurfaceSecondary} size={scale(23)} style={{marginLeft: scale(5)}}/>
+            <MaterialCommunityIcons name="email" color={colors.onSurfaceSecondary} size={scale(23)} style={{ marginLeft: scale(5) }} />
           </TouchableOpacity>
         </View>
       </View>
@@ -42,38 +48,52 @@ const App = () => {
       <View style={[styles.oneContainer]}>
         <Text style={styles.heading}>Donate</Text>
         <View style={styles.content}>
-          <TouchableOpacity
-            onPress={onPayPalPress}
-            style={containerStyles.button}>
-              <Text style={containerStyles.globalTextMessage}>PayNow</Text>
+          <TouchableOpacity onPress={onPayNowPress} style={containerStyles.button}>
+            <Text style={containerStyles.globalTextMessage}>PayNow</Text>
           </TouchableOpacity>
           {/* <PayLahComponent /> */}
           <PayPalComponent />
         </View>
-          
       </View>
-      
-      <Modal
-        visible={isVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setIsVisible(false)}
-      >
+
+      <View style={[styles.oneContainer]}>
+        <Text style={styles.heading}>MRT Map</Text>
+        <View style={styles.content}>
+          <TouchableOpacity onPress={onMRTMapPress} style={containerStyles.button}>
+            <Text style={containerStyles.globalTextMessage}>View MRT Map</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <Modal visible={isPayNowVisible} transparent={true} animationType="fade" onRequestClose={() => setIsPayNowVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalHeaderText}></Text>
-              <TouchableOpacity onPress={() => setIsVisible(false)}>
-                <Ionicons name="close-circle" style={styles.modalCrossIcon}/>
+              <TouchableOpacity onPress={() => setIsPayNowVisible(false)}>
+                <Ionicons name="close-circle" style={styles.modalCrossIcon} />
               </TouchableOpacity>
-              
             </View>
-
             <Image source={paynowQR} style={styles.image} />
-            <Text style={[containerStyles.globalTextMessage, {padding: scale(10)}]}>Screenshot and Scan this QR code in your preferred Bank app</Text>
+            <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>Screenshot and Scan this QR code in your preferred Bank app</Text>
           </View>
-          
         </View>
+      </Modal>
+
+      <Modal visible={isMRTMapVisible} transparent={true} animationType="fade" onRequestClose={() => setIsMRTMapVisible(false)}>
+        <ImageViewer
+          imageUrls={[{ url: '', props: { source: MRTMap } }]}
+          enableSwipeDown={true}
+          onSwipeDown={() => setIsMRTMapVisible(false)}
+          enableImageZoom={true}
+          enablePreload={true}
+          saveToLocalByLongPress={false}
+          renderHeader={() => (
+            <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
+              <Ionicons name="close-circle" style={styles.modalCrossIcon} />
+            </TouchableOpacity>
+          )}
+        />
       </Modal>
     </View>
   );
@@ -95,12 +115,10 @@ const styles = StyleSheet.create({
     margin: scale(7.5),
     width: "95%"
   },
-
   content: {
     flexDirection: "row",
     marginTop: scale(10)
   },
-
   modalOverlay: {
     flex: 1,
     backgroundColor: colors.modalBackgroundOpacity,
@@ -126,7 +144,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  
   modalHeaderText: {
     flex: 1,
   },
@@ -137,12 +154,16 @@ const styles = StyleSheet.create({
     paddingRight: scale(5),
     paddingBottom: scale(5),
   },
-  
-  
   image: {
-    width: 200,
-    height: 200,
+    width: scale(180),
+    height: scale(180),
     marginBottom: scale(20)
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 1,
   },
 });
 

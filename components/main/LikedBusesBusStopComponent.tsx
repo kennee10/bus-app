@@ -99,7 +99,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
 
   return (
     <View style={styles.outerContainer}>
-      {!isLoading && (
+      {!isLoading && props.busStopDetails && (
         <View>
           <View style={styles.upper}>
             <View style={styles.busStopCodeWrapper}>

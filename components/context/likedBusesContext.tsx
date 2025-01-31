@@ -33,7 +33,7 @@ const LikedBusesContext = createContext<LikedBusesContextType | undefined>(undef
 
 // Provider component
 export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [likedBuses, setLikedBuses] = useState<GroupedLikedBuses>({ pinned: {} });
+  const [likedBuses, setLikedBuses] = useState<GroupedLikedBuses>({ Pinned: {} });
 
   // Load liked buses from AsyncStorage on initial render
   useEffect(() => {
@@ -105,10 +105,6 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
         } else {
           updatedLikedBuses[groupName][busStopCode] = updatedServices;
         }
-
-        // if (Object.keys(updatedLikedBuses[groupName]).length === 0 && groupName !== 'pinned') {
-        //   delete updatedLikedBuses[groupName];
-        // }
         
         changes = true;
       }
@@ -125,12 +121,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
   // Function to create a new group
   const createGroup = async (groupName: string) => {
     try {
-      // if (groupName === 'pinned') {
-      //   throw new Error('likedBusesContext.tsx: Cannot create a group named "pinned" as it is reserved');
-      // }
-
       if (likedBuses[groupName]) {
-        // throw new Error(`likedBusesContext.tsx: Group ${groupName} already exists`);
         Alert.alert(
               "Duplicated Group",
               `Group "${groupName}" has already been created`,
@@ -154,10 +145,6 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
   // Function to delete a group
   const deleteGroup = async (groupName: string) => {
     try {
-      if (groupName === 'pinned') {
-        throw new Error('likedBusesContext.tsx: Cannot delete the pinned group');
-      }
-
       if (!likedBuses[groupName]) {
         throw new Error(`likedBusesContext.tsx: Group ${groupName} does not exist`);
       }

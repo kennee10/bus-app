@@ -6,6 +6,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import EntypoIcons from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import BlinkingDotComponent from "./BlinkingDotComponent"
 
 
 type BusArrivalInfo = {
@@ -135,7 +136,8 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
             borderRadius: scale(5), // Makes it a circle
             backgroundColor: dotColor
           }} />
-      </View>
+          {/* <BlinkingDotComponent dotColor={dotColor}/> */}
+        </View>
       )}
 
       

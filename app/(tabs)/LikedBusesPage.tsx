@@ -128,7 +128,7 @@ const LikedBusesPage = () => {
               >
                 <View style={styles.arrowContainer}>
                   <Ionicons 
-                    name={collapsedGroups[groupName] ? "chevron-down" : "chevron-up"} 
+                    name={collapsedGroups[groupName] ? "chevron-up" : "chevron-down"}
                     size={scale(18)} 
                     color={colors.primary}
                   />
