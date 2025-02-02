@@ -90,7 +90,7 @@ const App = () => {
           saveToLocalByLongPress={false}
           renderHeader={() => (
             <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
-              <Ionicons name="close-circle" style={styles.modalCrossIcon} />
+              <Ionicons name="close-circle" style={styles.MRTmodalCrossIcon} />
             </TouchableOpacity>
           )}
         />
@@ -149,6 +149,13 @@ const styles = StyleSheet.create({
   },
   modalCrossIcon: {
     fontSize: scale(25),
+    color: colors.secondary2,
+    paddingTop: scale(5),
+    paddingRight: scale(5),
+    paddingBottom: scale(5),
+  },
+  MRTmodalCrossIcon: {
+    fontSize: scale(35),
     color: colors.secondary2,
     paddingTop: scale(5),
     paddingRight: scale(5),

@@ -138,7 +138,7 @@ const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => 
                 </View>
                   
                 <View style={styles.rightSide}>
-                  <Text style={styles.infoText}>Stading Available</Text>
+                  <Text style={styles.infoText}>Standing Available</Text>
                 </View>
                   
                 </View>

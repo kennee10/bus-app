@@ -147,6 +147,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
       {/* Buses not in operation */}
       {busesNotInOperation.length > 0 && !isLoading && (
         <View style={styles.notInOperationContainer}>
+          <Text style={styles.notOperationalText}>Not In Operation</Text>
           <View style={styles.notInOperationGrid}>
             {busesNotInOperation.map((busService) => (
               <View key={busService} style={styles.notInOperationBox}>
@@ -243,6 +244,19 @@ const styles = StyleSheet.create({
     padding: scale(8),
     borderRadius: scale(4),
     backgroundColor: colors.surface2,
+
+    // shadow stuff
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  notOperationalText: {
+    fontSize: scale(10.5),
+    fontFamily: font.semiBold,
+    marginBottom: scale(4),
+    color: colors.onSurfaceSecondary2,
   },
   notInOperationGrid: {
     flexDirection: "row",

@@ -42,6 +42,10 @@ type BusStopWithDist = {
   Distance: number;
 };
 
+type BusStopsData = {
+  [busStopCode: string]: string[]; // Changed from Set<string> to string[]
+};
+
 const NearbyBusStopsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [busStops, setBusStops] = useState<RawBusStop[]>([]);
@@ -53,23 +57,22 @@ const NearbyBusStopsPage = () => {
   const inputRef = useRef<TextInput>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStops, toggleLike } = useLikedBusStops();
-
+  const [busStopsData, setBusStopsData] = useState<BusStopsData>({});
 
   useEffect(() => {
     const backAction = () => {
       console.log("back button")
-        Keyboard.dismiss(); // Dismiss the keyboard
-        // Add any other logic for handling back button press
-        return true; // Prevent default back button behavior
+      Keyboard.dismiss();
+      return true;
     };
 
     const backHandler = BackHandler.addEventListener(
-        "hardwareBackPress",
-        backAction
+      "hardwareBackPress",
+      backAction
     );
 
     return () => backHandler.remove();
-}, []);
+  }, []);
 
   useEffect(() => {
     let subscription: { remove: () => void } | null = null;
@@ -87,6 +90,14 @@ const NearbyBusStopsPage = () => {
           if (storedBusStops) {
             const parsedStops = JSON.parse(storedBusStops) as RawBusStop[];
             setBusStops(parsedStops);
+          }
+
+          // Fetch busStopsData from AsyncStorage
+          const storedBusStopsData = await AsyncStorage.getItem("busStopsData");
+          if (storedBusStopsData) {
+            const parsedBusStopsData = JSON.parse(storedBusStopsData) as BusStopsData;
+            // Remove Set-related logging since we're using arrays now
+            setBusStopsData(parsedBusStopsData);
           }
         } catch (error) {
           console.error("Error fetching nearby/all bus stops:", error);
@@ -138,7 +149,7 @@ const NearbyBusStopsPage = () => {
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
-      setFilteredStops(nearbyBusStops); // Default to nearby bus stops if no query
+      setFilteredStops(nearbyBusStops);
     } else {
       const lowerCaseQuery = searchQuery.toLowerCase();
       const matchedStops = busStops
@@ -156,7 +167,7 @@ const NearbyBusStopsPage = () => {
                 stop.Latitude,
                 stop.Longitude
               )
-            : Infinity; // if user coordinates are unavailable
+            : Infinity;
         
           return {
             ...stop,
@@ -179,26 +190,23 @@ const NearbyBusStopsPage = () => {
     Keyboard.dismiss()
   }
 
-
   return (
     <View style={containerStyles.pageContainer}>
       <View style={containerStyles.innerPageContainer}>
         <View style={styles.headerContainer}>
           <View style={styles.searchContainer}>
-            
             {searchQuery === "" ? (
-                <TouchableOpacity onPress={searchIconPress} activeOpacity={1}>
-                  <Ionicons name="search" style={styles.searchIcon} />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={clearSearchQuery}>
-                  <Ionicons name="arrow-back" style={styles.searchIcon} />
-                </TouchableOpacity>
-                
-              )}
+              <TouchableOpacity onPress={searchIconPress} activeOpacity={1}>
+                <Ionicons name="search" style={styles.searchIcon} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={clearSearchQuery}>
+                <Ionicons name="arrow-back" style={styles.searchIcon} />
+              </TouchableOpacity>
+            )}
 
             <TextInput
-              ref= {inputRef}
+              ref={inputRef}
               style={styles.searchInput}
               placeholder="Search for a bus stop..."
               placeholderTextColor={colors.onSurfaceSecondary}
@@ -218,44 +226,40 @@ const NearbyBusStopsPage = () => {
           </View>
         </View>
       
-      
-      {/* MODAL */}
-      <InfoModalComponent 
-        isVisible={isModalVisible} 
-        onClose={() => setIsModalVisible(false)}
-      />
-
-      {loading ? (
-        <ActivityIndicator
-          size="large"
-          color={colors.onBackgroundSecondary}
-          style={{ flex: 1 }}
+        <InfoModalComponent 
+          isVisible={isModalVisible} 
+          onClose={() => setIsModalVisible(false)}
         />
-      ) : (
-        (filteredStops.length > 0 ? (
-          // <View style={containerStyles.globalContainer}>
-            <FlatList
-            data={filteredStops.slice(0, limit)}
-            keyExtractor={(item) => item.BusStopCode}
-            renderItem={({ item }) => (
-              <BusStopComponent
-                BusStopCode={item.BusStopCode}
-                Description={item.Description}
-                RoadName={item.RoadName}
-                Distance={item.Distance.toFixed(0)}
-                isLiked={likedBusStops.includes(item.BusStopCode)}
-                onLikeToggle={toggleLike}
-                searchQuery={searchQuery}
-              />
-            )}
-            ListFooterComponent={
-              filteredStops.length > limit ? renderFooter : null
-            }
+
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.onBackgroundSecondary}
+            style={{ flex: 1 }}
           />
-          // </View>
-          
         ) : (
-          (nearbyBusStops.length > 0 ? (
+          filteredStops.length > 0 ? (
+            <FlatList
+              data={filteredStops.slice(0, limit)}
+              keyExtractor={(item) => item.BusStopCode}
+              renderItem={({ item }) => (
+                <BusStopComponent
+                  BusStopCode={item.BusStopCode}
+                  Description={item.Description}
+                  RoadName={item.RoadName}
+                  Distance={item.Distance.toFixed(0)}
+                  isLiked={likedBusStops.includes(item.BusStopCode)}
+                  onLikeToggle={toggleLike}
+                  searchQuery={searchQuery}
+                  allBusServices={busStopsData[item.BusStopCode] || []} // No need to convert to Array.from()
+                />
+              )}
+              ListFooterComponent={
+                filteredStops.length > limit ? renderFooter : null
+              }
+            />
+          ) : (
+            nearbyBusStops.length > 0 ? (
               <View style={containerStyles.pageContainer}>
                 <Text style={containerStyles.globalTextMessage}>No bus stops match your search</Text>
               </View>
@@ -265,8 +269,7 @@ const NearbyBusStopsPage = () => {
               </View>
             )
           )
-        ))
-      )}
+        )}
       </View>
     </View>
   );
@@ -294,13 +297,11 @@ const styles = StyleSheet.create({
     padding: scale(10),
     color: colors.secondary2,
     opacity: 0.8,
-    // backgroundColor: 'red'
   },
   crossIcon: {
     fontSize: scale(24),
     color: colors.secondary2,
     padding: scale(7),
-    // backgroundColor: 'red'
   },
   searchInput: {
     flex: 1,
@@ -314,7 +315,6 @@ const styles = StyleSheet.create({
     color: colors.secondary2,
     padding: scale(7),
     opacity: 0.8,
-    // backgroundColor: 'red'
   },
 });
 

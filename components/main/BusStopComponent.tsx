@@ -36,6 +36,7 @@ type BusStopComponentProps = {
   isLiked: boolean;
   onLikeToggle: (busStopCode: string) => void;
   searchQuery: string;
+  allBusServices: string[]; // Add this prop to pass all possible bus services for the bus stop
 };
 
 const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
@@ -48,6 +49,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   useEffect(() => {
     let intervalId; 
     let latestBusArrivalData = busArrivalData; // Create a local reference
+    console.log(`${props.BusStopCode}: ${props.allBusServices}`)
     
     const fetchAndSetBusArrivalData = async () => {
       try {
@@ -91,6 +93,10 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Find buses not in operation
+  const busesNotInOperation = props.allBusServices?.filter(
+    (service) => !busArrivalData.some((bus) => bus.ServiceNo === service)
+  );
 
   return (
     <View style={styles.outerContainer}>
@@ -171,6 +177,21 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
               </Text>
             </View>
           )}
+        </View>
+      )}
+
+      {/* Buses not in operation */}
+      {!isCollapsed && busesNotInOperation?.length > 0 && !isLoading && (
+        <View style={styles.notInOperationContainer}>
+          <Text style={styles.notOperationalText}>Not In Operation</Text>
+          <View style={styles.notInOperationGrid}>
+            {busesNotInOperation.map((busService) => (
+              <View key={busService} style={styles.notInOperationBox}>
+                <View style={styles.diagonalLine} />
+                <Text style={styles.notInOperationText}>{busService}</Text>
+              </View>
+            ))}
+          </View>
         </View>
       )}
     </View>
@@ -271,7 +292,6 @@ const styles = StyleSheet.create({
     paddingBottom: scale(10),
     borderRadius: scale(4),
     backgroundColor: colors.surface2,
-    // shadow stuff
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -282,6 +302,56 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: font.bold,
     color: colors.warning,
+    textAlign: "center",
+  },
+  notInOperationContainer: {
+    marginTop: scale(8),
+    marginLeft: scale(5),
+    marginRight: scale(5),
+    padding: scale(8),
+    borderRadius: scale(4),
+    backgroundColor: colors.surface2,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  notOperationalText: {
+    fontSize: scale(10.5),
+    fontFamily: font.semiBold,
+    marginBottom: scale(4),
+    color: colors.onSurfaceSecondary2,
+  },
+  notInOperationGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: scale(6),
+  },
+  notInOperationBox: {
+    borderRadius: scale(4),
+    width: scale(33),
+    height: scale(33),
+    backgroundColor: colors.surface,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative", // Enables absolute positioning of the diagonal line
+  },
+  diagonalLine: {
+    position: "absolute",
+    width: "140%", // Ensures the line covers the box diagonally
+    height: scale(1.5),
+    backgroundColor: colors.warning, // Use a distinct color for the cross-out
+    transform: [{ rotate: "-45deg" }],
+    top: "50%",
+    left: "-20%", // Adjust to align the diagonal line correctly
+    opacity: 0.25,
+  },
+  notInOperationText: {
+    fontSize: scale(11),
+    fontFamily: font.semiBold,
+    color: colors.onSurfaceSecondary2,
     textAlign: "center",
   },
 });
