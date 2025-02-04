@@ -1,19 +1,37 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "module": "esnext",
-    "strict": true,
+    "module": "esnext", // Use ES modules
+    "target": "esnext", // Target the latest ECMAScript version
+    "strict": true, // Enable all strict type-checking options
+    "jsx": "react-native", // Support React Native JSX
+    "moduleResolution": "node", // Use Node.js-style module resolution
+    "baseUrl": ".", // Base directory for resolving non-relative module names
     "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
-    
+      "@/*": ["./*"] // Map '@/*' to the root directory
+    },
+    "esModuleInterop": true, // Enable ES module interop
+    "skipLibCheck": true, // Skip type-checking of declaration files
+    "forceConsistentCasingInFileNames": true, // Ensure consistent file casing
+    "resolveJsonModule": true, // Allow importing JSON files
+    "outDir": "./dist", // Output directory for compiled files (optional)
+    "rootDir": "./", // Root directory for source files
+    "allowJs": true, // Allow JavaScript files to be compiled
+    "checkJs": true, // Type-check JavaScript files
+    "noEmit": true // Do not emit compiled files (useful for development)
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "components/widgets/androidLikedBusStops.ts", "components/test.js"  ]
+    "expo-env.d.ts",
+    "components/widgets/androidLikedBusStops.ts",
+    "components/test.js"
+  ],
+  "exclude": [
+    "node_modules", // Exclude node_modules
+    "dist", // Exclude the output directory (if applicable)
+    "**/*.spec.ts", // Exclude test files (if applicable)
+    "**/*.test.ts" // Exclude test files (if applicable)
+  ]
 }
