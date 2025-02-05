@@ -6,7 +6,7 @@ import { scale, verticalScale } from "react-native-size-matters";
 import { colors } from "../../assets/styles/GlobalStyles";
 
 export default function TabsLayout() {
-  console.log("_layout.tsx: (tabs) Tabs layout rendering...");
+  console.log("_layout.tsx(tabs): Tabs layout rendering...");
 
   return (
     <Tabs

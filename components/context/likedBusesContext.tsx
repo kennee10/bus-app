@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Toast from "react-native-toast-message";
 import { Alert } from 'react-native';
 
 
@@ -40,7 +39,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
     const loadLikedBuses = async () => {
       try {
         const storedLikedBuses = await AsyncStorage.getItem('likedBuses');
-        const parsedLikedBuses = storedLikedBuses ? JSON.parse(storedLikedBuses) : { pinned: {} };
+        const parsedLikedBuses = storedLikedBuses ? JSON.parse(storedLikedBuses) : { Pinned: {} };
         setLikedBuses(parsedLikedBuses);
       } catch (error) {
         console.error('likedBusesContext.tsx: Failed to load liked buses: ', error);

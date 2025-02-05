@@ -1,6 +1,18 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
 import { calculateDistance } from "./usefulFunctions";
+import busStopsWithServices from '../../assets/busStopsWithServices.json';
+
+type BusStopData = {
+  Description: string;
+  RoadName: string;
+  Latitude: number;
+  Longitude: number;
+  ServiceNos: string[];
+}
+
+type BusStopsJSON = {
+  [code: string]: BusStopData;
+}
 
 type BusStopWithDistance = {
   BusStopCode: string;
@@ -21,22 +33,27 @@ export const getBusStopsDetails = async (likedBusStops: string[]): Promise<BusSt
     const location = await Location.getCurrentPositionAsync({});
     const { latitude, longitude } = location.coords;
 
-    const storedData = await AsyncStorage.getItem("busStops");
-    if (!storedData) {
-      throw new Error("No bus stop data found");
-    }
-
-    const parsedData = JSON.parse(storedData);
-
-    // Get details and calculate distance
-    const enhancedStops = parsedData
-      .filter((stop: BusStopWithDistance) => likedBusStops.includes(stop.BusStopCode))
-      .map((stop: BusStopWithDistance) => {
-        const distance = calculateDistance(latitude, longitude, stop.Latitude, stop.Longitude).toFixed(0);
-        return { ...stop, Distance: distance };
-      })
+    // Convert JSON object to array of bus stops with their codes
+    const enhancedStops = Object.entries(busStopsWithServices)
+      // Filter for liked bus stops
+      .filter(([code]) => likedBusStops.includes(code))
+      // Map to required format with distance
+      .map(([code, data]) => ({
+        BusStopCode: code,
+        Description: data.Description,
+        RoadName: data.RoadName,
+        Latitude: data.Latitude,
+        Longitude: data.Longitude,
+        Distance: calculateDistance(
+          latitude,
+          longitude,
+          data.Latitude,
+          data.Longitude
+        ).toFixed(0)
+      }))
+      // Maintain original liked order
       .sort(
-        (a: BusStopWithDistance, b: BusStopWithDistance) =>
+        (a, b) =>
           likedBusStops.indexOf(a.BusStopCode) - likedBusStops.indexOf(b.BusStopCode)
       );
 

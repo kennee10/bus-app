@@ -3,10 +3,10 @@ import { Text, FlatList, View, ActivityIndicator } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
 import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
-import BusStopComponent from "../../components/main/BusStopComponent"
+import BusStopComponent from "../../components/main/BusStopComponent";
 import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
 import { getBusStopsDetails } from '../../components/hooks/getBusStopsDetails';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import busStopsWithServices from '../../assets/busStopsWithServices.json'; // Import the JSON file
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -18,29 +18,30 @@ type BusStopWithDist = {
 };
 
 type BusStopsData = {
-  [busStopCode: string]: string[]; // Changed from Set<string> to string[]
+  [busStopCode: string]: {
+    Description: string;
+    RoadName: string;
+    Latitude: number;
+    Longitude: number;
+    ServiceNos: string[];
+  };
 };
 
 const LikedBusStopsPage = () => {
   const [loading, setLoading] = useState(true);
-  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStopWithDist[]>([]); // this function has access to likedBusStops too
+  const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStopWithDist[]>([]);
   const { likedBusStops, toggleLike } = useLikedBusStops();
   const [busStopsData, setBusStopsData] = useState<BusStopsData>({});
 
   useEffect(() => {
     (async () => {
       try {
-        // console.log('LikedBusStopsPage.tsx: getting liked bus stops')
+        // Fetch details for liked bus stops
         const details = await getBusStopsDetails(likedBusStops);
         setLikedBusStopsDetails(details);
 
-        // Fetch busStopsData from AsyncStorage
-        const storedBusStopsData = await AsyncStorage.getItem("busStopsData");
-        if (storedBusStopsData) {
-          const parsedBusStopsData = JSON.parse(storedBusStopsData) as BusStopsData;
-          // Remove Set-related logging since we're using arrays now
-          setBusStopsData(parsedBusStopsData);
-        }
+        // Use the imported JSON data directly
+        setBusStopsData(busStopsWithServices);
       } catch (error) {
         console.error("LikedBusStopsPage.tsx: Failed to load liked bus stops details:", error);
       } finally {
@@ -49,15 +50,14 @@ const LikedBusStopsPage = () => {
     })();
   }, [likedBusStops]);
 
-
   return (
     <View style={containerStyles.pageContainer}>
-      <View style={[containerStyles.innerPageContainer, {marginTop: scale(10)}]}>
+      <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
         {loading ? (
           <ActivityIndicator
             size="large"
             color={colors.onBackgroundSecondary}
-            style={{flex:1}}
+            style={{ flex: 1 }}
           />
         ) : likedBusStopsDetails.length > 0 ? (
           <FlatList
@@ -72,7 +72,7 @@ const LikedBusStopsPage = () => {
                 isLiked={likedBusStops.includes(item.BusStopCode)}
                 onLikeToggle={() => toggleLike(item.BusStopCode)}
                 searchQuery=""
-                allBusServices={busStopsData[item.BusStopCode] || []} // No 
+                allBusServices={busStopsData[item.BusStopCode]?.ServiceNos || []} // Use ServiceNos from JSON
               />
             )}
           />
@@ -80,9 +80,7 @@ const LikedBusStopsPage = () => {
           <View style={containerStyles.pageContainer}>
             <Text style={containerStyles.globalTextMessage}>No liked bus stops</Text>
           </View>
-          
-        )
-      }
+        )}
       </View>
     </View>
   );

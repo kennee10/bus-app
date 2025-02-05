@@ -37,5 +37,6 @@ yarn-error.*
 
 app-example
 
-components/apis/fetchAllBusStops.tsx
 components/apis/fetchBusArrival.tsx
+
+fetchBusStops.ts

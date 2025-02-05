@@ -5,7 +5,6 @@ import { scale } from "react-native-size-matters";
 import { Stack } from "expo-router";
 
 
-
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
 import { LikedBusesProvider } from "../components/context/likedBusesContext";
@@ -25,7 +24,7 @@ export default function RootLayout() {
 
   // If not initialized, show the AppInitializer
   if (!isInitialized) {
-    console.log("_layout.tsx: Initializing app...");
+    console.log("_layout.tsx(root): Initializing app...");
     return (
       <AppInitializer
         onInitializationComplete={handleInitializationComplete}

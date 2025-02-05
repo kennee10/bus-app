@@ -2,22 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import { 
   Text, 
   FlatList, 
-  SafeAreaView, 
   TouchableOpacity, 
   View, 
   ActivityIndicator, 
   TextInput, 
   StyleSheet,
-  Modal,
-  Button
+  Keyboard,
+  BackHandler
 } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
 import { calculateDistance } from "../../components/hooks/usefulFunctions";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Keyboard } from 'react-native';
-import { BackHandler } from 'react-native';
-
 import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
 import { getNearbyBusStops } from '../../components/hooks/getNearbyBusStops';
 import BusStopComponent from '../../components/main/BusStopComponent';
@@ -25,30 +20,29 @@ import { useLikedBusStops } from "../../components/context/likedBusStopsContext"
 import { LocationWatcher } from "../../components/hooks/LocationWatcher";
 import InfoModalComponent from "../../components/main/InfoModalComponent";
 
-type RawBusStop = {
-  BusStopCode: string;
-  Description: string;
-  RoadName: string;
-  Latitude: number;
-  Longitude: number;
-};
+// Import the JSON file
+import busStopsWithServices from '../../assets/busStopsWithServices.json';
 
-type BusStopWithDist = {
-  BusStopCode: string;
+// Update types to match JSON structure
+type BusStopData = {
   Description: string;
   RoadName: string;
   Latitude: number;
   Longitude: number;
+  ServiceNos: string[];
+}
+
+type BusStopsJSON = {
+  [code: string]: BusStopData;
+}
+
+type BusStopWithDist = BusStopData & {
+  BusStopCode: string;
   Distance: number;
-};
-
-type BusStopsData = {
-  [busStopCode: string]: string[]; // Changed from Set<string> to string[]
-};
+}
 
 const NearbyBusStopsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [busStops, setBusStops] = useState<RawBusStop[]>([]);
   const [nearbyBusStops, setNearbyBusStops] = useState<BusStopWithDist[]>([]);
   const [userCoords, setUserCoords] = useState<{latitude: number, longitude: number } | null>(null);
   const [filteredStops, setFilteredStops] = useState<BusStopWithDist[]>([]);
@@ -57,11 +51,9 @@ const NearbyBusStopsPage = () => {
   const inputRef = useRef<TextInput>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStops, toggleLike } = useLikedBusStops();
-  const [busStopsData, setBusStopsData] = useState<BusStopsData>({});
 
   useEffect(() => {
     const backAction = () => {
-      console.log("back button")
       Keyboard.dismiss();
       return true;
     };
@@ -82,25 +74,28 @@ const NearbyBusStopsPage = () => {
         setUserCoords({ latitude: coords.latitude, longitude: coords.longitude });
 
         try {
-          const nearbyStops = await getNearbyBusStops(coords);
+          // Convert JSON data to array format with bus stop codes
+          const busStopsArray = Object.entries(busStopsWithServices).map(([code, data]) => ({
+            BusStopCode: code,
+            ...data,
+            Distance: calculateDistance(
+              coords.latitude,
+              coords.longitude,
+              data.Latitude,
+              data.Longitude
+            )
+          }));
+
+          // Filter for nearby stops and sort by distance
+          const nearbyStops = busStopsArray
+            .filter(stop => stop.Distance <= 2000)
+            .sort((a, b) => a.Distance - b.Distance);
+
           setNearbyBusStops(nearbyStops);
+          setFilteredStops(nearbyStops);
           setLimit(Math.min(8, nearbyStops.length));
-
-          const storedBusStops = await AsyncStorage.getItem("busStops");
-          if (storedBusStops) {
-            const parsedStops = JSON.parse(storedBusStops) as RawBusStop[];
-            setBusStops(parsedStops);
-          }
-
-          // Fetch busStopsData from AsyncStorage
-          const storedBusStopsData = await AsyncStorage.getItem("busStopsData");
-          if (storedBusStopsData) {
-            const parsedBusStopsData = JSON.parse(storedBusStopsData) as BusStopsData;
-            // Remove Set-related logging since we're using arrays now
-            setBusStopsData(parsedBusStopsData);
-          }
         } catch (error) {
-          console.error("Error fetching nearby/all bus stops:", error);
+          console.error("Error processing bus stops data:", error);
         } finally {
           setLoading(false);
         }
@@ -108,17 +103,44 @@ const NearbyBusStopsPage = () => {
 
       if (result && result.subscription) {
         subscription = result.subscription;
-        console.log("Subscription started:", subscription);
       }
     })();
 
     return () => {
       if (subscription) {
         subscription.remove();
-        console.log("Subscription removed");
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredStops(nearbyBusStops);
+    } else {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      const allBusStops = Object.entries(busStopsWithServices).map(([code, data]) => ({
+        BusStopCode: code,
+        ...data,
+        Distance: userCoords
+          ? calculateDistance(
+              userCoords.latitude,
+              userCoords.longitude,
+              data.Latitude,
+              data.Longitude
+            )
+          : Infinity
+      }));
+
+      const matchedStops = allBusStops.filter(
+        (stop) =>
+          stop.BusStopCode.toLowerCase().includes(lowerCaseQuery) ||
+          stop.Description.toLowerCase().includes(lowerCaseQuery) ||
+          stop.RoadName.toLowerCase().includes(lowerCaseQuery)
+      );
+
+      setFilteredStops(matchedStops);
+    }
+  }, [searchQuery, nearbyBusStops, userCoords]);
 
   const increaseLimit = () => {
     setLimit((prevLimit) => Math.min(prevLimit + 8, filteredStops.length));
@@ -146,38 +168,6 @@ const NearbyBusStopsPage = () => {
       </View>
     );
   };
-
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredStops(nearbyBusStops);
-    } else {
-      const lowerCaseQuery = searchQuery.toLowerCase();
-      const matchedStops = busStops
-        .filter(
-          (stop) =>
-            stop.BusStopCode.toLowerCase().includes(lowerCaseQuery) ||
-            stop.Description.toLowerCase().includes(lowerCaseQuery) ||
-            stop.RoadName.toLowerCase().includes(lowerCaseQuery)
-        )
-        .map((stop) => {
-          const distance = userCoords
-            ? calculateDistance(
-                userCoords.latitude,
-                userCoords.longitude,
-                stop.Latitude,
-                stop.Longitude
-              )
-            : Infinity;
-        
-          return {
-            ...stop,
-            Distance: distance,
-          };
-        });
-
-      setFilteredStops(matchedStops);
-    }
-  }, [searchQuery, busStops, nearbyBusStops]);
 
   const searchIconPress = () => {
     if (inputRef.current) {
@@ -251,7 +241,7 @@ const NearbyBusStopsPage = () => {
                   isLiked={likedBusStops.includes(item.BusStopCode)}
                   onLikeToggle={toggleLike}
                   searchQuery={searchQuery}
-                  allBusServices={busStopsData[item.BusStopCode] || []} // No need to convert to Array.from()
+                  allBusServices={item.ServiceNos}
                 />
               )}
               ListFooterComponent={
