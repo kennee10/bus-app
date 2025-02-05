@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { 
   Text, 
   FlatList, 
@@ -41,162 +41,182 @@ const NearbyBusStopsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [nearbyBusStops, setNearbyBusStops] = useState<BusStopWithDist[]>([]);
   const [userCoords, setUserCoords] = useState<{latitude: number, longitude: number } | null>(null);
-  const [filteredStops, setFilteredStops] = useState<BusStopWithDist[]>([]);
-  const [limit, setLimit] = useState<number>(8);
   const [loading, setLoading] = useState(true);
   const inputRef = useRef<TextInput>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStops, toggleLike } = useLikedBusStops();
 
-  useEffect(() => {
-    const backAction = () => {
-      Keyboard.dismiss();
-      return true;
-    };
+  // Memoized bus stops data
+  const allBusStops = useMemo(() => 
+    Object.entries(busStopsWithServices).map(([code, data]) => ({
+      BusStopCode: code,
+      ...data,
+      Distance: userCoords
+        ? calculateDistance(
+            userCoords.latitude,
+            userCoords.longitude,
+            data.Latitude,
+            data.Longitude
+          )
+        : Infinity
+    })), 
+  [userCoords]);
 
+  // Filtered and sorted stops
+  const filteredStops = useMemo(() => {
+    if (searchQuery.trim() === "") {
+      return nearbyBusStops;
+    }
+
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    
+    return allBusStops
+      .filter(stop => {
+        const lowerDescription = stop.Description.toLowerCase();
+        const lowerCode = stop.BusStopCode.toLowerCase();
+        const lowerRoad = stop.RoadName.toLowerCase();
+        return (
+          lowerDescription.includes(lowerCaseQuery) ||
+          lowerCode.includes(lowerCaseQuery) ||
+          lowerRoad.includes(lowerCaseQuery)
+        );
+      })
+      .sort((a, b) => {
+        const getPriority = (stop: BusStopWithDist) => {
+          const lowerDesc = stop.Description.toLowerCase();
+          const lowerCode = stop.BusStopCode.toLowerCase();
+          const lowerRoad = stop.RoadName.toLowerCase();
+          
+          if (lowerDesc.includes(lowerCaseQuery)) return 3;
+          if (lowerCode.includes(lowerCaseQuery)) return 2;
+          if (lowerRoad.includes(lowerCaseQuery)) return 1;
+          return 0;
+        };
+
+        const aPriority = getPriority(a);
+        const bPriority = getPriority(b);
+        
+        return bPriority - aPriority || a.Distance - b.Distance;
+      });
+  }, [searchQuery, nearbyBusStops, allBusStops]);
+
+  // Pagination
+  const [limit, setLimit] = useState<number>(8);
+  const increaseLimit = useCallback(() => {
+    setLimit(prev => Math.min(prev + 8, filteredStops.length));
+  }, [filteredStops.length]);
+
+  // Back handler
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
-      backAction
+      () => {
+        Keyboard.dismiss();
+        return true;
+      }
     );
-
     return () => backHandler.remove();
   }, []);
 
+  // Location watcher with throttling
   useEffect(() => {
+    let isMounted = true;
     let subscription: { remove: () => void } | null = null;
+
+    const processLocation = async (coords: { latitude: number; longitude: number }) => {
+      if (!isMounted) return;
+
+      try {
+        const busStopsArray = allBusStops.map(stop => ({
+          ...stop,
+          Distance: calculateDistance(
+            coords.latitude,
+            coords.longitude,
+            stop.Latitude,
+            stop.Longitude
+          )
+        }));
+
+        const nearbyStops = busStopsArray
+          .filter(stop => stop.Distance <= 2000)
+          .sort((a, b) => a.Distance - b.Distance);
+
+        if (isMounted) {
+          setUserCoords(coords);
+          setNearbyBusStops(nearbyStops);
+          setLimit(prev => Math.min(prev, nearbyStops.length));
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error processing bus stops data:", error);
+      }
+    };
 
     (async () => {
       const result = await LocationWatcher(async (coords) => {
-        setUserCoords({ latitude: coords.latitude, longitude: coords.longitude });
-
-        try {
-          const busStopsArray = Object.entries(busStopsWithServices).map(([code, data]) => ({
-            BusStopCode: code,
-            ...data,
-            Distance: calculateDistance(
-              coords.latitude,
-              coords.longitude,
-              data.Latitude,
-              data.Longitude
-            )
-          }));
-
-          const nearbyStops = busStopsArray
-            .filter(stop => stop.Distance <= 2000)
-            .sort((a, b) => a.Distance - b.Distance);
-
-          setNearbyBusStops(nearbyStops);
-          setFilteredStops(nearbyStops);
-          setLimit(Math.min(8, nearbyStops.length));
-        } catch (error) {
-          console.error("Error processing bus stops data:", error);
-        } finally {
-          setLoading(false);
+        // Throttle location updates to 1 second
+        if (isMounted) {
+          processLocation(coords);
         }
-      });
+      }); // Throttle to 1 second
 
-      if (result && result.subscription) {
+      if (result?.subscription) {
         subscription = result.subscription;
       }
     })();
 
     return () => {
-      if (subscription) {
-        subscription.remove();
-      }
+      isMounted = false;
+      subscription?.remove();
     };
   }, []);
 
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredStops(nearbyBusStops);
-    } else {
-      const lowerCaseQuery = searchQuery.toLowerCase();
-      const allBusStops = Object.entries(busStopsWithServices).map(([code, data]) => ({
-        BusStopCode: code,
-        ...data,
-        Distance: userCoords
-          ? calculateDistance(
-              userCoords.latitude,
-              userCoords.longitude,
-              data.Latitude,
-              data.Longitude
-            )
-          : Infinity
-      }));
+  // Search input handlers
+  const searchIconPress = useCallback(() => {
+    inputRef.current?.focus();
+  }, []);
 
-      const matchedStops = allBusStops
-        .filter(stop => {
-          const lowerDescription = stop.Description.toLowerCase();
-          const lowerCode = stop.BusStopCode.toLowerCase();
-          const lowerRoad = stop.RoadName.toLowerCase();
-          return (
-            lowerDescription.includes(lowerCaseQuery) ||
-            lowerCode.includes(lowerCaseQuery) ||
-            lowerRoad.includes(lowerCaseQuery)
-          );
-        })
-        .sort((a, b) => {
-          // Priority sorting function
-          const getPriority = (stop: BusStopWithDist) => {
-            const lowerDesc = stop.Description.toLowerCase();
-            const lowerCode = stop.BusStopCode.toLowerCase();
-            const lowerRoad = stop.RoadName.toLowerCase();
-            
-            if (lowerDesc.includes(lowerCaseQuery)) return 3;
-            if (lowerCode.includes(lowerCaseQuery)) return 2;
-            if (lowerRoad.includes(lowerCaseQuery)) return 1;
-            return 0;
-          };
-
-          const aPriority = getPriority(a);
-          const bPriority = getPriority(b);
-          
-          // First sort by priority (descending), then by distance (ascending)
-          return bPriority - aPriority || a.Distance - b.Distance;
-        });
-
-      setFilteredStops(matchedStops);
-    }
-  }, [searchQuery, nearbyBusStops, userCoords]);
-
-  const increaseLimit = () => {
-    setLimit((prevLimit) => Math.min(prevLimit + 8, filteredStops.length));
-  };
-
-  const renderFooter = () => {
-    return (
-      <View style={containerStyles.iconContainer}>
-        <TouchableOpacity
-          onPress={increaseLimit}
-          style={{
-            borderRadius: scale(12),
-            borderWidth: scale(1.3),
-            padding: scale(3),
-            borderColor: colors.secondary2,
-            opacity: 0.7,
-          }}
-        >
-          <Ionicons 
-            name="add-outline"
-            color={colors.secondary2}
-            size={scale(23)}
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  const searchIconPress = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }
-
-  const clearSearchQuery = () => {
+  const clearSearchQuery = useCallback(() => {
     setSearchQuery("");
-    Keyboard.dismiss()
-  }
+    Keyboard.dismiss();
+  }, []);
+
+  // Render footer for pagination
+  const renderFooter = useCallback(() => (
+    <View style={containerStyles.iconContainer}>
+      <TouchableOpacity
+        onPress={increaseLimit}
+        style={{
+          borderRadius: scale(12),
+          borderWidth: scale(1.3),
+          padding: scale(3),
+          borderColor: colors.secondary2,
+          opacity: 0.7,
+        }}
+      >
+        <Ionicons 
+          name="add-outline"
+          color={colors.secondary2}
+          size={scale(23)}
+        />
+      </TouchableOpacity>
+    </View>
+  ), [increaseLimit]);
+
+  // Memoized FlatList render item
+  const renderItem = useCallback(({ item }: { item: BusStopWithDist }) => (
+    <BusStopComponent
+      key={item.BusStopCode}
+      BusStopCode={item.BusStopCode}
+      Description={item.Description}
+      RoadName={item.RoadName}
+      Distance={item.Distance.toFixed(0)}
+      isLiked={likedBusStops.includes(item.BusStopCode)}
+      onLikeToggle={toggleLike}
+      searchQuery={searchQuery}
+      allBusServices={item.ServiceNos}
+    />
+  ), [likedBusStops, searchQuery, toggleLike]);
 
   return (
     <View style={containerStyles.pageContainer}>
@@ -250,21 +270,14 @@ const NearbyBusStopsPage = () => {
             <FlatList
               data={filteredStops.slice(0, limit)}
               keyExtractor={(item) => item.BusStopCode}
-              renderItem={({ item }) => (
-                <BusStopComponent
-                  BusStopCode={item.BusStopCode}
-                  Description={item.Description}
-                  RoadName={item.RoadName}
-                  Distance={item.Distance.toFixed(0)}
-                  isLiked={likedBusStops.includes(item.BusStopCode)}
-                  onLikeToggle={toggleLike}
-                  searchQuery={searchQuery}
-                  allBusServices={item.ServiceNos}
-                />
-              )}
+              renderItem={renderItem}
               ListFooterComponent={
                 filteredStops.length > limit ? renderFooter : null
               }
+              removeClippedSubviews
+              initialNumToRender={8}
+              maxToRenderPerBatch={8}
+              windowSize={11}
             />
           ) : (
             nearbyBusStops.length > 0 ? (
