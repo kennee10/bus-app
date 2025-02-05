@@ -1,6 +1,6 @@
-import axios from "axios";
-import fs from "fs";
-import path from "path";
+const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 
 // Define the type for the bus stop data
 interface BusStop {
@@ -9,12 +9,6 @@ interface BusStop {
   Description: string;
   Latitude: number;
   Longitude: number;
-}
-
-// Define the type for the bus route data
-interface BusRoute {
-  ServiceNo: string;
-  BusStopCode: string;
 }
 
 // Define the type for the final output format
@@ -28,9 +22,9 @@ interface BusStopWithServices {
   };
 }
 
-// Function to fetch all bus stops from the API
-async function fetchAllBusStops(): Promise<BusStop[]> {
-  let allBusStops: BusStop[] = [];
+// Fetch all bus stops and initialize the output structure
+async function fetchAllBusStops(): Promise<BusStopWithServices> {
+  const busStopsWithServices: BusStopWithServices = {};
   let skip = 0;
   let isMoreData = true;
 
@@ -53,23 +47,33 @@ async function fetchAllBusStops(): Promise<BusStop[]> {
       const data = response.data;
 
       if (data.value.length > 0) {
-        allBusStops = [...allBusStops, ...data.value];
-        skip += 500; // Increment skip for the next page
+        // Initialize each bus stop with an empty ServiceNos array
+        data.value.forEach((busStop: BusStop) => {
+          busStopsWithServices[busStop.BusStopCode] = {
+            Description: busStop.Description,
+            RoadName: busStop.RoadName,
+            Latitude: busStop.Latitude,
+            Longitude: busStop.Longitude,
+            ServiceNos: [],
+          };
+        });
+        skip += 500;
       } else {
-        isMoreData = false; // Stop fetching if no more data
+        isMoreData = false;
       }
     } catch (error) {
       console.error("Error fetching bus stops:", error);
-      isMoreData = false; // Stop fetching on error
+      isMoreData = false;
     }
   }
 
-  return allBusStops;
+  return busStopsWithServices;
 }
 
-// Function to fetch all bus routes from the API
-async function fetchAllBusRoutes(): Promise<BusRoute[]> {
-  let allBusRoutes: BusRoute[] = [];
+// Fetch all bus routes and populate ServiceNos incrementally
+async function fetchAndMapBusRoutes(
+  busStopsWithServices: BusStopWithServices
+): Promise<void> {
   let skip = 0;
   let isMoreData = true;
 
@@ -92,67 +96,44 @@ async function fetchAllBusRoutes(): Promise<BusRoute[]> {
       const data = response.data;
 
       if (data.value.length > 0) {
-        // Extract ServiceNo and BusStopCode from each route
-        const routes = data.value.map((route: any) => ({
-          ServiceNo: route.ServiceNo,
-          BusStopCode: route.BusStopCode,
-        }));
-        allBusRoutes = [...allBusRoutes, ...routes];
-        skip += 500; // Increment skip for the next page
+        // Process each route entry directly
+        data.value.forEach((route: any) => {
+          const busStopCode = route.BusStopCode;
+          const serviceNo = route.ServiceNo;
+
+          if (busStopsWithServices[busStopCode]) {
+            // Add ServiceNo if not already present
+            if (!busStopsWithServices[busStopCode].ServiceNos.includes(serviceNo)) {
+              busStopsWithServices[busStopCode].ServiceNos.push(serviceNo);
+              console.log(`Added into ${busStopCode}: serviceNo ${serviceNo}`)
+            }
+          }
+        });
+
+        skip += 500;
       } else {
-        isMoreData = false; // Stop fetching if no more data
+        isMoreData = false;
       }
     } catch (error) {
       console.error("Error fetching bus routes:", error);
-      isMoreData = false; // Stop fetching on error
+      isMoreData = false;
     }
   }
-
-  return allBusRoutes;
 }
 
-// Function to map bus routes to bus stops
-function mapRoutesToStops(busStops: BusStop[], busRoutes: BusRoute[]): BusStopWithServices {
-  const busStopsWithServices: BusStopWithServices = {};
-
-  // Initialize each bus stop with an empty ServiceNos array
-  for (const busStop of busStops) {
-    busStopsWithServices[busStop.BusStopCode] = {
-      Description: busStop.Description,
-      RoadName: busStop.RoadName,
-      Latitude: busStop.Latitude,
-      Longitude: busStop.Longitude,
-      ServiceNos: [],
-    };
-  }
-
-  // Populate the ServiceNos array for each bus stop
-  for (const route of busRoutes) {
-    if (busStopsWithServices[route.BusStopCode]) {
-      // Add the ServiceNo if it's not already in the array
-      if (!busStopsWithServices[route.BusStopCode].ServiceNos.includes(route.ServiceNo)) {
-        busStopsWithServices[route.BusStopCode].ServiceNos.push(route.ServiceNo);
-      }
-    }
-  }
-
-  return busStopsWithServices;
-}
-
-// Function to save bus stops with services to a JSON file
+// Save the final data
 function saveBusStopsToFile(busStops: BusStopWithServices, filePath: string) {
   const jsonData = JSON.stringify(busStops, null, 2);
   fs.writeFileSync(filePath, jsonData, "utf8");
   console.log(`Bus stops saved to ${filePath}`);
 }
 
-// Main function to run the script
+// Main function
 async function main() {
-  const busStops = await fetchAllBusStops();
-  if (busStops.length > 0) {
-    const busRoutes = await fetchAllBusRoutes();
-    const busStopsWithServices = mapRoutesToStops(busStops, busRoutes);
-    const filePath = path.join(__dirname, "../assets/busStopsWithServices.json"); // Adjust the path as needed
+  const busStopsWithServices = await fetchAllBusStops();
+  if (Object.keys(busStopsWithServices).length > 0) {
+    await fetchAndMapBusRoutes(busStopsWithServices);
+    const filePath = path.join(__dirname, "./assets/busStopsWithServices.json");
     saveBusStopsToFile(busStopsWithServices, filePath);
   } else {
     console.log("No bus stops fetched.");

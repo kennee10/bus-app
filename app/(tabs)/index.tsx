@@ -14,7 +14,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
 import { calculateDistance } from "../../components/hooks/usefulFunctions";
 import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
-import { getNearbyBusStops } from '../../components/hooks/getNearbyBusStops';
 import BusStopComponent from '../../components/main/BusStopComponent';
 import { useLikedBusStops } from "../../components/context/likedBusStopsContext";
 import { LocationWatcher } from "../../components/hooks/LocationWatcher";
