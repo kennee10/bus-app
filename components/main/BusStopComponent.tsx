@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { scale, verticalScale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import { colors, font } from '../../assets/styles/GlobalStyles';
 import BusComponent from "./BusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
@@ -37,6 +36,28 @@ type BusStopComponentProps = {
   onLikeToggle: (busStopCode: string) => void;
   searchQuery: string;
   allBusServices: string[]; // Add this prop to pass all possible bus services for the bus stop
+};
+
+const escapeRegExp = (string: string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
+const highlightText = (text: string, query: string) => {
+  if (!query.trim()) return [text];
+
+  const escapedQuery = escapeRegExp(query);
+  const regex = new RegExp(`(${escapedQuery})`, 'gi');
+  const parts = text.split(regex);
+
+  return parts.map((part, index) => {
+    const lowerPart = part.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    return lowerPart === lowerQuery ? (
+      <Text key={index} style={styles.highlight}>{part}</Text>
+    ) : (
+      part
+    );
+  });
 };
 
 const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
@@ -104,26 +125,22 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
         {/* Upper Section */}
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
-            <Text style={styles.busStopCode}>{props.BusStopCode}</Text>
+            <Text style={styles.busStopCode} adjustsFontSizeToFit numberOfLines={1}>
+              {props.searchQuery
+                ? highlightText(props.BusStopCode, props.searchQuery)
+                : props.BusStopCode}
+            </Text>
           </View>
           <View style={styles.descriptionWrapper}>
             <Text style={styles.description} adjustsFontSizeToFit numberOfLines={1}>
               {props.searchQuery
-                ? props.Description.split(new RegExp(`(${props.searchQuery})`, 'i')).map((part, index) =>
-                    part.toLowerCase() === props.searchQuery.toLowerCase() ? (
-                      <Text key={index} style={styles.highlight}>
-                        {part}
-                      </Text>
-                    ) : (
-                      part
-                    )
-                  )
+                ? highlightText(props.Description, props.searchQuery)
                 : props.Description}
             </Text>
           </View>
           <View
             style={styles.likeButtonWrapper}
-            onStartShouldSetResponder={() => true} // Prevent touch from propagating to parent
+            onStartShouldSetResponder={() => true}
           >
             <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
               <Ionicons
@@ -140,7 +157,11 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             <Text style={styles.distance}>{props.Distance}m</Text>
           </View>
           <View style={styles.roadNameWrapper}>
-            <Text style={styles.roadName}>{props.RoadName}</Text>
+            <Text style={styles.roadName}>
+              {props.searchQuery
+                ? highlightText(props.RoadName, props.searchQuery)
+                : props.RoadName}
+            </Text>
           </View>
           <View style={styles.blackSpace2}>
             {isLoading ? (

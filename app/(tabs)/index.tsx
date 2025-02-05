@@ -18,11 +18,8 @@ import BusStopComponent from '../../components/main/BusStopComponent';
 import { useLikedBusStops } from "../../components/context/likedBusStopsContext";
 import { LocationWatcher } from "../../components/hooks/LocationWatcher";
 import InfoModalComponent from "../../components/main/InfoModalComponent";
-
-// Import the JSON file
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
 
-// Update types to match JSON structure
 type BusStopData = {
   Description: string;
   RoadName: string;
@@ -73,7 +70,6 @@ const NearbyBusStopsPage = () => {
         setUserCoords({ latitude: coords.latitude, longitude: coords.longitude });
 
         try {
-          // Convert JSON data to array format with bus stop codes
           const busStopsArray = Object.entries(busStopsWithServices).map(([code, data]) => ({
             BusStopCode: code,
             ...data,
@@ -85,7 +81,6 @@ const NearbyBusStopsPage = () => {
             )
           }));
 
-          // Filter for nearby stops and sort by distance
           const nearbyStops = busStopsArray
             .filter(stop => stop.Distance <= 2000)
             .sort((a, b) => a.Distance - b.Distance);
@@ -130,12 +125,36 @@ const NearbyBusStopsPage = () => {
           : Infinity
       }));
 
-      const matchedStops = allBusStops.filter(
-        (stop) =>
-          stop.BusStopCode.toLowerCase().includes(lowerCaseQuery) ||
-          stop.Description.toLowerCase().includes(lowerCaseQuery) ||
-          stop.RoadName.toLowerCase().includes(lowerCaseQuery)
-      );
+      const matchedStops = allBusStops
+        .filter(stop => {
+          const lowerDescription = stop.Description.toLowerCase();
+          const lowerCode = stop.BusStopCode.toLowerCase();
+          const lowerRoad = stop.RoadName.toLowerCase();
+          return (
+            lowerDescription.includes(lowerCaseQuery) ||
+            lowerCode.includes(lowerCaseQuery) ||
+            lowerRoad.includes(lowerCaseQuery)
+          );
+        })
+        .sort((a, b) => {
+          // Priority sorting function
+          const getPriority = (stop: BusStopWithDist) => {
+            const lowerDesc = stop.Description.toLowerCase();
+            const lowerCode = stop.BusStopCode.toLowerCase();
+            const lowerRoad = stop.RoadName.toLowerCase();
+            
+            if (lowerDesc.includes(lowerCaseQuery)) return 3;
+            if (lowerCode.includes(lowerCaseQuery)) return 2;
+            if (lowerRoad.includes(lowerCaseQuery)) return 1;
+            return 0;
+          };
+
+          const aPriority = getPriority(a);
+          const bPriority = getPriority(b);
+          
+          // First sort by priority (descending), then by distance (ascending)
+          return bPriority - aPriority || a.Distance - b.Distance;
+        });
 
       setFilteredStops(matchedStops);
     }

@@ -32,6 +32,8 @@ export const colors = {
     accent6: "sienna",
     accent7: "khaki",
 
+    highlight: "#a17ee4",
+
     borderToPress: "rgba(255, 255, 255, 0.15)",
     borderToPress2: "rgba(255, 255, 255, 0.1)",
     busIcon: "powderblue",
