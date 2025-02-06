@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "90%",
-    maxHeight: "80%",
+    // maxHeight: "80%",
     backgroundColor: colors.surface3,
     borderRadius: scale(6),
     borderWidth: scale(1),
@@ -250,11 +250,11 @@ const styles = StyleSheet.create({
   },
   modalBody: {
     padding: scale(5),
-    maxHeight: scale(300),
+    maxHeight: scale(440),
   },
   flatList: {
     width: "100%",
-    maxHeight: scale(220),
+    maxHeight: scale(335),
   },
   groupItem: {
     flexDirection: "row",
