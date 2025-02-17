@@ -3,8 +3,6 @@ import { SafeAreaView, StyleSheet, Platform, StatusBar, Text } from "react-nativ
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { scale } from "react-native-size-matters";
 import { Stack } from "expo-router";
-
-
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
 import { LikedBusesProvider } from "../components/context/likedBusesContext";

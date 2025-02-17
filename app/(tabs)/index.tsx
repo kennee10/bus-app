@@ -282,11 +282,11 @@ const NearbyBusStopsPage = () => {
           ) : (
             nearbyBusStops.length > 0 ? (
               <View style={containerStyles.pageContainer}>
-                <Text style={containerStyles.globalTextMessage}>No bus stops match your search</Text>
+                <Text style={containerStyles.globalInfoTextMessage}>No bus stops match your search</Text>
               </View>
             ) : (
               <View style={containerStyles.pageContainer}>
-                <Text style={containerStyles.globalTextMessage}>No bus stops within 2000m</Text>
+                <Text style={containerStyles.globalInfoTextMessage}>No bus stops within 2000m</Text>
               </View>
             )
           )

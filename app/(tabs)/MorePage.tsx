@@ -136,7 +136,7 @@ export default function App() {
         animationType="fade"
         onRequestClose={() => setIsMRTMapVisible(false)}
       >
-        <View style={styles.modalOverlay}>
+        <View style={styles.modalOverlayMRT}>
           <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
             <Ionicons name="close-circle" style={styles.MRTmodalCrossIcon} />
           </TouchableOpacity>
@@ -180,6 +180,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: scale(10),
   },
+  modalOverlayMRT: {
+    flex: 1,
+    backgroundColor: colors.modalBackgroundOpacity,
+    justifyContent: "center",
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: colors.modalBackgroundOpacity,
@@ -220,14 +225,11 @@ const styles = StyleSheet.create({
   MRTmodalCrossIcon: {
     fontSize: scale(35),
     color: colors.primary,
-    paddingTop: scale(5),
-    paddingRight: scale(5),
-    paddingBottom: scale(5),
   },
   closeButton: {
     position: "absolute",
     top: scale(40),
-    right: scale(20),
+    right: scale(8),
     zIndex: 1,
   },
 });

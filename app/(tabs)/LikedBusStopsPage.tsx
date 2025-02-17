@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, FlatList, View, ActivityIndicator } from 'react-native';
 import { scale } from 'react-native-size-matters';
-
 import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from "../../components/main/BusStopComponent";
 import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
@@ -78,7 +77,7 @@ const LikedBusStopsPage = () => {
           />
         ) : (
           <View style={containerStyles.pageContainer}>
-            <Text style={containerStyles.globalTextMessage}>No liked bus stops</Text>
+            <Text style={containerStyles.globalInfoTextMessage}>You haven't liked any bus stops</Text>
           </View>
         )}
       </View>

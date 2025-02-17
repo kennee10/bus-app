@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Modal, TextInput, FlatList, Alert } from "react-native";
 import { scale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors, font } from '../../assets/styles/GlobalStyles';
+import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
 import ArrivalTimingComponent from "./ArrivalTimingComponent";
 import { useLikedBuses } from "../context/likedBusesContext";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
@@ -137,13 +137,19 @@ const BusComponent: React.FC<BusComponentProps> = (props) => {
               </TouchableOpacity>
             </View>
             <View style={styles.modalBody}>
-              <FlatList
-                data={groupNames}
-                keyExtractor={(item) => item}
-                renderItem={renderGroupItem}
-                style={styles.flatList}
-                ItemSeparatorComponent={() => <View style={{height: scale(7)}}/>}
-              />
+              {groupNames.length > 0 ? (
+                <FlatList
+                  data={groupNames}
+                  keyExtractor={(item) => item}
+                  renderItem={renderGroupItem}
+                  style={styles.flatList}
+                  ItemSeparatorComponent={() => <View style={{height: scale(7)}}/>}
+                />
+              ) : (
+                <Text style={[containerStyles.globalInfoTextMessage, styles.noGroups]}>You haven't created a group</Text>
+              )
+              }
+              
 
               <View style={styles.modalFooter}>
                 <TextInput
@@ -251,6 +257,12 @@ const styles = StyleSheet.create({
   modalBody: {
     padding: scale(5),
     maxHeight: scale(440),
+  },
+  noGroups: {
+    paddingTop: scale(20),
+    paddingBottom: scale(20),
+    fontFamily: font.semiBold,
+    fontSize: scale(13),
   },
   flatList: {
     width: "100%",

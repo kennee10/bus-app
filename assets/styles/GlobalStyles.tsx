@@ -26,7 +26,6 @@ export const colors = {
     accent: "#1EB980", // green
     accent2: "#045D56", // dark green
     accent3: "#FF6859", // red
-    // accent4: "#f99a07", // orange
     accent4: "#f3d251",
     accent5: "#2fa7f3",
     accent6: "sienna",
@@ -40,7 +39,6 @@ export const colors = {
 
 
     info: 'gray',
-    // warning: '#f3d251', // #FFCF44
     warning: '#f99a07',
     error: '#FF6859',
 
@@ -102,6 +100,12 @@ export const containerStyles = StyleSheet.create({
       fontSize: scale(14),
       fontFamily: font.bold,
       color: colors.onBackground,
+      textAlign: "center",
+    },
+    globalInfoTextMessage: {
+      fontSize: scale(14),
+      fontFamily: font.bold,
+      color: colors.onSurfaceSecondary,
       textAlign: "center",
     },
     globalWarningText: {

@@ -114,7 +114,7 @@ const LikedBusesPage = () => {
       <View style={[containerStyles.innerPageContainer, {marginTop: scale(10)}]}>
       {groups.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>You haven't liked any buses yet!</Text>
+          <Text style={containerStyles.globalInfoTextMessage}>You haven't liked any buses</Text>
         </View>
       ) : (
         <FlatList
@@ -186,13 +186,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  emptyText: {
-    fontSize: scale(15),
-    marginHorizontal: scale(20),
-    fontFamily: font.bold,
-    color: colors.onSurfaceSecondary,
-    textAlign: "center",
   },
   groupContainer: {
     marginBottom: scale(10),
