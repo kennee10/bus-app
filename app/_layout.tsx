@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView, StyleSheet, Platform, StatusBar, Text } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { scale } from "react-native-size-matters";
@@ -7,22 +7,29 @@ import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
 import { LikedBusesProvider } from "../components/context/likedBusesContext";
 import AppInitializer from "./AppInitializer";
+import * as NavigationBar from 'expo-navigation-bar'; // Add this import
 
 export default function RootLayout() {
-  const [isInitialized, setIsInitialized] = useState(false); // Tracks whether initialization is complete
-  const [error, setError] = useState<string | null>(null); // Tracks errors during initialization
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Set navigation bar color on Android
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      NavigationBar.setBackgroundColorAsync(colors.background)
+        .catch(error => console.log("Error setting navigation bar color:", error));
+    }
+  }, []);
 
   const handleInitializationComplete = () => {
-    setIsInitialized(true); // Mark initialization as complete
+    setIsInitialized(true);
   };
 
   const handleError = (errorMessage: string) => {
-    setError(errorMessage); // Store the error message
+    setError(errorMessage);
   };
 
-  // If not initialized, show the AppInitializer
   if (!isInitialized) {
-    console.log("_layout.tsx(root): Initializing app...");
     return (
       <AppInitializer
         onInitializationComplete={handleInitializationComplete}
@@ -31,7 +38,6 @@ export default function RootLayout() {
     );
   }
 
-  // If there's an error, show an error message
   if (error) {
     return (
       <SafeAreaView style={containerStyles.globalContainer}>
@@ -40,16 +46,23 @@ export default function RootLayout() {
     );
   }
 
-  // Render the app after initialization
   return (
     <>
-      <ExpoStatusBar style="light" backgroundColor={colors.background} />
+      <ExpoStatusBar 
+        style="light" 
+        backgroundColor={colors.background} 
+      />
       <SafeAreaView style={styles.safeArea}>
         <LikedBusStopsProvider>
           <LikedBusesProvider>
             <Stack
               screenOptions={{
                 headerShown: false,
+                // Add these to style any header that might appear
+                headerStyle: {
+                  backgroundColor: colors.background,
+                },
+                headerTintColor: colors.onBackground,
               }}
             >
               <Stack.Screen name="(tabs)" />

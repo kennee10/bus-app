@@ -37,7 +37,7 @@
     "expo-sqlite": "~15.0.3",
     "expo-status-bar": "~2.0.0",
     "expo-symbols": "~0.2.0",
-    "expo-system-ui": "~4.0.6",
+    "expo-system-ui": "~4.0.8",
     "expo-web-browser": "~14.0.1",
     "glob": "^11.0.0",
     "react": "18.3.1",
@@ -50,6 +50,7 @@
     "react-native-get-random-values": "~1.11.0",
     "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-modal": "^13.0.1",
+    "react-native-navigation-bar-color": "^2.0.2",
     "react-native-pdf": "^6.7.7",
     "react-native-reanimated": "~3.16.1",
     "react-native-root-toast": "^3.6.0",
@@ -60,7 +61,8 @@
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.13",
-    "react-native-webview": "^13.13.2"
+    "react-native-webview": "^13.13.2",
+    "expo-navigation-bar": "~4.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
