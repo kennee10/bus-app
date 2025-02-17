@@ -1,19 +1,53 @@
-import React, { useState } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Linking, Dimensions } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image } from "react-native";
+import { WebView } from "react-native-webview"; // Make sure to install: expo install react-native-webview
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import ImageViewer from 'react-native-image-zoom-viewer';
-import { colors, containerStyles, font } from "@/assets/styles/GlobalStyles";
-import PayLahComponent from "../../components/main/PayLahComponent";
-import PayPalComponent from "@/components/main/PayPalComponent";
-import { scale } from "react-native-size-matters";
-import paynowQR from "../../assets/images/paynow.jpg";
-import MRTMap from "../../assets/images/MRTMap.jpg";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Asset } from "expo-asset";
+import * as FileSystem from "expo-file-system";
+import { scale } from "react-native-size-matters";
+import { colors, containerStyles, font } from "@/assets/styles/GlobalStyles";
+import PayPalComponent from "@/components/main/PayPalComponent";
+import paynowQR from "../../assets/images/paynow.jpg";
 
-const App = () => {
+// Instead of importing as a module, use require so we can use Asset.fromModule
+const MRTMap = require("../../assets/images/MRTMap.svg");
+
+export default function App() {
   const [isPayNowVisible, setIsPayNowVisible] = useState(false);
   const [isMRTMapVisible, setIsMRTMapVisible] = useState(false);
+  const [svgHtml, setSvgHtml] = useState<string | null>(null);
+
+  // On mount, download and read the SVG file as a string,
+  // then wrap it in an HTML document so the WebView can display it.
+  useEffect(() => {
+    const loadSvg = async () => {
+      try {
+        const asset = Asset.fromModule(MRTMap);
+        await asset.downloadAsync();
+        if (asset.localUri) {
+          const svgContent = await FileSystem.readAsStringAsync(asset.localUri);
+          // Wrap the SVG content in a basic HTML document with a viewport meta tag for scaling
+          const html = `
+            <html>
+              <head>
+                <meta name="viewport" content="width=device-width, initial-scale=0.95, user-scalable=yes" />
+                <style>body { margin: 0; padding: 0; background-color: white; }</style>
+              </head>
+              <body>
+                ${svgContent}
+              </body>
+            </html>
+          `;
+          setSvgHtml(html);
+        }
+      } catch (error) {
+        console.error("Error loading SVG:", error);
+      }
+    };
+
+    loadSvg();
+  }, []);
 
   const onPayNowPress = () => {
     setIsPayNowVisible(true);
@@ -36,27 +70,34 @@ const App = () => {
 
   return (
     <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: scale(15) }]}>
-      <View style={[styles.oneContainer]}>
+      {/* Contact Me */}
+      <View style={styles.oneContainer}>
         <Text style={styles.heading}>Contact Me</Text>
         <View style={styles.content}>
-          <TouchableOpacity onPress={() => onEmailPress()}>
-            <MaterialCommunityIcons name="email" color={colors.onSurfaceSecondary} size={scale(23)} style={{ marginLeft: scale(5) }} />
+          <TouchableOpacity onPress={onEmailPress}>
+            <MaterialCommunityIcons
+              name="email"
+              color={colors.onSurfaceSecondary}
+              size={scale(23)}
+              style={{ marginLeft: scale(5) }}
+            />
           </TouchableOpacity>
         </View>
       </View>
 
-      <View style={[styles.oneContainer]}>
+      {/* Donate */}
+      <View style={styles.oneContainer}>
         <Text style={styles.heading}>Donate</Text>
         <View style={styles.content}>
           <TouchableOpacity onPress={onPayNowPress} style={containerStyles.button}>
             <Text style={containerStyles.globalTextMessage}>PayNow</Text>
           </TouchableOpacity>
-          {/* <PayLahComponent /> */}
           <PayPalComponent />
         </View>
       </View>
 
-      <View style={[styles.oneContainer]}>
+      {/* MRT Map */}
+      <View style={styles.oneContainer}>
         <Text style={styles.heading}>MRT Map</Text>
         <View style={styles.content}>
           <TouchableOpacity onPress={onMRTMapPress} style={containerStyles.button}>
@@ -65,7 +106,13 @@ const App = () => {
         </View>
       </View>
 
-      <Modal visible={isPayNowVisible} transparent={true} animationType="fade" onRequestClose={() => setIsPayNowVisible(false)}>
+      {/* PayNow Modal */}
+      <Modal
+        visible={isPayNowVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsPayNowVisible(false)}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -75,29 +122,38 @@ const App = () => {
               </TouchableOpacity>
             </View>
             <Image source={paynowQR} style={styles.image} />
-            <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>Screenshot and Scan this QR code in your preferred Bank app</Text>
+            <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>
+              Screenshot and Scan this QR code in your preferred Bank app
+            </Text>
           </View>
         </View>
       </Modal>
 
-      <Modal visible={isMRTMapVisible} transparent={true} animationType="fade" onRequestClose={() => setIsMRTMapVisible(false)}>
-        <ImageViewer
-          imageUrls={[{ url: '', props: { source: MRTMap } }]}
-          enableSwipeDown={true}
-          onSwipeDown={() => setIsMRTMapVisible(false)}
-          enableImageZoom={true}
-          enablePreload={true}
-          saveToLocalByLongPress={false}
-          renderHeader={() => (
-            <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
-              <Ionicons name="close-circle" style={styles.MRTmodalCrossIcon} />
-            </TouchableOpacity>
+      {/* MRT Map Modal via WebView */}
+      <Modal
+        visible={isMRTMapVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsMRTMapVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
+            <Ionicons name="close-circle" style={styles.MRTmodalCrossIcon} />
+          </TouchableOpacity>
+          {svgHtml ? (
+            <WebView
+              source={{ html: svgHtml }}
+              style={{ flex: 1, width: "100%" }}
+              scalesPageToFit={true}
+            />
+          ) : (
+            <Text style={containerStyles.globalTextMessage}>Loading SVG...</Text>
           )}
-        />
+        </View>
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   heading: {
@@ -106,6 +162,11 @@ const styles = StyleSheet.create({
     color: colors.onSurface,
     textAlign: "left",
   },
+  image: {
+    width: scale(180),
+    height: scale(180),
+    marginBottom: scale(20)
+  },
   oneContainer: {
     padding: scale(12),
     borderRadius: scale(4),
@@ -113,17 +174,17 @@ const styles = StyleSheet.create({
     borderWidth: scale(1),
     borderColor: colors.borderToPress2,
     margin: scale(7.5),
-    width: "95%"
+    width: "95%",
   },
   content: {
     flexDirection: "row",
-    marginTop: scale(10)
+    marginTop: scale(10),
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: colors.modalBackgroundOpacity,
     justifyContent: "center",
-    alignItems: "center",
+    paddingBottom: scale(100),
   },
   modalContent: {
     width: "75%",
@@ -134,11 +195,13 @@ const styles = StyleSheet.create({
     padding: scale(4),
     opacity: 0.97,
     alignItems: "center",
-    elevation: 5, // Adds shadow for Android
-    shadowColor: "#000", // Adds shadow for iOS
+    elevation: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+    alignSelf: "center",
+    marginTop: "20%",
   },
   modalHeader: {
     flexDirection: "row",
@@ -156,22 +219,15 @@ const styles = StyleSheet.create({
   },
   MRTmodalCrossIcon: {
     fontSize: scale(35),
-    color: colors.secondary2,
+    color: colors.primary,
     paddingTop: scale(5),
     paddingRight: scale(5),
     paddingBottom: scale(5),
   },
-  image: {
-    width: scale(180),
-    height: scale(180),
-    marginBottom: scale(20)
-  },
   closeButton: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
+    position: "absolute",
+    top: scale(40),
+    right: scale(20),
     zIndex: 1,
   },
 });
-
-export default App;
