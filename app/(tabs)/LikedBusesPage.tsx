@@ -122,18 +122,20 @@ const LikedBusesPage = () => {
           keyExtractor={([groupName]) => groupName}
           renderItem={({ item: [groupName, groupData] }) => (
             <View style={styles.groupContainer}>
-              <TouchableOpacity 
-                style={styles.groupTitleContainer} 
-                onPress={() => toggleGroupCollapse(groupName)}
-              >
-                <View style={styles.arrowContainer}>
-                  <Ionicons 
-                    name={collapsedGroups[groupName] ? "chevron-forward" : "chevron-down"}
-                    size={scale(18)} 
-                    color={colors.primary}
-                  />
-                </View>
-                <Text style={styles.groupTitle}>{groupName}</Text>
+              <View style={styles.groupHeader}>
+                <TouchableOpacity 
+                  style={styles.groupTitleContainer} 
+                  onPress={() => toggleGroupCollapse(groupName)}
+                >
+                  <View style={styles.arrowContainer}>
+                    <Ionicons 
+                      name={collapsedGroups[groupName] ? "chevron-forward" : "chevron-down"}
+                      size={scale(18)} 
+                      color={colors.primary}
+                    />
+                  </View>
+                  <Text style={styles.groupTitle}>{groupName}</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => handleDeleteGroup(groupName)}
@@ -144,7 +146,9 @@ const LikedBusesPage = () => {
                     color={colors.onSurfaceSecondary2}
                   />
                 </TouchableOpacity>
-              </TouchableOpacity>
+              </View>
+              
+              
 
             
               {!collapsedGroups[groupName] && (
@@ -195,11 +199,18 @@ const styles = StyleSheet.create({
     borderRadius: scale(4),
     backgroundColor: colors.surface3,
   },
+  groupHeader: {
+    flexDirection: "row",
+    alignItems: 'center',
+    padding: scale(10),
+  },
   groupTitleContainer: {
     flexDirection: 'row',
+    flex: 1,
     alignItems: "center",
-    padding: scale(10),
     paddingLeft: 0,
+  },
+  deleteButton: {
   },
   arrowContainer: {
     flex: 1,
@@ -213,8 +224,6 @@ const styles = StyleSheet.create({
     fontFamily: font.bold,
     color: colors.primary,
     // backgroundColor: 'yellow'
-  },
-  deleteButton: {
   },
   noLikedBusesInGroupTextWrapper: {
     alignItems: "center",

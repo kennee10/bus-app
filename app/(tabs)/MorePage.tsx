@@ -24,7 +24,7 @@ const App = () => {
   };
 
   const onEmailPress = () => {
-    const email = "kennee100@gmail.com";
+    const email = "cheongcodes@gmail.com";
     const subject = "Your Subject Here"; // Optional
     const body = "Your email body content here"; // Optional
     const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;

@@ -156,7 +156,7 @@ const BusComponent: React.FC<BusComponentProps> = (props) => {
                   onSubmitEditing={handleCreateGroup}
                 />
 
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.createButton} 
                   onPress={handleCreateGroup}
                 >
