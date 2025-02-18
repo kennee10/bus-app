@@ -12,6 +12,7 @@ import paynowQR from "../../assets/images/paynow.jpg";
 
 // Instead of importing as a module, use require so we can use Asset.fromModule
 const MRTMap = require("../../assets/images/MRTMap.svg");
+import DonationTicker from '@/components/main/DonationTicker'; // Make sure to create this file
 
 export default function App() {
   const [isPayNowVisible, setIsPayNowVisible] = useState(false);
@@ -95,6 +96,7 @@ export default function App() {
           </TouchableOpacity>
           <PayPalComponent />
         </View>
+        <DonationTicker/>
       </View>
 
       {/* MRT Map */}
@@ -106,6 +108,7 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
+
 
       {/* PayNow Modal */}
       <Modal
