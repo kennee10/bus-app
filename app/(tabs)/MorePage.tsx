@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView } from "react-native";
 import { WebView } from "react-native-webview"; // Make sure to install: expo install react-native-webview
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -69,7 +69,8 @@ export default function App() {
   };
 
   return (
-    <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: scale(15) }]}>
+    <ScrollView style={{backgroundColor: colors.background}}>
+      <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: scale(15) }]}>
       {/* Contact Me */}
       <View style={styles.oneContainer}>
         <Text style={styles.heading}>Contact Me</Text>
@@ -152,6 +153,8 @@ export default function App() {
         </View>
       </Modal>
     </View>
+    </ScrollView>
+    
   );
 }
 
