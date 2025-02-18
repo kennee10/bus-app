@@ -70,9 +70,18 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       const busServices = group[busStopCode] || [];
   
       // Add the serviceNo only if it's not already in the list
-      const updatedBusServices = busServices.includes(serviceNo)
-        ? busServices // Do nothing if the service is already liked
-        : [...busServices, serviceNo]; // Like the bus
+      if (busServices.includes(serviceNo)) {
+        Alert.alert(
+          "Already added",
+          `${serviceNo} has already been added to "${groupName}"`,
+          [{ text: "Cancel", style: "cancel" }]
+        );
+        return; // Exit early to prevent further execution
+      }
+
+      // Like the bus
+      const updatedBusServices = [...busServices, serviceNo];
+
   
       // Update the group
       const updatedGroup = { ...group, [busStopCode]: updatedBusServices };
@@ -88,7 +97,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
   };
   
 
-  // Function to toggle unlike a bus from all groups
+  // Function to toggle unlike a bus from a group
   const toggleUnlike = async (groupName: string, busStopCode: string, serviceNo: string) => {
     try {
       const updatedLikedBuses = { ...likedBuses };

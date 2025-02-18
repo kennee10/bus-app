@@ -70,11 +70,11 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   useEffect(() => {
     let intervalId; 
     let latestBusArrivalData = busArrivalData; // Create a local reference
-    // console.log(`BusStopComponent: ${props.BusStopCode}: ${props.allBusServices}`)
     
     const fetchAndSetBusArrivalData = async () => {
       try {
         const fetchedData = await fetchBusArrival(props.BusStopCode);
+        // console.log(fetchedData)
   
         const updatedData = fetchedData.map((service: BusService) => ({
           ...service,

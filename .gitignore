@@ -35,8 +35,6 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-app-example
-
 components/apis/fetchBusArrival.tsx
 
 fetchBusStops.ts
