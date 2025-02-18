@@ -74,7 +74,6 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
     const fetchAndSetBusArrivalData = async () => {
       try {
         const fetchedData = await fetchBusArrival(props.BusStopCode);
-        // console.log(fetchedData)
   
         const updatedData = fetchedData.map((service: BusService) => ({
           ...service,
@@ -117,7 +116,18 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   // Find buses not in operation
   const busesNotInOperation = props.allBusServices?.filter(
     (service) => !busArrivalData.some((bus) => bus.ServiceNo === service)
-  );
+  )?.sort((a, b) => {
+    const numA = parseInt(a.replace(/\D/g, '') || '0');
+    const numB = parseInt(b.replace(/\D/g, '') || '0');
+      
+    // First compare numerical parts
+    if (numA !== numB) return numA - numB;
+
+     // If numbers are equal, compare the full string
+     return a.localeCompare(b);
+    });
+
+  
 
   return (
     <View style={styles.outerContainer}>
