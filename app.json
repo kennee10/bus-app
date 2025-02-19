@@ -4,21 +4,30 @@
     "slug": "bus-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/adaptive-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "We need your location to show nearby buses."
-      }
+        "NSLocationWhenInUseUsageDescription": "We need your location to show nearby buses.",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "icon": {
+        "dark": "./assets/images/icon-ios-dark.png",
+        "light": "./assets/images/icon-ios-light.png",
+        "tinted": "./assets/images/icon-ios-tinted.png"
+      },
+      "bundleIdentifier": "com.kennee10.busapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "monochromeImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#0d0d0d"
+      },
+      "package": "com.kennee10.busapp"
     },
     "web": {
       "bundler": "metro",
@@ -30,10 +39,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/splash-icon-dark.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#0d0d0d"
         }
       ],
       "expo-secure-store",
@@ -41,6 +50,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e3123854-6ad9-48f2-9c94-9b5c98b16e8d"
+      }
     }
   }
 }

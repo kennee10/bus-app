@@ -35,6 +35,6 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-components/apis/fetchBusArrival.tsx
+# components/apis/fetchBusArrival.tsx
 
 fetchBusStops.ts
