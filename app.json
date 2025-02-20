@@ -46,7 +46,13 @@
         }
       ],
       "expo-secure-store",
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-build-properties",
+      {
+        "android": {
+            "kotlinVersion": "1.9.25"
+          }
+      }
     ],
     "experiments": {
       "typedRoutes": true
