@@ -2,6 +2,13 @@
   "name": "bus-app",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    }
+  },
   "scripts": {
     "start": "expo start --dev-client",
     "reset-project": "node ./scripts/reset-project.js",

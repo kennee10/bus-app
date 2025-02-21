@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Modal,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { useLikedBuses } from "../../components/context/likedBusesContext";
 import LikedBusesBusStopComponent from "../../components/main/LikedBusesBusStopComponent";
 import { colors, containerStyles, font } from "../../assets/styles/GlobalStyles";
 import { scale } from "react-native-size-matters";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -18,165 +26,261 @@ type BusStopWithDist = {
 };
 
 const LikedBusesPage = () => {
-  const { likedBuses, deleteGroup } = useLikedBuses();
-  const [collapsedGroups, setCollapsedGroups] = useState<{[key: string]: boolean}>({});
-  const [busStopDetails, setBusStopDetails] = useState<{[key: string]: BusStopWithDist}>({});
-  const groups = Object.entries(likedBuses || {});
+  const { likedBuses, deleteGroup, toggleIsArchived } = useLikedBuses();
+  const [collapsedGroups, setCollapsedGroups] = useState<{ [key: string]: boolean }>({});
+  const [busStopDetails, setBusStopDetails] = useState<{ [key: string]: BusStopWithDist }>({});
+  const [archivedModalVisible, setArchivedModalVisible] = useState(false);
 
-  // Group collapse State
+  // groups is an array of [groupName, BusGroup]
+  const groups = Object.entries(likedBuses || {});
+  // Only show unarchived groups (treat undefined as unarchived)
+  const unarchivedGroups = groups.filter(
+    ([, groupData]) => !groupData.isArchived
+  );
+
+  // Load collapse state from AsyncStorage
   useEffect(() => {
     const loadCollapsedState = async () => {
       try {
-        const savedState = await AsyncStorage.getItem('groupCollapseState');
+        const savedState = await AsyncStorage.getItem("groupCollapseState");
         if (savedState) {
           setCollapsedGroups(JSON.parse(savedState));
         } else {
           const initialState = Object.fromEntries(
-            groups.map(([groupName]) => [groupName, true])
+            unarchivedGroups.map(([groupName]) => [groupName, true])
           );
           setCollapsedGroups(initialState);
         }
       } catch (error) {
-        console.error('Failed to load collapsed state', error);
+        console.error("Failed to load collapsed state", error);
       }
     };
-
     loadCollapsedState();
   }, [likedBuses]);
 
   const toggleGroupCollapse = async (groupName: string) => {
-    setCollapsedGroups(prev => {
-      const newState = {
-        ...prev,
-        [groupName]: !prev[groupName]
-      };
-      
-      AsyncStorage.setItem('groupCollapseState', JSON.stringify(newState));
-      
+    setCollapsedGroups((prev) => {
+      const newState = { ...prev, [groupName]: !prev[groupName] };
+      AsyncStorage.setItem("groupCollapseState", JSON.stringify(newState));
       return newState;
     });
   };
-  
-  // Get bus stop details
+
+  // Fetch bus stop details
   useEffect(() => {
     const fetchBusStopDetails = async () => {
       try {
-        // Extract unique bus stop codes from all groups
         const busStopCodes = new Set<string>();
-        Object.values(likedBuses || {}).forEach(groupData => {
-          Object.keys(groupData).forEach(busStopCode => {
+        Object.values(likedBuses || {}).forEach((group) => {
+          Object.keys(group.busStops || {}).forEach((busStopCode) => {
             busStopCodes.add(busStopCode);
           });
         });
-
-        // Only fetch if there are bus stops to fetch
         if (busStopCodes.size > 0) {
           const details = await getBusStopsDetails(Array.from(busStopCodes));
-          
-          // Convert array to object for easier lookup
           const detailsMap = details.reduce((acc, busStop) => ({
             ...acc,
-            [busStop.BusStopCode]: busStop
+            [busStop.BusStopCode]: busStop,
           }), {});
-          
           setBusStopDetails(detailsMap);
         }
       } catch (error) {
-        console.error('Failed to fetch bus stop details:', error);
+        console.error("Failed to fetch bus stop details:", error);
       }
     };
-
     fetchBusStopDetails();
   }, [likedBuses]);
 
+  // Delete group handler
   const handleDeleteGroup = (groupName: string) => {
-      Alert.alert(
-        "Delete Group",
-        `Are you sure you want to delete "${groupName}"?`,
-        [
-          {
-            text: "Cancel",
-            style: "cancel"
-          },
-          {
-            text: "Delete",
-            onPress: async () => {
-              await deleteGroup(groupName);
-            },
-            style: "destructive"
-          }
-        ]
-      );
-    };
+    Alert.alert("Delete Group", `Are you sure you want to delete "${groupName}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        onPress: async () => await deleteGroup(groupName),
+        style: "destructive",
+      },
+    ]);
+  };
 
   return (
     <View style={containerStyles.pageContainer}>
-      <View style={[containerStyles.innerPageContainer, {marginTop: scale(10)}]}>
-      {groups.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={containerStyles.globalInfoTextMessage}>You haven't liked any buses</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={groups}
-          keyExtractor={([groupName]) => groupName}
-          renderItem={({ item: [groupName, groupData] }) => (
-            <View style={styles.groupContainer}>
-              <View style={styles.groupHeader}>
-                <TouchableOpacity 
-                  style={styles.groupTitleContainer} 
-                  onPress={() => toggleGroupCollapse(groupName)}
-                >
-                  <View style={styles.arrowContainer}>
-                    <Ionicons 
-                      name={collapsedGroups[groupName] ? "chevron-forward" : "chevron-down"}
-                      size={scale(18)} 
-                      color={colors.primary}
+      <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
+        {unarchivedGroups.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Text style={containerStyles.globalInfoTextMessage}>
+              You haven't liked any buses
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={unarchivedGroups}
+            keyExtractor={([groupName]) => groupName}
+            renderItem={({ item: [groupName, groupData] }) => (
+              <View style={styles.groupContainer}>
+                <View style={styles.groupHeader}>
+                  <TouchableOpacity
+                    style={styles.groupTitleContainer}
+                    onPress={() => toggleGroupCollapse(groupName)}
+                  >
+                    <View style={styles.arrowContainer}>
+                      <Ionicons
+                        name={collapsedGroups[groupName] ? "chevron-forward" : "chevron-down"}
+                        size={scale(18)}
+                        color={colors.primary}
+                      />
+                    </View>
+                    <Text style={styles.groupTitle}>{groupName}</Text>
+                  </TouchableOpacity>
+                  {/* Archive button now uses eye icons */}
+                  <TouchableOpacity
+                    style={styles.archiveButton}
+                    onPress={() => toggleIsArchived(groupName)}
+                  >
+                    <Ionicons
+                      name={groupData?.isArchived ? "eye-off" : "eye"}
+                      size={scale(18)}
+                      color={colors.onSurfaceSecondary2}
                     />
-                  </View>
-                  <Text style={styles.groupTitle}>{groupName}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => handleDeleteGroup(groupName)}
-                >
-                  <Ionicons 
-                    name="trash-outline" 
-                    size={scale(18)} 
-                    color={colors.onSurfaceSecondary2}
-                  />
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                  {/* Delete button */}
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={() => handleDeleteGroup(groupName)}
+                  >
+                    <Ionicons
+                      name="trash-outline"
+                      size={scale(18)}
+                      color={colors.onSurfaceSecondary2}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                {/* Render bus stops if group is expanded */}
+                {!collapsedGroups[groupName] &&
+                  (Object.keys(groupData?.busStops || {}).length > 0 ? (
+                    Object.entries(groupData?.busStops || {}).map(([busStopCode, likedServices]) => (
+                      <LikedBusesBusStopComponent
+                        key={busStopCode}
+                        busStopCode={busStopCode}
+                        groupName={groupName}
+                        likedServices={likedServices}
+                        busStopDetails={busStopDetails[busStopCode]}
+                      />
+                    ))
+                  ) : (
+                    <View style={styles.noLikedBusesInGroupTextWrapper}>
+                      <Text style={styles.noLikedBusesInGroupText}>
+                        No liked buses in this group
+                      </Text>
+                    </View>
+                  ))}
               </View>
-              
-              
-
-            
-              {!collapsedGroups[groupName] && (
-                Object.keys(groupData).length > 0 ? (
-                  Object.entries(groupData).map(([busStopCode, likedServices]) => (
-                    <LikedBusesBusStopComponent
-                      key={busStopCode}
-                      busStopCode={busStopCode}
-                      groupName={groupName}
-                      likedServices={likedServices}
-                      busStopDetails={busStopDetails[busStopCode]}
-                    />
-                  ))
-                ) : (
-                  <View style={styles.noLikedBusesInGroupTextWrapper}>
-                    <Text style={styles.noLikedBusesInGroupText}>
-                      No liked buses in this group
-                    </Text>
-                  </View>
-                  
-                )
-              )}
-
-            </View>
-          )}
-        />
-      )}
+            )}
+          />
+        )}
       </View>
+      {/* Floating button to open the archived groups modal */}
+      <TouchableOpacity
+        style={styles.archivedGroupsButton}
+        onPress={() => setArchivedModalVisible(true)}
+      >
+        <Ionicons name="eye-off" size={scale(24)} color={colors.onSurfaceSecondary2} />
+      </TouchableOpacity>
+
+      {/* Archived Groups Modal Overlay */}
+      <Modal
+        visible={archivedModalVisible}
+        animationType="fade"
+        onRequestClose={() => setArchivedModalVisible(false)}
+      >
+        <View style={containerStyles.pageContainer}>
+          <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
+            {/* Close button for modal */}
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalHeaderText}></Text>
+              <TouchableOpacity
+              style={styles.modalCloseButton}
+              onPress={() => setArchivedModalVisible(false)}
+              >
+                <Ionicons name="close" size={scale(15)}/>
+              </TouchableOpacity>
+            </View>
+            
+
+            {groups.filter(([, groupData]) => groupData.isArchived).length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <Text style={containerStyles.globalInfoTextMessage}>No archived groups</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={groups.filter(([, groupData]) => groupData.isArchived)}
+                keyExtractor={([groupName]) => groupName}
+                renderItem={({ item: [groupName, groupData] }) => (
+                  <View style={styles.groupContainer}>
+                    <View style={styles.groupHeader}>
+                      <TouchableOpacity
+                        style={styles.groupTitleContainer}
+                        onPress={() => toggleGroupCollapse(groupName)}
+                      >
+                        <View style={styles.arrowContainer}>
+                          <Ionicons
+                            name={collapsedGroups[groupName] ? "chevron-forward" : "chevron-down"}
+                            size={scale(18)}
+                            color={colors.primary}
+                          />
+                        </View>
+                        <Text style={styles.groupTitle}>{groupName}</Text>
+                      </TouchableOpacity>
+                      {/* Archive button allows unarchiving */}
+                      <TouchableOpacity
+                        style={styles.archiveButton}
+                        onPress={() => toggleIsArchived(groupName)}
+                      >
+                        <Ionicons
+                          name={groupData?.isArchived ? "eye-off" : "eye"}
+                          size={scale(18)}
+                          color={colors.onSurfaceSecondary2}
+                        />
+                      </TouchableOpacity>
+                      {/* Delete button */}
+                      <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={() => handleDeleteGroup(groupName)}
+                      >
+                        <Ionicons
+                          name="trash-outline"
+                          size={scale(18)}
+                          color={colors.onSurfaceSecondary2}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    {!collapsedGroups[groupName] &&
+                      (Object.keys(groupData?.busStops || {}).length > 0 ? (
+                        Object.entries(groupData?.busStops || {}).map(([busStopCode, likedServices]) => (
+                          <LikedBusesBusStopComponent
+                            key={busStopCode}
+                            busStopCode={busStopCode}
+                            groupName={groupName}
+                            likedServices={likedServices}
+                            busStopDetails={busStopDetails[busStopCode]}
+                          />
+                        ))
+                      ) : (
+                        <View style={styles.noLikedBusesInGroupTextWrapper}>
+                          <Text style={styles.noLikedBusesInGroupText}>
+                            No liked buses in this group
+                          </Text>
+                        </View>
+                      ))}
+                  </View>
+                )}
+              />
+            )}
+          </View>
+          
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -194,21 +298,28 @@ const styles = StyleSheet.create({
   },
   groupHeader: {
     flexDirection: "row",
-    alignItems: 'center',
-    padding: scale(10),
+    alignItems: "center",
+    paddingRight: scale(10),
   },
   groupTitleContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     flex: 1,
     alignItems: "center",
-    paddingLeft: 0,
+    padding: scale(10),
+  },
+  archiveButton: {
+    overflow: "hidden",
+    padding: scale(6),
+    marginRight: scale(6),
   },
   deleteButton: {
+    overflow: "hidden",
+    padding: scale(6),
+    paddingRight: 0,
   },
   arrowContainer: {
     flex: 1,
-    alignItems:"center",
-    // backgroundColor: 'red'
+    alignItems: "center",
   },
   groupTitle: {
     flex: 10,
@@ -216,7 +327,6 @@ const styles = StyleSheet.create({
     marginLeft: scale(6),
     fontFamily: font.bold,
     color: colors.primary,
-    // backgroundColor: 'yellow'
   },
   noLikedBusesInGroupTextWrapper: {
     alignItems: "center",
@@ -226,7 +336,6 @@ const styles = StyleSheet.create({
     paddingBottom: scale(10),
     borderRadius: scale(4),
     backgroundColor: colors.surface2,
-    // shadow stuff
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -238,6 +347,30 @@ const styles = StyleSheet.create({
     fontFamily: font.bold,
     color: colors.onSurfaceSecondary,
     textAlign: "center",
+  },
+  archivedGroupsButton: {
+    position: "absolute",
+    bottom: scale(20),
+    right: scale(20),
+    backgroundColor: colors.surface3,
+    padding: scale(10),
+    borderRadius: scale(30),
+    elevation: 5,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  modalHeaderText: {
+    flex: 1,
+  },
+  modalCloseButton: {
+    backgroundColor: colors.secondary,
+    padding: scale(4),
+    borderRadius: scale(30),
+    marginBottom: scale(10),
+    marginRight: scale(5),
+    elevation: 5,
   },
 });
 
