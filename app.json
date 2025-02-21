@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "bus-app",
-    "slug": "bus-app",
+    "name": "Bussin",
+    "slug": "Bussin",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/adaptive-icon.png",
