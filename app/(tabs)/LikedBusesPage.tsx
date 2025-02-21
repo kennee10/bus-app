@@ -180,6 +180,7 @@ const LikedBusesPage = () => {
           />
         )}
       </View>
+      
       {/* Floating button to open the archived groups modal */}
       <TouchableOpacity
         style={styles.archivedGroupsButton}
@@ -196,9 +197,17 @@ const LikedBusesPage = () => {
       >
         <View style={containerStyles.pageContainer}>
           <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
-            {/* Close button for modal */}
+            {/* Back / Close header for modal */}
             <View style={styles.modalHeader}>
+              <TouchableOpacity
+                style={styles.modalBackButton}
+                onPress={() => setArchivedModalVisible(false)}
+              >
+                <Ionicons name="arrow-back" style={styles.modalBackIcon}/>
+              </TouchableOpacity>
+              
               <Text style={styles.modalHeaderText}></Text>
+              
               <TouchableOpacity
               style={styles.modalCloseButton}
               onPress={() => setArchivedModalVisible(false)}
@@ -360,6 +369,8 @@ const styles = StyleSheet.create({
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: scale(10),
+    marginHorizontal: scale(5),
   },
   modalHeaderText: {
     flex: 1,
@@ -368,10 +379,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondary,
     padding: scale(4),
     borderRadius: scale(30),
-    marginBottom: scale(10),
-    marginRight: scale(5),
     elevation: 5,
   },
+  modalBackButton: {
+    elevation: 5,
+  },
+  modalBackIcon: {
+    color: colors.secondary2,
+    fontSize: scale(20),
+  }
 });
 
 export default LikedBusesPage;
