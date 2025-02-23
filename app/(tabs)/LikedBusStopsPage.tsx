@@ -28,8 +28,6 @@ type BusStopsData = {
   };
 };
 
-// ... (other imports remain the same)
-
 const LikedBusStopsPage = () => {
   const [loading, setLoading] = useState(true);
   const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStopWithDist[]>([]);

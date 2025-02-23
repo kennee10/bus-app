@@ -273,11 +273,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.surface2,
     borderRadius: scale(4),
-    padding: scale(10),
     width: "100%",
   },
   groupItemContent: {
     flex: 1,
+    padding: scale(10),
   },
   groupText: {
     fontSize: scale(14),

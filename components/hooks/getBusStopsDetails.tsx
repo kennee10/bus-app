@@ -2,17 +2,6 @@ import * as Location from "expo-location";
 import { calculateDistance } from "./usefulFunctions";
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
 
-type BusStopData = {
-  Description: string;
-  RoadName: string;
-  Latitude: number;
-  Longitude: number;
-  ServiceNos: string[];
-};
-
-type BusStopsJSON = {
-  [code: string]: BusStopData;
-};
 
 type BusStopWithDistance = {
   BusStopCode: string;
@@ -23,10 +12,10 @@ type BusStopWithDistance = {
   Distance: string;
 };
 
-export const getBusStopsDetails = async (likedBusStops: string[] = []): Promise<BusStopWithDistance[]> => {
+export const getBusStopsDetails = async (busStops: string[] = []): Promise<BusStopWithDistance[]> => {
   try {
-    // Check if likedBusStops is valid
-    if (!Array.isArray(likedBusStops) || likedBusStops.length === 0) {
+    // Check if busStops is valid
+    if (!Array.isArray(busStops) || busStops.length === 0) {
       return []; // Return empty array if no liked bus stops
     }
 
@@ -43,7 +32,7 @@ export const getBusStopsDetails = async (likedBusStops: string[] = []): Promise<
     // Convert JSON object to array of bus stops with their codes
     const enhancedStops = Object.entries(busStopsWithServices)
       // Filter for liked bus stops
-      .filter(([code]) => likedBusStops.includes(code))
+      .filter(([code]) => busStops.includes(code))
       // Map to required format with distance
       .map(([code, data]) => ({
         BusStopCode: code,
@@ -56,12 +45,12 @@ export const getBusStopsDetails = async (likedBusStops: string[] = []): Promise<
           longitude,
           data.Latitude,
           data.Longitude
-        ).toFixed(0) + " km", // Add unit for clarity
+        ).toFixed(0),
       }))
       // Maintain original liked order
       .sort(
         (a, b) =>
-          likedBusStops.indexOf(a.BusStopCode) - likedBusStops.indexOf(b.BusStopCode)
+          busStops.indexOf(a.BusStopCode) - busStops.indexOf(b.BusStopCode)
       );
 
     return enhancedStops;

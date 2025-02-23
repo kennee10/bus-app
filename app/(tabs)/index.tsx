@@ -28,9 +28,9 @@ type BusStopData = {
   ServiceNos: string[];
 }
 
-type BusStopsJSON = {
-  [code: string]: BusStopData;
-}
+// type BusStopsJSON = {
+//   [code: string]: BusStopData;
+// }
 
 type BusStopWithDist = BusStopData & {
   BusStopCode: string;
@@ -44,7 +44,7 @@ const NearbyBusStopsPage = () => {
   const [loading, setLoading] = useState(true);
   const inputRef = useRef<TextInput>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { likedBusStops, toggleLike } = useLikedBusStops();
+  const { likedBusStopsOrder, toggleLike } = useLikedBusStops();
 
   // Memoized bus stops data
   const allBusStops = useMemo(() => 
@@ -211,12 +211,12 @@ const NearbyBusStopsPage = () => {
       Description={item.Description}
       RoadName={item.RoadName}
       Distance={item.Distance.toFixed(0)}
-      isLiked={likedBusStops.includes(item.BusStopCode)}
+      isLiked={likedBusStopsOrder.includes(item.BusStopCode)}
       onLikeToggle={toggleLike}
       searchQuery={searchQuery}
       allBusServices={item.ServiceNos}
     />
-  ), [likedBusStops, searchQuery, toggleLike]);
+  ), [likedBusStopsOrder, searchQuery, toggleLike]);
 
   return (
     <View style={containerStyles.pageContainer}>
