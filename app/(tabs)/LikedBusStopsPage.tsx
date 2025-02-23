@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
-import { scale } from "react-native-size-matters";
-import { colors, containerStyles } from "../../assets/styles/GlobalStyles";
-import LikedBusStopsBusStopComponent from "../../components/main/LikedBusStopsBusStopComponent";
-import { useLikedBusStops } from "../../components/context/likedBusStopsContext";
-import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
-import busStopsWithServices from "../../assets/busStopsWithServices.json";
-import DraggableFlatList from "react-native-draggable-flatlist";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
+import { scale } from 'react-native-size-matters';
+import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
+import LikedBusStopsBusStopComponent from '../../components/main/LikedBusStopsBusStopComponent';
+import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
+import { getBusStopsDetails } from '../../components/hooks/getBusStopsDetails';
+import busStopsWithServices from '../../assets/busStopsWithServices.json';
+import DraggableFlatList from 'react-native-draggable-flatlist';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -29,47 +28,33 @@ type BusStopsData = {
   };
 };
 
-const LIKED_BUS_STOPS_ORDER_KEY = "likedBusStopsOrder";
+// ... (other imports remain the same)
 
 const LikedBusStopsPage = () => {
   const [loading, setLoading] = useState(true);
   const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStopWithDist[]>([]);
-  const { likedBusStops, toggleLike } = useLikedBusStops();
+  const { likedBusStopsOrder, toggleLike, updateLikedBusStopsOrder } = useLikedBusStops();
   const [busStopsData, setBusStopsData] = useState<BusStopsData>(busStopsWithServices);
 
-  // Load saved order from AsyncStorage on app start
+  // Load details based on order
   useEffect(() => {
-    const loadSavedOrder = async () => {
+    const loadDetails = async () => {
       try {
-        const savedOrder = await AsyncStorage.getItem(LIKED_BUS_STOPS_ORDER_KEY);
-        if (savedOrder) {
-          const parsedOrder = JSON.parse(savedOrder);
-          setLikedBusStopsDetails(parsedOrder);
-        } else {
-          // If no saved order, fetch details for liked bus stops
-          const details = await getBusStopsDetails(likedBusStops);
-          setLikedBusStopsDetails(details);
-        }
+        const details = await getBusStopsDetails(likedBusStopsOrder);
+        setLikedBusStopsDetails(details);
       } catch (error) {
-        console.error("Failed to load saved order:", error);
+        console.error('Failed to load bus stop details:', error);
       } finally {
         setLoading(false);
       }
     };
+    loadDetails();
+  }, [likedBusStopsOrder]);
 
-    loadSavedOrder();
-  }, []);
-
-  // Save order to AsyncStorage when the list is reordered
+  // Handle drag reorder
   const onDragEnd = async ({ data }: { data: BusStopWithDist[] }) => {
-    try {
-      // Create a copy of the data to avoid modifying the shared object
-      const updatedData = [...data];
-      await AsyncStorage.setItem(LIKED_BUS_STOPS_ORDER_KEY, JSON.stringify(updatedData));
-      setLikedBusStopsDetails(updatedData);
-    } catch (error) {
-      console.error("Failed to save order:", error);
-    }
+    const newOrder = data.map((item) => item.BusStopCode);
+    await updateLikedBusStopsOrder(newOrder);
   };
 
   return (
@@ -77,11 +62,7 @@ const LikedBusStopsPage = () => {
       <View style={containerStyles.pageContainer}>
         <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
           {loading ? (
-            <ActivityIndicator
-              size="large"
-              color={colors.onBackgroundSecondary}
-              style={{ flex: 1 }}
-            />
+            <ActivityIndicator size="large" color={colors.onBackgroundSecondary} style={{ flex: 1 }} />
           ) : likedBusStopsDetails.length > 0 ? (
             <DraggableFlatList
               data={likedBusStopsDetails}
@@ -92,7 +73,7 @@ const LikedBusStopsPage = () => {
                   Description={item.Description}
                   RoadName={item.RoadName}
                   Distance={item.Distance}
-                  isLiked={likedBusStops.includes(item.BusStopCode)}
+                  isLiked={likedBusStopsOrder.includes(item.BusStopCode)} // Check if in order array
                   onLikeToggle={() => toggleLike(item.BusStopCode)}
                   searchQuery=""
                   allBusServices={busStopsData[item.BusStopCode]?.ServiceNos || []}

@@ -29,7 +29,7 @@ const LikedBusesContext = createContext<LikedBusesContextType | undefined>(undef
 
 // Provider component
 export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [likedBuses, setLikedBuses] = useState<GroupedLikedBuses>({});
+  const [likedBuses, setLikedBuses] = useState<GroupedLikedBuses>({'Pinned' : {isArchived: false, busStops: {}}});
 
   // Load liked buses from AsyncStorage on initial render
   useEffect(() => {

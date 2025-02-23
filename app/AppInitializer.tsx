@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import * as Font from "expo-font";
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AppInitializerProps {
   onInitializationComplete: () => void; // Called when both fetching and font loading are complete
@@ -13,6 +14,18 @@ const AppInitializer: React.FC<AppInitializerProps> = ({
   onError,
 }) => {
   const [isFontLoadingComplete, setFontLoadingComplete] = useState(false);
+
+  const resetAsyncStorage = async () => {
+    try {
+      await AsyncStorage.clear();  // Clears all stored data
+      console.log('AsyncStorage has been reset!');
+    } catch (error) {
+      console.error('Error clearing AsyncStorage:', error);
+    }
+  };
+  
+  // Call this function once, then remove it
+  // resetAsyncStorage();
 
   // Load fonts
   useEffect(() => {

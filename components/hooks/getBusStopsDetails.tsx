@@ -8,11 +8,11 @@ type BusStopData = {
   Latitude: number;
   Longitude: number;
   ServiceNos: string[];
-}
+};
 
 type BusStopsJSON = {
   [code: string]: BusStopData;
-}
+};
 
 type BusStopWithDistance = {
   BusStopCode: string;
@@ -23,13 +23,20 @@ type BusStopWithDistance = {
   Distance: string;
 };
 
-export const getBusStopsDetails = async (likedBusStops: string[]): Promise<BusStopWithDistance[]> => {
+export const getBusStopsDetails = async (likedBusStops: string[] = []): Promise<BusStopWithDistance[]> => {
   try {
+    // Check if likedBusStops is valid
+    if (!Array.isArray(likedBusStops) || likedBusStops.length === 0) {
+      return []; // Return empty array if no liked bus stops
+    }
+
+    // Request location permission
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       throw new Error("Location permission denied");
     }
 
+    // Get current location
     const location = await Location.getCurrentPositionAsync({});
     const { latitude, longitude } = location.coords;
 
@@ -49,7 +56,7 @@ export const getBusStopsDetails = async (likedBusStops: string[]): Promise<BusSt
           longitude,
           data.Latitude,
           data.Longitude
-        ).toFixed(0)
+        ).toFixed(0) + " km", // Add unit for clarity
       }))
       // Maintain original liked order
       .sort(
@@ -60,6 +67,6 @@ export const getBusStopsDetails = async (likedBusStops: string[]): Promise<BusSt
     return enhancedStops;
   } catch (error) {
     console.error("getBusStopsDetails.tsx: Error fetching liked bus stops: ", error);
-    return [];
+    return []; // Return empty array on error
   }
 };

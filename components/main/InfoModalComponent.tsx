@@ -67,7 +67,7 @@ const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => 
                   </View>
                   <View style={styles.rightSide}>
                     <Text style={styles.infoText}>
-                      Arrival time in mins & secs. Refresh every 3 secs
+                      Arrival time in mins & secs. Refreshes every 3 secs
                     </Text>
                     <Text style={styles.proTipText}>
                       Not always accurate, arrive 1-2 mins early
