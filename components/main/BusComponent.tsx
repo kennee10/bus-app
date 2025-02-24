@@ -34,11 +34,11 @@ type BusComponentProps = {
 };
 
 const BusComponent: React.FC<BusComponentProps> = (props) => {
-  const { likedBuses, toggleLike, createGroup, deleteGroup } = useLikedBuses();
+  const { groups, toggleLike, createGroup, deleteGroup } = useLikedBuses();
   const [isModalVisible, setModalVisible] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
 
-  const groupNames = Object.keys(likedBuses);
+  const groupNames = Object.keys(groups);
 
   const handleHeartPress = () => {
     setModalVisible(true);
@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
     fontFamily: font.semiBold,
   },
   deleteButton: {
+    padding: scale(10),
   },
   modalFooter: {
     flexDirection: "row",

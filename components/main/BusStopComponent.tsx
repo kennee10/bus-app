@@ -64,7 +64,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(true); // Initial state is collapsed
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { likedBuses, toggleLike } = useLikedBuses();
+  const { groups, toggleLike } = useLikedBuses();
 
   // Getting bus timings
   useEffect(() => {
@@ -195,7 +195,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
                 busNumber={busService.ServiceNo}
                 busStopCode={props.BusStopCode}
                 nextBuses={busService.nextBuses}
-                isHearted={Object.values(likedBuses).some(
+                isHearted={Object.values(groups).some(
                   (group) => group.busStops[props.BusStopCode]?.includes(busService.ServiceNo)
                 )}                
                 onHeartToggle={toggleLike}

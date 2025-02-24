@@ -45,7 +45,7 @@ type LikedBusesBusStopComponentProps = {
 const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (props) => {
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { likedBuses, toggleLike } = useLikedBuses();
+  const { groups, toggleLike } = useLikedBuses();
 
   // Getting bus timings
   useEffect(() => {
@@ -90,7 +90,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
     intervalId = setInterval(fetchAndSetBusArrivalData, 3000);
 
     return () => clearInterval(intervalId);
-  }, [likedBuses]);
+  }, [groups]);
 
   // Find buses not in operation
   const busesNotInOperation = props.likedServices.filter(
