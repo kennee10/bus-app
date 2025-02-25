@@ -26,11 +26,11 @@ type LikedBusesBusComponent = {
   groupName: string;
   nextBuses: NextBusInfo[];
   isHearted: boolean;
-  onHeartToggle: (
-    groupName: string,
-    busStopCode: string,
-    serviceNo: string
-  ) => Promise<void>;
+  // onHeartToggle: (
+  //   groupName: string,
+  //   busStopCode: string,
+  //   serviceNo: string
+  // ) => Promise<void>;
 };
 
 const LikedBusesBusComponent: React.FC<LikedBusesBusComponent> = (props) => {

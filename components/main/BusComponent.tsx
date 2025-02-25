@@ -26,6 +26,7 @@ type BusComponentProps = {
   busStopCode: string;
   nextBuses: NextBusInfo[];
   isHearted: boolean;
+  // onHeartToggle: (groupName: string, busStopCode: string, serviceNo: string) => void;
 };
 
 const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, nextBuses, isHearted }) => {

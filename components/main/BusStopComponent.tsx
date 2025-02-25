@@ -198,7 +198,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
                 isHearted={Object.values(groups).some(
                   (group) => group.busStops[props.BusStopCode]?.includes(busService.ServiceNo)
                 )}                
-                onHeartToggle={toggleLike}
+                // onHeartToggle={toggleLike}
               />
             ))
           ) : (

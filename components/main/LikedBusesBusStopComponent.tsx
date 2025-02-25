@@ -4,7 +4,7 @@ import { colors, font } from "../../assets/styles/GlobalStyles";
 import LikedBusesBusComponent from "./LikedBusesBusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -134,7 +134,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
               groupName={props.groupName}
               nextBuses={busService.nextBuses}
               isHearted={true}
-              onHeartToggle={toggleLike}
+              // onHeartToggle={toggleLike}
             />
           ))
         ) : (
