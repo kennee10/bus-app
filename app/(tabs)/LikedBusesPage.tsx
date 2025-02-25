@@ -117,9 +117,9 @@ const LikedBusesPage = () => {
       <View style={{ opacity: isActive ? 0.5 : 1 }}>
         <View style={styles.groupContainer}>
           <View style={styles.groupHeader}>
-            <TouchableOpacity onPressIn={drag} style={styles.dragHandle}>
+            {/* <TouchableOpacity onPressIn={drag} style={styles.dragHandle}>
               <Ionicons name="reorder-three-outline" size={scale(24)} color={colors.primary} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               style={styles.groupTitleContainer}
@@ -225,7 +225,7 @@ const LikedBusesPage = () => {
               >
                 <Ionicons name="arrow-back" style={styles.modalBackIcon}/>
               </TouchableOpacity>
-              <Text style={styles.modalHeaderText}></Text>
+              <Text style={styles.modalHeaderText}>Archived Groups</Text>
               <TouchableOpacity
                 style={styles.modalCloseButton}
                 onPress={() => setArchivedModalVisible(false)}
@@ -395,6 +395,10 @@ const styles = StyleSheet.create({
   },
   modalHeaderText: {
     flex: 1,
+    fontSize: scale(15),
+    fontFamily: font.bold,
+    color: colors.primary,
+    textAlign: "center",
   },
   modalCloseButton: {
     backgroundColor: colors.secondary,
