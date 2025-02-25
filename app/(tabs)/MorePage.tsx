@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { WebView } from "react-native-webview"; // Make sure to install: expo install react-native-webview
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -117,20 +117,25 @@ export default function App() {
         animationType="fade"
         onRequestClose={() => setIsPayNowVisible(false)}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalHeaderText}></Text>
-              <TouchableOpacity onPress={() => setIsPayNowVisible(false)}>
-                <Ionicons name="close-circle" style={styles.modalCrossIcon} />
-              </TouchableOpacity>
-            </View>
-            <Image source={paynowQR} style={styles.image} />
-            <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>
-              Screenshot and Scan this QR code in your preferred Bank app
-            </Text>
+        <TouchableWithoutFeedback onPress={() => setIsPayNowVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalHeaderText}></Text>
+                  <TouchableOpacity onPress={() => setIsPayNowVisible(false)}>
+                    <Ionicons name="close-circle" style={styles.modalCrossIcon} />
+                  </TouchableOpacity>
+                </View>
+                <Image source={paynowQR} style={styles.image} />
+                <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>
+                  Screenshot and Scan this QR code in your preferred Bank app
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
+        
       </Modal>
 
       {/* MRT Map Modal via WebView */}

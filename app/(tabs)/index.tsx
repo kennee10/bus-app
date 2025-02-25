@@ -28,10 +28,6 @@ type BusStopData = {
   ServiceNos: string[];
 }
 
-// type BusStopsJSON = {
-//   [code: string]: BusStopData;
-// }
-
 type BusStopWithDist = BusStopData & {
   BusStopCode: string;
   Distance: number;
