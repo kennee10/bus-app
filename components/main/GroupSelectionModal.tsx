@@ -35,7 +35,6 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
   const groupNameRef = useRef<string>("");
   // Use a ref for the TextInput component to clear its content after submission.
   const textInputRef = useRef<TextInput>(null);
-
   const { groups, order, toggleLike, createGroup, deleteGroup } = useLikedBuses();
 
   const handleCreateGroup = async (groupName: string) => {
@@ -56,20 +55,12 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
     ]);
   };
 
-  const groupNames = Object.keys(groups);
-
   const unarchivedGroups = order;
   const archivedGroups: string[] = Object.keys(groups).filter(
     groupName => groups[groupName]?.isArchived
   );
   
   const allGroups = [...unarchivedGroups, ...archivedGroups];
-
-  
-
-  const unarchivedGroupsOrder = order.filter(
-    groupName => !groups[groupName]?.isArchived
-  );
 
   return (
     <Modal
@@ -111,6 +102,12 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
                           >
                             <Text style={styles.groupText}>{item}</Text>
                           </TouchableOpacity>
+
+                          <Ionicons
+                            name={groups[item]?.isArchived ? "eye-off" : "eye"}
+                            size={scale(13)}
+                            color={colors.onSurfaceSecondary3}
+                          />
 
                           <TouchableOpacity
                             style={styles.deleteButton}

@@ -4,7 +4,6 @@ import { scale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { colors } from "../../assets/styles/GlobalStyles";
 import ArrivalTimingComponent from "./ArrivalTimingComponent";
-import { useLikedBuses } from "../context/likedBusesContext";
 import GroupSelectionModal from "./GroupSelectionModal";
 
 type NextBusInfo = {
@@ -29,7 +28,6 @@ type BusComponentProps = {
 };
 
 const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, nextBuses, isHearted }) => {
-  // const { toggleLike, createGroup, deleteGroup } = useLikedBuses();
   const [isModalVisible, setModalVisible] = useState(false);
 
   return (

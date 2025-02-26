@@ -14,6 +14,7 @@ export const colors = {
     onSurface: "#FFFFFF",
     onSurfaceSecondary: "#AFAFB2",
     onSurfaceSecondary2: "gray",
+    onSurfaceSecondary3: "rgba(255, 255, 255, 0.25)",
     
     onSurface2: "#FFFFFF",
     onSurface2Secondary: "#bdbdbd", // brighter than gray
