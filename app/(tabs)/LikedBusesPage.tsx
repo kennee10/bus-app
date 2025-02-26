@@ -15,9 +15,9 @@ import { colors, containerStyles, font } from "../../assets/styles/GlobalStyles"
 import { scale } from "react-native-size-matters";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
-import DraggableFlatList, {
-  DragEndParams,
-} from 'react-native-draggable-flatlist';
+// import DraggableFlatList, {
+//   DragEndParams,
+// } from 'react-native-draggable-flatlist';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type BusStopWithDist = {
@@ -30,7 +30,7 @@ type BusStopWithDist = {
 };
 
 const LikedBusesPage = () => {
-  const { groups, order, deleteGroup, toggleIsArchived, reorderGroups } = useLikedBuses();
+  const { groups, order, deleteGroup, toggleIsArchived } = useLikedBuses();
   const [collapsedGroups, setCollapsedGroups] = useState<{ [key: string]: boolean }>({});
   const [busStopDetails, setBusStopDetails] = useState<{ [key: string]: BusStopWithDist }>({});
   const [archivedModalVisible, setArchivedModalVisible] = useState(false);
@@ -90,11 +90,11 @@ const LikedBusesPage = () => {
     fetchBusStopDetails();
   }, [groups]);
 
-  const handleDragEnd = ({ data }: DragEndParams<string>) => {
-    const archivedGroups = order.filter(groupName => groups[groupName]?.isArchived);
-    const newOrder = [...data, ...archivedGroups];
-    reorderGroups(newOrder);
-  };
+  // const handleDragEnd = ({ data }: DragEndParams<string>) => {
+  //   const archivedGroups = order.filter(groupName => groups[groupName]?.isArchived);
+  //   const newOrder = [...data, ...archivedGroups];
+  //   reorderGroups(newOrder);
+  // };
 
   const handleDeleteGroup = (groupName: string) => {
     Alert.alert("Delete Group", `Delete "${groupName}"?`, [
@@ -105,16 +105,16 @@ const LikedBusesPage = () => {
 
   const renderItem = ({
     item,
-    drag,
-    isActive,
+    // drag,
+    // isActive,
   }: {
     item: string;
-    drag: () => void;
-    isActive: boolean;
+    // drag: () => void;
+    // isActive: boolean;
   }) => {
     const groupData = groups[item];
     return (
-      <View style={{ opacity: isActive ? 0.5 : 1 }}>
+      <View>
         <View style={styles.groupContainer}>
           <View style={styles.groupHeader}>
             {/* <TouchableOpacity onPressIn={drag} style={styles.dragHandle}>
@@ -191,16 +191,15 @@ const LikedBusesPage = () => {
             </Text>
           </View>
         ) : (
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <DraggableFlatList
+          // <GestureHandlerRootView style={{ flex: 1 }}>
+            <FlatList
               data={unarchivedGroupsOrder}
               keyExtractor={(item) => item}
               renderItem={renderItem}
-              onDragEnd={handleDragEnd}
-              activationDistance={20}
+              // onDragEnd={handleDragEnd}
+              // activationDistance={20}
               contentContainerStyle={{ paddingBottom: scale(20) }}
             />
-          </GestureHandlerRootView>
         )}
       </View>
 

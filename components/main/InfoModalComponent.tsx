@@ -5,7 +5,8 @@ import {
   StyleSheet, 
   Text, 
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -26,219 +27,224 @@ const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => 
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalHeaderText}></Text>
+                <TouchableOpacity onPress={onClose}>
+                  <Ionicons name="close-circle" style={styles.modalCrossIcon}/>
+                </TouchableOpacity>
+              </View>
 
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalHeaderText}></Text>
-            <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close-circle" style={styles.modalCrossIcon}/>
-            </TouchableOpacity>
-          </View>
+              {/* Wrap the content with ScrollView */}
+              <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <View style={styles.infoContainer}>
 
-          {/* Wrap the content with ScrollView */}
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <View style={styles.infoContainer}>
-
-              {/* Timings */}
-              <View style={styles.oneInfoContainer}>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <View style={styles.timingWrapper}>
-                      <View style={styles.minsWrapper}>
-                        <Text
-                          style={styles.mins}
-                          adjustsFontSizeToFit
-                          numberOfLines={1}
-                        >
-                          8
+                  {/* Timings */}
+                  <View style={styles.oneInfoContainer}>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <View style={styles.timingWrapper}>
+                          <View style={styles.minsWrapper}>
+                            <Text
+                              style={styles.mins}
+                              adjustsFontSizeToFit
+                              numberOfLines={1}
+                            >
+                              8
+                            </Text>
+                          </View>
+                          <View style={styles.secsWrapper}>
+                            <Text
+                              style={styles.secs}
+                              adjustsFontSizeToFit
+                              numberOfLines={1}
+                            >
+                              26
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>
+                          Arrival time in mins & secs. Refreshes every 3 secs
+                        </Text>
+                        <Text style={styles.proTipText}>
+                          Not always accurate, arrive 1-2 mins early
                         </Text>
                       </View>
-                      <View style={styles.secsWrapper}>
-                        <Text
-                          style={styles.secs}
-                          adjustsFontSizeToFit
-                          numberOfLines={1}
-                        >
-                          26
+                    </View>
+                  </View>
+
+                  {/* Last Updated */}
+                  <View style={styles.oneInfoContainer}>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <View style={{
+                            width: scale(3),
+                            height: scale(12),
+                            borderRadius: scale(5),
+                            backgroundColor: colors.accent,
+                            position: 'absolute',
+                            top: scale(4)
+                          }} />
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>
+                          Live Location Updated {'<'} 15 seconds ago
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <View style={{
+                            width: scale(3),
+                            height: scale(12),
+                            borderRadius: scale(5),
+                            backgroundColor: colors.warning,
+                            position: 'absolute',
+                            top: scale(4)
+                          }} />
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>
+                          Live Location Updated 15 - 45 seconds ago
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <View style={{
+                            width: scale(3),
+                            height: scale(12),
+                            borderRadius: scale(5),
+                            backgroundColor: colors.error,
+                            position: 'absolute',
+                            top: scale(4)
+                          }} />
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>
+                          Last Update {'>'} 45 seconds ago
                         </Text>
                       </View>
                     </View>
                   </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>
-                      Arrival time in mins & secs. Refreshes every 3 secs
-                    </Text>
-                    <Text style={styles.proTipText}>
-                      Not always accurate, arrive 1-2 mins early
-                    </Text>
-                  </View>
-                </View>
-              </View>
 
-              {/* Last Updated */}
-              <View style={styles.oneInfoContainer}>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <View style={{
-                        width: scale(3),
-                        height: scale(12),
-                        borderRadius: scale(5),
-                        backgroundColor: colors.accent,
-                        position: 'absolute',
-                        top: scale(4)
-                      }} />
-                  </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>
-                      Live Location Updated {'<'} 15 seconds ago
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <View style={{
-                        width: scale(3),
-                        height: scale(12),
-                        borderRadius: scale(5),
-                        backgroundColor: colors.warning,
-                        position: 'absolute',
-                        top: scale(4)
-                      }} />
-                  </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>
-                      Live Location Updated 15 - 45 seconds ago
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <View style={{
-                        width: scale(3),
-                        height: scale(12),
-                        borderRadius: scale(5),
-                        backgroundColor: colors.error,
-                        position: 'absolute',
-                        top: scale(4)
-                      }} />
-                  </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>
-                      Last Update {'>'} 45 seconds ago
-                    </Text>
-                  </View>
-                </View>
-              </View>
-
-              {/* Monitored */}
-              <View style={styles.oneInfoContainer}>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <MaterialCommunityIcons
-                      name="clock-alert"
-                      color={colors.accent7}
-                      size={scale(14)}
-                      style={{ position: 'absolute', top: scale(4) }}
-                    />
-                  </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>
-                      Live Location Unknown. Arrival time based on Schedule
-                    </Text>
-                  </View>
-                </View>
-              </View>
-
-              {/* Crowd Level */}
-              <View style={styles.oneInfoContainer}>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
-                      <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                  {/* Monitored */}
+                  <View style={styles.oneInfoContainer}>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <MaterialCommunityIcons
+                          name="clock-alert"
+                          color={colors.accent7}
+                          size={scale(14)}
+                          style={{ position: 'absolute', top: scale(4) }}
+                        />
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>
+                          Live Location Unknown. Arrival time based on Schedule
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>Seating Available</Text>
-                  </View>
-                </View>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
-                      <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
-                      <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
-                    </View>
-                  </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>Standing Available</Text>
-                  </View>
-                </View>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
-                      <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
-                      <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
-                      <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
-                    </View>
-                  </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>Limited Standing Available</Text>
-                  </View>
-                </View>
-              </View>
 
-              {/* Bus Type */}
-              <View style={styles.oneInfoContainer}>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <MaterialCommunityIcons 
-                      name="bus-side" 
-                      color={colors.busIcon} 
-                      size={scale(15)} 
-                    />
-                  </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>Single Deck</Text>
-                  </View>
-                </View>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <MaterialCommunityIcons 
-                      name="bus-double-decker" 
-                      color={colors.busIcon} 
-                      size={scale(15)} 
-                    />
-                  </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>Double Decker</Text>
-                  </View>
-                </View>
-                <View style={styles.oneLine}>
-                  <View style={styles.leftSide}>
-                    <View style={{ flexDirection: 'row' }}>
-                      <MaterialCommunityIcons 
-                        name="bus-articulated-end" 
-                        color={colors.busIcon} 
-                        size={scale(15)} 
-                      />
-                      <MaterialCommunityIcons 
-                        name="bus-articulated-front" 
-                        color={colors.busIcon} 
-                        size={scale(15)} 
-                        style={{ right: scale(4) }}
-                      />
+                  {/* Crowd Level */}
+                  <View style={styles.oneInfoContainer}>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
+                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                        </View>
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>Seating Available</Text>
+                      </View>
+                    </View>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
+                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                        </View>
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>Standing Available</Text>
+                      </View>
+                    </View>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
+                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                        </View>
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>Limited Standing Available</Text>
+                      </View>
                     </View>
                   </View>
-                  <View style={styles.rightSide}>
-                    <Text style={styles.infoText}>Bendy</Text>
-                  </View>
-                </View>
-              </View>
 
+                  {/* Bus Type */}
+                  <View style={styles.oneInfoContainer}>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <MaterialCommunityIcons 
+                          name="bus-side" 
+                          color={colors.busIcon} 
+                          size={scale(15)} 
+                        />
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>Single Deck</Text>
+                      </View>
+                    </View>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <MaterialCommunityIcons 
+                          name="bus-double-decker" 
+                          color={colors.busIcon} 
+                          size={scale(15)} 
+                        />
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>Double Decker</Text>
+                      </View>
+                    </View>
+                    <View style={styles.oneLine}>
+                      <View style={styles.leftSide}>
+                        <View style={{ flexDirection: 'row' }}>
+                          <MaterialCommunityIcons 
+                            name="bus-articulated-end" 
+                            color={colors.busIcon} 
+                            size={scale(15)} 
+                          />
+                          <MaterialCommunityIcons 
+                            name="bus-articulated-front" 
+                            color={colors.busIcon} 
+                            size={scale(15)} 
+                            style={{ right: scale(4) }}
+                          />
+                        </View>
+                      </View>
+                      <View style={styles.rightSide}>
+                        <Text style={styles.infoText}>Bendy</Text>
+                      </View>
+                    </View>
+                  </View>
+
+                </View>
+              </ScrollView>
             </View>
-          </ScrollView>
+          </TouchableWithoutFeedback>
+          
         </View>
-      </View>
+      </TouchableWithoutFeedback>
+      
     </Modal>
   );
 };

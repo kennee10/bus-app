@@ -8,11 +8,14 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { scale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { colors, font, containerStyles } from "../../assets/styles/GlobalStyles";
+import { Platform } from "react-native";
 
 type GroupSelectionModalProps = {
   isVisible: boolean;
@@ -63,75 +66,88 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Select a Group</Text>
-            <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close-circle" style={styles.modalCrossIcon} />
-            </TouchableOpacity>
-          </View>
+      <TouchableWithoutFeedback onPress={onClose}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? scale(100): 0 }
+          style={{ flex: 1}}
+        >
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>Select a Group</Text>
+                  <TouchableOpacity onPress={onClose}>
+                    <Ionicons name="close-circle" style={styles.modalCrossIcon} />
+                  </TouchableOpacity>
+                </View>
 
-          <View style={styles.modalBody}>
-            {groupNames.length > 0 ? (
-              <FlatList
-                data={groupNames}
-                keyExtractor={(item) => item}
-                style={styles.flatList}
-                renderItem={({ item }) => (
-                  <View style={styles.groupItem}>
-                    <TouchableOpacity
-                      style={styles.groupItemContent}
-                      onPress={() => {
-                        onToggleLike(item);
-                        onClose(); // This closes the modal
-                      }}
-                    >
-                      <Text style={styles.groupText}>{item}</Text>
-                    </TouchableOpacity>
+                <View style={styles.modalBody}>
+                  {groupNames.length > 0 ? (
+                    <FlatList
+                      data={groupNames}
+                      keyExtractor={(item) => item}
+                      style={styles.flatList}
+                      renderItem={({ item }) => (
+                        <View style={styles.groupItem}>
+                          <TouchableOpacity
+                            style={styles.groupItemContent}
+                            onPress={() => {
+                              onToggleLike(item);
+                              onClose(); // This closes the modal
+                            }}
+                          >
+                            <Text style={styles.groupText}>{item}</Text>
+                          </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={styles.deleteButton}
-                      onPress={() => handleDeleteGroup(item)}
-                    >
-                      <Ionicons
-                        name="trash-outline"
-                        size={scale(15)}
-                        color={colors.onSurfaceSecondary2}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )}
-                ItemSeparatorComponent={() => <View style={{ height: scale(7) }} />}
-              />
-            ) : (
-              <Text style={[containerStyles.globalInfoTextMessage, styles.noGroups]}>
-                You haven't created a group
-              </Text>
-            )}
-          </View>
+                          <TouchableOpacity
+                            style={styles.deleteButton}
+                            onPress={() => handleDeleteGroup(item)}
+                          >
+                            <Ionicons
+                              name="trash-outline"
+                              size={scale(15)}
+                              color={colors.onSurfaceSecondary2}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                      ItemSeparatorComponent={() => <View style={{ height: scale(7) }} />}
+                    />
+                  ) : (
+                    <Text style={[containerStyles.globalInfoTextMessage, styles.noGroups]}>
+                      You haven't created a group
+                    </Text>
+                  )}
+                </View>
 
-          <View style={styles.modalFooter}>
-            <TextInput
-              ref={textInputRef}
-              style={styles.input}
-              multiline={true}
-              placeholder="Create new group (eg. Home → Work)"
-              placeholderTextColor={colors.onSurfaceSecondary2}
-              // Update the ref value on every change.
-              onChangeText={(text) => (groupNameRef.current = text)}
-              // You can also use onSubmitEditing to immediately submit:
-              onSubmitEditing={(event) => handleCreateGroup(event.nativeEvent.text)}
-            />
-            <TouchableOpacity
-              style={styles.createButton}
-              onPress={() => handleCreateGroup(groupNameRef.current)}
-            >
-              <FontAwesome6 name="check" color={colors.onSurface} size={scale(14)} />
-            </TouchableOpacity>
+                <View style={styles.modalFooter}>
+                  <TextInput
+                    ref={textInputRef}
+                    style={styles.input}
+                    multiline={true}
+                    placeholder="Create new group (eg. Home → Work)"
+                    placeholderTextColor={colors.onSurfaceSecondary2}
+                    // Update the ref value on every change.
+                    onChangeText={(text) => (groupNameRef.current = text)}
+                    // You can also use onSubmitEditing to immediately submit:
+                    onSubmitEditing={(event) => handleCreateGroup(event.nativeEvent.text)}
+                  />
+                  <TouchableOpacity
+                    style={styles.createButton}
+                    onPress={() => handleCreateGroup(groupNameRef.current)}
+                  >
+                    <FontAwesome6 name="check" color={colors.onSurface} size={scale(14)} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+           
           </View>
-        </View>
-      </View>
+        </KeyboardAvoidingView> 
+      </TouchableWithoutFeedback>
+      
+      
     </Modal>
   );
 };

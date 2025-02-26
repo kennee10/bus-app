@@ -29,7 +29,7 @@ type LikedBusesContextType = {
   createGroup: (groupName: string) => Promise<void>;
   deleteGroup: (groupName: string) => Promise<void>;
   toggleIsArchived: (groupName: string) => Promise<void>;
-  reorderGroups: (newOrder: string[]) => Promise<void>;
+  // reorderGroups: (newOrder: string[]) => Promise<void>;
 };
 
 // Create Context
@@ -66,9 +66,9 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
   };
 
   // Reorder groups
-  const reorderGroups = async (newOrder: string[]) => {
-    await saveToStorage({ ...likedBusesData, order: newOrder });
-  }
+  // const reorderGroups = async (newOrder: string[]) => {
+  //   await saveToStorage({ ...likedBusesData, order: newOrder });
+  // }
 
   // Toggle like
   const toggleLike = async (groupName: string, busStopCode: string, serviceNo: string) => {
@@ -185,7 +185,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       createGroup, 
       deleteGroup, 
       toggleIsArchived,
-      reorderGroups
+      // reorderGroups
     }}>
       {children}
     </LikedBusesContext.Provider>

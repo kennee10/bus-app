@@ -131,7 +131,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
   return (
     <View style={styles.outerContainer}>
-      <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} style={styles.container}>
+      <TouchableOpacity onPress={() => {setIsCollapsed(!isCollapsed)}} style={styles.container}>
         {/* Upper Section */}
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
