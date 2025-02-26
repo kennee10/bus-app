@@ -19,7 +19,7 @@ interface BusModalProps {
   onClose: () => void;
 }
 
-const InfoModalComponent: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
+const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
   return (
     <Modal
       visible={isVisible}
@@ -352,4 +352,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InfoModalComponent;
+export default InfoModal;

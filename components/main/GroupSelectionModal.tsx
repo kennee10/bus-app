@@ -16,34 +16,33 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { colors, font, containerStyles } from "../../assets/styles/GlobalStyles";
 import { Platform } from "react-native";
+import { useLikedBuses } from "../context/likedBusesContext";
 
 type GroupSelectionModalProps = {
+  busNumber: string;
+  busStopCode: string;
   isVisible: boolean;
-  groups: Record<string, any>;
   onClose: () => void;
-  onToggleLike: (groupName: string) => Promise<void>;
-  onCreateGroup: (groupName: string) => Promise<void>;
-  onDeleteGroup: (groupName: string) => Promise<void>;
 };
 
 const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
+  busNumber,
+  busStopCode,
   isVisible,
-  groups,
   onClose,
-  onToggleLike,
-  onCreateGroup,
-  onDeleteGroup,
 }) => {
   // Use a ref to hold the current text without causing re-renders.
   const groupNameRef = useRef<string>("");
   // Use a ref for the TextInput component to clear its content after submission.
   const textInputRef = useRef<TextInput>(null);
 
+  const { groups, order, toggleLike, createGroup, deleteGroup } = useLikedBuses();
+
   const handleCreateGroup = async (groupName: string) => {
     const trimmedName = groupName.trim();
     if (trimmedName) {
-      await onCreateGroup(trimmedName); // Create group first
-      await onToggleLike(trimmedName);   // Then toggle the like for the bus
+      await createGroup(trimmedName); // Create group first
+      await toggleLike(trimmedName, busStopCode, busNumber);
       // Clear the TextInput field and reset the ref value.
       textInputRef.current?.clear();
       groupNameRef.current = "";
@@ -53,11 +52,24 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
   const handleDeleteGroup = (groupName: string) => {
     Alert.alert("Delete Group", `Are you sure you want to delete "${groupName}"?`, [
       { text: "Cancel", style: "cancel" },
-      { text: "Delete", onPress: async () => await onDeleteGroup(groupName), style: "destructive" },
+      { text: "Delete", onPress: async () => await deleteGroup(groupName), style: "destructive" },
     ]);
   };
 
   const groupNames = Object.keys(groups);
+
+  const unarchivedGroups = order;
+  const archivedGroups: string[] = Object.keys(groups).filter(
+    groupName => groups[groupName]?.isArchived
+  );
+  
+  const allGroups = [...unarchivedGroups, ...archivedGroups];
+
+  
+
+  const unarchivedGroupsOrder = order.filter(
+    groupName => !groups[groupName]?.isArchived
+  );
 
   return (
     <Modal
@@ -83,9 +95,9 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
                 </View>
 
                 <View style={styles.modalBody}>
-                  {groupNames.length > 0 ? (
+                  {allGroups.length > 0 ? (
                     <FlatList
-                      data={groupNames}
+                      data={allGroups}
                       keyExtractor={(item) => item}
                       style={styles.flatList}
                       renderItem={({ item }) => (
@@ -93,7 +105,7 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
                           <TouchableOpacity
                             style={styles.groupItemContent}
                             onPress={() => {
-                              onToggleLike(item);
+                              toggleLike(item, busStopCode, busNumber);
                               onClose(); // This closes the modal
                             }}
                           >

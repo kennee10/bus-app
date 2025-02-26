@@ -29,7 +29,6 @@ type LikedBusesContextType = {
   createGroup: (groupName: string) => Promise<void>;
   deleteGroup: (groupName: string) => Promise<void>;
   toggleIsArchived: (groupName: string) => Promise<void>;
-  // reorderGroups: (newOrder: string[]) => Promise<void>;
 };
 
 // Create Context
@@ -64,11 +63,6 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       console.error('Failed to save to storage:', error);
     }
   };
-
-  // Reorder groups
-  // const reorderGroups = async (newOrder: string[]) => {
-  //   await saveToStorage({ ...likedBusesData, order: newOrder });
-  // }
 
   // Toggle like
   const toggleLike = async (groupName: string, busStopCode: string, serviceNo: string) => {
@@ -152,28 +146,28 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
   };
 
   // Toggle isArchived
-    const toggleIsArchived = async (groupName: string) => {
-      if (!likedBusesData.groups[groupName]) return;
+  const toggleIsArchived = async (groupName: string) => {
+    if (!likedBusesData.groups[groupName]) return;
 
-      const wasArchived = likedBusesData.groups[groupName].isArchived;
-      const updatedGroups = {
-        ...likedBusesData.groups,
-        [groupName]: {
-          ...likedBusesData.groups[groupName],
-          isArchived: !wasArchived,
-        },
-      };
-
-      // Update order: Remove if archiving, add to end if unarchiving
-      const updatedOrder = wasArchived
-        ? [...likedBusesData.order, groupName] // Add back to the end when unarchived
-        : likedBusesData.order.filter((name) => name !== groupName); // Remove when archived
-
-      await saveToStorage({
-        groups: updatedGroups,
-        order: updatedOrder,
-      });
+    const wasArchived = likedBusesData.groups[groupName].isArchived;
+    const updatedGroups = {
+      ...likedBusesData.groups,
+      [groupName]: {
+        ...likedBusesData.groups[groupName],
+        isArchived: !wasArchived,
+      },
     };
+
+    // Update order: Remove if archiving, add to end if unarchiving
+    const updatedOrder = wasArchived
+      ? [...likedBusesData.order, groupName] // Add back to the end when unarchived
+      : likedBusesData.order.filter((name) => name !== groupName); // Remove when archived
+
+    await saveToStorage({
+      groups: updatedGroups,
+      order: updatedOrder,
+    });
+  };
 
 
   return (
@@ -185,7 +179,6 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       createGroup, 
       deleteGroup, 
       toggleIsArchived,
-      // reorderGroups
     }}>
       {children}
     </LikedBusesContext.Provider>

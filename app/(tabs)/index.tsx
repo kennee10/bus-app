@@ -17,7 +17,7 @@ import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles'
 import BusStopComponent from '../../components/main/BusStopComponent';
 import { useLikedBusStops } from "../../components/context/likedBusStopsContext";
 import { LocationWatcher } from "../../components/hooks/LocationWatcher";
-import InfoModalComponent from "../../components/main/InfoModalComponent";
+import InfoModal from "../../components/main/InfoModal";
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
 
 type BusStopData = {
@@ -250,7 +250,7 @@ const NearbyBusStopsPage = () => {
           </View>
         </View>
       
-        <InfoModalComponent 
+        <InfoModal 
           isVisible={isModalVisible} 
           onClose={() => setIsModalVisible(false)}
         />

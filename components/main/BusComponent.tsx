@@ -26,11 +26,10 @@ type BusComponentProps = {
   busStopCode: string;
   nextBuses: NextBusInfo[];
   isHearted: boolean;
-  // onHeartToggle: (groupName: string, busStopCode: string, serviceNo: string) => void;
 };
 
 const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, nextBuses, isHearted }) => {
-  const { groups, toggleLike, createGroup, deleteGroup } = useLikedBuses();
+  // const { toggleLike, createGroup, deleteGroup } = useLikedBuses();
   const [isModalVisible, setModalVisible] = useState(false);
 
   return (
@@ -58,12 +57,10 @@ const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, nex
       </View>
 
       <GroupSelectionModal
+        busNumber={busNumber}
+        busStopCode={busStopCode}
         isVisible={isModalVisible}
-        groups={groups}
         onClose={() => setModalVisible(false)}
-        onToggleLike={(groupName) => toggleLike(groupName, busStopCode, busNumber)}
-        onCreateGroup={createGroup}
-        onDeleteGroup={deleteGroup}
       />
     </View>
   );

@@ -15,10 +15,6 @@ import { colors, containerStyles, font } from "../../assets/styles/GlobalStyles"
 import { scale } from "react-native-size-matters";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
-// import DraggableFlatList, {
-//   DragEndParams,
-// } from 'react-native-draggable-flatlist';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -90,12 +86,6 @@ const LikedBusesPage = () => {
     fetchBusStopDetails();
   }, [groups]);
 
-  // const handleDragEnd = ({ data }: DragEndParams<string>) => {
-  //   const archivedGroups = order.filter(groupName => groups[groupName]?.isArchived);
-  //   const newOrder = [...data, ...archivedGroups];
-  //   reorderGroups(newOrder);
-  // };
-
   const handleDeleteGroup = (groupName: string) => {
     Alert.alert("Delete Group", `Delete "${groupName}"?`, [
       { text: "Cancel", style: "cancel" },
@@ -105,22 +95,14 @@ const LikedBusesPage = () => {
 
   const renderItem = ({
     item,
-    // drag,
-    // isActive,
   }: {
     item: string;
-    // drag: () => void;
-    // isActive: boolean;
   }) => {
     const groupData = groups[item];
     return (
       <View>
         <View style={styles.groupContainer}>
           <View style={styles.groupHeader}>
-            {/* <TouchableOpacity onPressIn={drag} style={styles.dragHandle}>
-              <Ionicons name="reorder-three-outline" size={scale(24)} color={colors.primary} />
-            </TouchableOpacity> */}
-
             <TouchableOpacity
               style={styles.groupTitleContainer}
               onPress={() => toggleGroupCollapse(item)}
