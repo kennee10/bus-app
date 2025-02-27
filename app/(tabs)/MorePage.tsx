@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView, TouchableWithoutFeedback } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView, TouchableWithoutFeedback, KeyboardAvoidingView, Platform } from "react-native";
 import { WebView } from "react-native-webview"; // Make sure to install: expo install react-native-webview
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -120,22 +120,24 @@ export default function App() {
         <TouchableWithoutFeedback onPress={() => setIsPayNowVisible(false)}>
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-              <View style={styles.modalContent}>
+              <View style={styles.bottomModalContainer}>
                 <View style={styles.modalHeader}>
-                  <Text style={styles.modalHeaderText}></Text>
-                  <TouchableOpacity onPress={() => setIsPayNowVisible(false)}>
-                    <Ionicons name="close-circle" style={styles.modalCrossIcon} />
+                  <Text style={styles.modalTitle}>PayNow QR</Text>
+                  <TouchableOpacity onPress={() => setIsPayNowVisible(false)} style={styles.closeButton}>
+                    <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
                   </TouchableOpacity>
                 </View>
-                <Image source={paynowQR} style={styles.image} />
-                <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>
-                  Screenshot and Scan this QR code in your preferred Bank app
-                </Text>
+                <View style={styles.modalDivider} />
+                <View style={styles.payNowImageContainer}>
+                  <Image source={paynowQR} style={styles.image} />
+                  <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>
+                    Screenshot and Scan this QR code in your preferred Bank app
+                  </Text>
+                </View>
               </View>
             </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
-        
       </Modal>
 
       {/* MRT Map Modal via WebView */}
@@ -145,19 +147,28 @@ export default function App() {
         animationType="fade"
         onRequestClose={() => setIsMRTMapVisible(false)}
       >
-        <View style={styles.modalOverlayMRT}>
-          <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
-            <Ionicons name="close-circle" style={styles.MRTmodalCrossIcon} />
-          </TouchableOpacity>
-          {svgHtml ? (
-            <WebView
-              source={{ html: svgHtml }}
-              style={{ flex: 1, width: "100%" }}
-              scalesPageToFit={true}
-            />
-          ) : (
-            <Text style={containerStyles.globalTextMessage}>Loading SVG...</Text>
-          )}
+        <View style={styles.modalOverlay}>
+          <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer, {padding: 0}]}>
+            <View style={[styles.modalHeader, {paddingTop: scale(10), paddingHorizontal: scale(10)}]}>
+              <Text style={styles.modalTitle}>MRT Map</Text>
+              <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
+                <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.webViewContainer}>
+              {svgHtml ? (
+                <WebView
+                  source={{ html: svgHtml }}
+                  style={{ flex: 1, width: "100%" }}
+                  scalesPageToFit={true}
+                  javaScriptEnabled={true}
+                  domStorageEnabled={true}
+                />
+              ) : (
+                <Text style={containerStyles.globalTextMessage}>Loading SVG...</Text>
+              )}
+            </View>
+          </View>
         </View>
       </Modal>
     </View>
@@ -176,7 +187,7 @@ const styles = StyleSheet.create({
   image: {
     width: scale(180),
     height: scale(180),
-    marginBottom: scale(20)
+    marginBottom: scale(10)
   },
   oneContainer: {
     padding: scale(12),
@@ -191,56 +202,49 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: scale(10),
   },
-  modalOverlayMRT: {
-    flex: 1,
-    backgroundColor: colors.modalBackgroundOpacity,
-    justifyContent: "center",
-  },
   modalOverlay: {
     flex: 1,
-    backgroundColor: colors.modalBackgroundOpacity,
-    justifyContent: "center",
-    paddingBottom: scale(100),
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "flex-end", // Position at bottom
   },
-  modalContent: {
-    width: "75%",
+  bottomModalContainer: {
     backgroundColor: colors.surface,
-    borderRadius: scale(6),
-    borderWidth: scale(1),
-    borderColor: colors.borderToPress2,
-    padding: scale(4),
-    opacity: 0.97,
-    alignItems: "center",
+    borderTopLeftRadius: scale(12),
+    borderTopRightRadius: scale(12),
+    padding: scale(10),
     elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    alignSelf: "center",
-    marginTop: "20%",
+  },
+  mrtMapModalContainer: {
+    height: "100%", // Increased height for better map viewing
+    paddingBottom: 0, // Remove bottom padding to maximize space
+  },
+  webViewContainer: {
+    flex: 1,
+    width: "100%",
+    marginTop: scale(5),
   },
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: scale(6),
   },
-  modalHeaderText: {
+  modalTitle: {
+    fontSize: scale(16),
+    fontFamily: font.bold,
+    color: colors.primary,
     flex: 1,
   },
-  modalCrossIcon: {
-    fontSize: scale(25),
-    color: colors.secondary2,
-    paddingTop: scale(5),
-    paddingRight: scale(5),
-    paddingBottom: scale(5),
-  },
-  MRTmodalCrossIcon: {
-    fontSize: scale(35),
-    color: colors.primary,
-  },
   closeButton: {
-    position: "absolute",
-    top: scale(40),
-    right: scale(8),
-    zIndex: 1,
+    padding: scale(4),
+  },
+  modalDivider: {
+    height: 1,
+    backgroundColor: colors.borderToPress,
+    marginVertical: scale(10),
+  },
+  payNowImageContainer: {
+    alignItems: "center",
+    padding: scale(10),
   },
 });

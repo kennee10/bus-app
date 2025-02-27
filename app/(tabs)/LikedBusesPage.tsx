@@ -79,8 +79,8 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
               <TouchableOpacity onPress={onArchivePress} style={styles.modalMenuItem}>
                 <Ionicons
                   name={isArchived ? "eye-off" : "eye"}
-                  size={scale(20)}
-                  color={colors.primary}
+                  size={scale(18)}
+                  color={colors.onSurface}
                   style={styles.modalMenuIcon}
                 />
                 <Text style={styles.modalMenuItemText}>
@@ -91,8 +91,8 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
               <TouchableOpacity onPress={onRenamePress} style={styles.modalMenuItem}>
                 <Ionicons
                   name="create-outline"
-                  size={scale(20)}
-                  color={colors.primary}
+                  size={scale(18)}
+                  color={colors.onSurface}
                   style={styles.modalMenuIcon}
                 />
                 <Text style={styles.modalMenuItemText}>Rename</Text>
@@ -101,11 +101,11 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
               <TouchableOpacity onPress={onDeletePress} style={styles.modalMenuItem}>
                 <Ionicons
                   name="trash-outline"
-                  size={scale(20)}
-                  color={colors.primary}
+                  size={scale(18)}
+                  color={colors.accent3}
                   style={styles.modalMenuIcon}
                 />
-                <Text style={styles.modalMenuItemText}>Delete</Text>
+                <Text style={[styles.modalMenuItemText, {color: colors.accent3}]}>Delete</Text>
               </TouchableOpacity>
             </View>
           </TouchableWithoutFeedback>
@@ -245,7 +245,7 @@ const GroupItem = memo(({
     try {
       // Only show toast if rename is successful
       await renameGroup(groupName, newName);
-      showToast(`Group renamed to "${newName}"`);
+      
     } catch (error) {
       console.error("Failed to rename group:", error);
     } finally {
@@ -467,7 +467,7 @@ const LikedBusesPage = () => {
             keyExtractor={(item) => item}
             renderItem={renderGroupItem}
             contentContainerStyle={{ paddingBottom: scale(20) }}
-            keyboardShouldPersistTaps="handled"
+            // keyboardShouldPersistTaps="handled"
           />
         )}
       </View>
@@ -537,10 +537,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   groupContainer: {
-    marginBottom: scale(10),
+    marginBottom: scale(5),
     borderRadius: scale(4),
     overflow: "hidden",
     backgroundColor: colors.surface3,
+    borderWidth: scale(0.5),
+    borderColor: colors.borderToPress2,
   },
   groupHeader: {
     flexDirection: "row",
@@ -612,7 +614,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: scale(6),
-    paddingVertical: scale(4),
+    // paddingVertical: scale(4),
   },
   modalTitle: {
     fontSize: scale(16),
@@ -631,35 +633,38 @@ const styles = StyleSheet.create({
   },
   modalDivider: {
     height: 1,
-    backgroundColor: colors.onSurfaceSecondary,
+    backgroundColor: colors.borderToPress,
     marginVertical: scale(10),
-    opacity: 0.2,
   },
   modalMenuItem: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: scale(12),
+    padding: scale(10),
+    marginBottom: scale(5),
+    borderRadius: scale(4),
+    backgroundColor: colors.surface3,
+    borderWidth: scale(0.5),
+    borderColor: colors.borderToPress,
   },
   modalMenuIcon: {
-    marginRight: scale(12),
-    width: scale(24),
+    marginRight: scale(8),
+    paddingHorizontal: scale(6),
     textAlign: "center",
   },
   modalMenuItemText: {
-    fontSize: scale(16),
+    fontSize: scale(14.5),
     fontFamily: font.medium,
-    color: colors.primary,
+    color: colors.onSurface,
   },
   // Text input and button styles for rename modal
   modalTextInput: {
     fontSize: scale(16),
     fontFamily: font.semiBold,
     color: colors.primary,
-    borderWidth: 1,
-    borderColor: colors.onSurfaceSecondary,
+    borderWidth: scale(1),
+    borderColor: colors.borderToPress,
     borderRadius: scale(8),
     padding: scale(12),
-    marginVertical: scale(10),
   },
   modalButtonsContainer: {
     flexDirection: "row",

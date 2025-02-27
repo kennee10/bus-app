@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+import { Alert, ToastAndroid, } from 'react-native';
 
 
 interface LikedBusesData {
@@ -43,6 +43,11 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
     order: ["Pinned"]
   });
 
+  // Toast helper function
+  const showToast = (message: string) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  };
+
   // Load liked buses from AsyncStorage on initial render
   useEffect(() => {
     const loadLikedBuses = async () => {
@@ -78,6 +83,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       return;
     }
 
+    showToast(`bus liked`);
     // for 1 group
     const updatedBusStops = {
       ...group.busStops, // other bus stop codes
@@ -100,6 +106,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
   const toggleUnlike = async (groupName: string, busStopCode: string, serviceNo: string) => {
     if (!likedBusesData.groups[groupName]) return;
 
+    // showToast(`bus unliked`);
     const updatedBusStops = { ...likedBusesData.groups[groupName].busStops };
     updatedBusStops[busStopCode] = updatedBusStops[busStopCode].filter(s => s !== serviceNo);
     
@@ -122,7 +129,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       Alert.alert('Duplicated Group', `Group "${groupName}" already exists.`);
       return;
     }
-
+    showToast(`group created`);
     const updatedGroups = {
       ...likedBusesData.groups,
       [groupName]:{ isArchived: false, busStops: {} },
@@ -152,7 +159,9 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       Alert.alert('Duplicated Group', `Group "${groupName}" already exists.`);
       return;
     }
-  
+    
+    showToast(`added to "${groupName}"`);
+    
     const updatedGroups = {
       ...likedBusesData.groups,
       [groupName]: { isArchived: false, busStops: { [busStopCode]: [serviceNo] } },
@@ -201,7 +210,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       return;
     }
     if (groupName === newGroupName) {
-      Alert.alert("Same Group Name", "Group name cannot be the same.");
+      Alert.alert("Same Group Name", "Same group name submitted.");
       return;
     }
     // Check if the new name is already taken
@@ -210,6 +219,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       return;
     }
     
+    showToast(`"${newGroupName}" renamed`);
     // Create updated groups object
     const updatedGroups = { ...likedBusesData.groups };
     const groupData = updatedGroups[groupName];
