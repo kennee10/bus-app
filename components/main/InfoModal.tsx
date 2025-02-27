@@ -30,13 +30,14 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-            <View style={styles.modalContent}>
+            <View style={styles.bottomModalContainer}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalHeaderText}></Text>
-                <TouchableOpacity onPress={onClose}>
-                  <Ionicons name="close-circle" style={styles.modalCrossIcon}/>
+                <Text style={styles.modalTitle}>Info</Text>
+                <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                  <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
                 </TouchableOpacity>
               </View>
+              <View style={styles.modalDivider} />
 
               {/* Wrap the content with ScrollView */}
               <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -241,10 +242,8 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
               </ScrollView>
             </View>
           </TouchableWithoutFeedback>
-          
         </View>
       </TouchableWithoutFeedback>
-      
     </Modal>
   );
 };
@@ -253,10 +252,8 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: "column",
     gap: scale(12.5),
-    paddingLeft: scale(20),
-    paddingRight: scale(20),
+    paddingHorizontal: scale(10),
     paddingBottom: scale(20),
-    paddingTop: scale(5),
   },
   oneInfoContainer: {
     flexDirection: "column",
@@ -314,39 +311,36 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: colors.modalBackgroundOpacity,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: colors.modalOverlayBackgroundColor,
+    justifyContent: "flex-end",
   },
-  modalContent: {
-    width: "90%",
+  bottomModalContainer: {
     backgroundColor: colors.surface,
-    borderRadius: scale(6),
-    borderWidth: scale(1),
-    borderColor: colors.borderToPress2,
-    padding: scale(4),
-    opacity: 0.97,
+    borderTopLeftRadius: scale(12),
+    borderTopRightRadius: scale(12),
+    padding: scale(10),
     elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
   },
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: scale(6),
   },
-  modalHeaderText: {
+  modalTitle: {
+    fontSize: scale(16),
+    fontFamily: font.bold,
+    color: colors.primary,
     flex: 1,
   },
-  modalCrossIcon: {
-    fontSize: scale(25),
-    color: colors.secondary2,
-    paddingTop: scale(5),
-    paddingRight: scale(5),
-    paddingBottom: scale(5),
+  closeButton: {
+    padding: scale(4),
   },
-  // Optional: if you want to adjust the ScrollView content container styling
+  modalDivider: {
+    height: 1,
+    backgroundColor: colors.borderToPress,
+    marginVertical: scale(10),
+  },
   scrollContainer: {
     flexGrow: 1,
   },

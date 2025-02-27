@@ -467,7 +467,7 @@ const LikedBusesPage = () => {
             keyExtractor={(item) => item}
             renderItem={renderGroupItem}
             contentContainerStyle={{ paddingBottom: scale(20) }}
-            // keyboardShouldPersistTaps="handled"
+            keyboardShouldPersistTaps="handled"
           />
         )}
       </View>
@@ -495,7 +495,7 @@ const LikedBusesPage = () => {
             <TouchableWithoutFeedback>
               <View style={[styles.bottomModalContainer, styles.archivedModalContainer]}>
                 <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitleArchived}>Archived Groups</Text>
+                  <Text style={styles.modalTitle}>Archived Groups</Text>
                   <TouchableOpacity onPress={closeArchivedModal} style={styles.closeButton}>
                     <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
                   </TouchableOpacity>
@@ -514,7 +514,6 @@ const LikedBusesPage = () => {
                     data={archivedGroupsOrder}
                     keyExtractor={(item) => item}
                     renderItem={renderGroupItem}
-                    contentContainerStyle={{ paddingHorizontal: scale(7) }}
                     keyboardShouldPersistTaps="handled"
                   />
                 )}
@@ -596,7 +595,7 @@ const styles = StyleSheet.create({
   // Modal styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: colors.modalOverlayBackgroundColor,
     justifyContent: "flex-end", // Position at bottom
   },
   bottomModalContainer: {
@@ -614,18 +613,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: scale(6),
-    // paddingVertical: scale(4),
   },
   modalTitle: {
     fontSize: scale(16),
     fontFamily: font.bold,
     color: colors.primary,
-    flex: 1,
-  },
-  modalTitleArchived: {
-    fontSize: scale(16),
-    fontFamily: font.bold,
-    color: colors.onSurface,
     flex: 1,
   },
   closeButton: {
@@ -658,8 +650,8 @@ const styles = StyleSheet.create({
   },
   // Text input and button styles for rename modal
   modalTextInput: {
-    fontSize: scale(16),
-    fontFamily: font.semiBold,
+    fontSize: scale(14.5),
+    fontFamily: font.medium,
     color: colors.primary,
     borderWidth: scale(1),
     borderColor: colors.borderToPress,
@@ -672,10 +664,10 @@ const styles = StyleSheet.create({
     marginTop: scale(10),
   },
   modalButton: {
-    paddingVertical: scale(8),
-    paddingHorizontal: scale(16),
+    paddingVertical: scale(6),
+    paddingHorizontal: scale(12),
     borderRadius: scale(4),
-    marginLeft: scale(10),
+    marginLeft: scale(2),
   },
   primaryButton: {
     backgroundColor: colors.primary,

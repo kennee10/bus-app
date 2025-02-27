@@ -39,12 +39,11 @@ export const colors = {
     borderToPress2: "rgba(255, 255, 255, 0.1)",
     busIcon: "powderblue",
 
-
     info: 'gray',
     warning: '#f99a07',
     error: '#FF6859',
 
-    modalBackgroundOpacity: "rgba(0, 0, 0, 0.45)",
+    modalOverlayBackgroundColor: "rgba(0,0,0,0.8)",
 
   };
   
