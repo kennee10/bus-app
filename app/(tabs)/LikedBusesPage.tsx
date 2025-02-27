@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, memo, useMemo } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,11 @@ import {
   Alert,
   Modal,
   FlatList,
+  TextInput,
+  TouchableWithoutFeedback,
+  ToastAndroid,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useLikedBuses } from "../../components/context/likedBusesContext";
@@ -25,16 +30,339 @@ type BusStopWithDist = {
   Distance: number;
 };
 
+type BottomModalMenuProps = {
+  isVisible: boolean;
+  isArchived: boolean;
+  groupName: string;
+  onClose: () => void;
+  onArchivePress: () => void;
+  onRenamePress: () => void;
+  onDeletePress: () => void;
+};
+
+type RenameModalProps = {
+  isVisible: boolean;
+  initialName: string;
+  onClose: () => void;
+  onSave: (newName: string) => void;
+};
+
+// Memoized modal components to prevent unnecessary re-renders
+const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
+  isVisible,
+  isArchived,
+  groupName,
+  onClose,
+  onArchivePress,
+  onRenamePress,
+  onDeletePress,
+}) => {
+  return (
+    <Modal
+      visible={isVisible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback>
+            <View style={styles.bottomModalContainer}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>{groupName}</Text>
+                <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                  <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.modalDivider} />
+              
+              <TouchableOpacity onPress={onArchivePress} style={styles.modalMenuItem}>
+                <Ionicons
+                  name={isArchived ? "eye-off" : "eye"}
+                  size={scale(20)}
+                  color={colors.primary}
+                  style={styles.modalMenuIcon}
+                />
+                <Text style={styles.modalMenuItemText}>
+                  {isArchived ? "Unarchive" : "Archive"}
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={onRenamePress} style={styles.modalMenuItem}>
+                <Ionicons
+                  name="create-outline"
+                  size={scale(20)}
+                  color={colors.primary}
+                  style={styles.modalMenuIcon}
+                />
+                <Text style={styles.modalMenuItemText}>Rename</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={onDeletePress} style={styles.modalMenuItem}>
+                <Ionicons
+                  name="trash-outline"
+                  size={scale(20)}
+                  color={colors.primary}
+                  style={styles.modalMenuIcon}
+                />
+                <Text style={styles.modalMenuItemText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+});
+
+const RenameBottomModal: React.FC<RenameModalProps> = memo(({
+  isVisible,
+  initialName,
+  onClose,
+  onSave,
+}) => {
+  const [name, setName] = useState(initialName);
+  const [inputRef, setInputRef] = useState<TextInput | null>(null);
+
+  // Reset the name state when modal becomes visible and focus the input
+  useEffect(() => {
+    if (isVisible) {
+      setName(initialName);
+      // Use a small timeout to ensure modal is fully visible before focusing
+      const timer = setTimeout(() => {
+        if (inputRef) {
+          inputRef.focus();
+        }
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, initialName, inputRef]);
+
+  const handleSave = useCallback(() => {
+    if (name.trim()) {
+      // Keyboard.dismiss();
+      onSave(name.trim());
+    }
+  }, [name, onSave]);
+
+  return (
+    <Modal
+      visible={isVisible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1 }}
+      >
+        <TouchableWithoutFeedback onPress={onClose}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={styles.bottomModalContainer}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>Rename Group</Text>
+                  <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                    <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.modalDivider} />
+                
+                <TextInput
+                  ref={(ref) => setInputRef(ref)}
+                  style={styles.modalTextInput}
+                  multiline={true}
+                  value={name}
+                  onChangeText={setName}
+                  placeholder="Enter new name"
+                  placeholderTextColor={colors.onSurfaceSecondary}
+                  returnKeyType="done"
+                  onSubmitEditing={handleSave}
+                />
+                
+                <View style={styles.modalButtonsContainer}>
+                  <TouchableOpacity onPress={onClose} style={styles.modalButton}>
+                    <Text style={styles.modalButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    onPress={handleSave}
+                    style={[styles.modalButton, styles.primaryButton]}
+                    disabled={!name.trim()}
+                  >
+                    <Text style={[styles.modalButtonText, styles.primaryButtonText]}>Save</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </Modal>
+  );
+});
+
+// Memoized BusStopComponent to prevent re-renders
+const MemoizedLikedBusesBusStopComponent = memo(LikedBusesBusStopComponent);
+
+// Toast helper function
+const showToast = (message: string) => {
+  ToastAndroid.show(message, ToastAndroid.SHORT);
+};
+
+// Memoized GroupItem component
+const GroupItem = memo(({ 
+  groupName, 
+  busStopDetails, 
+  collapsedGroups, 
+  toggleGroupCollapse,
+  toggleIsArchived,
+  renameGroup,
+  deleteGroup
+}: { 
+  groupName: string;
+  busStopDetails: { [key: string]: BusStopWithDist };
+  collapsedGroups: { [key: string]: boolean };
+  toggleGroupCollapse: (groupName: string) => void;
+  toggleIsArchived: (groupName: string) => Promise<void>;
+  renameGroup: (oldName: string, newName: string) => Promise<void>;
+  deleteGroup: (groupName: string) => Promise<void>;
+}) => {
+  const { groups } = useLikedBuses();
+  const groupData = groups[groupName];
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
+
+  const toggleMenu = useCallback(() => setMenuVisible((prev) => !prev), []);
+  const closeMenu = useCallback(() => setMenuVisible(false), []);
+
+  const handleRename = useCallback(() => {
+    closeMenu();
+    setIsRenaming(true);
+  }, [closeMenu]);
+
+  const handleSaveRename = useCallback(async (newName: string) => {
+    try {
+      // Only show toast if rename is successful
+      await renameGroup(groupName, newName);
+      showToast(`Group renamed to "${newName}"`);
+    } catch (error) {
+      console.error("Failed to rename group:", error);
+    } finally {
+      setIsRenaming(false);
+    }
+  }, [groupName, renameGroup]);
+
+  const handleArchiveToggle = useCallback(async () => {
+    try {
+      await toggleIsArchived(groupName);
+      showToast(groupData?.isArchived ? `"${groupName}" unarchived` : `"${groupName}" archived`);
+    } catch (error) {
+      console.error("Failed to toggle archive status:", error);
+    } finally {
+      closeMenu();
+    }
+  }, [closeMenu, groupData?.isArchived, groupName, toggleIsArchived]);
+
+  const handleDelete = useCallback(() => {
+    Alert.alert("Delete Group", `Delete "${groupName}"?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        onPress: async () => {
+          try {
+            await deleteGroup(groupName);
+            showToast(`"${groupName}" deleted`);
+          } catch (error) {
+            console.error("Failed to delete group:", error);
+          }
+        },
+        style: "destructive",
+      },
+    ]);
+    closeMenu();
+  }, [closeMenu, deleteGroup, groupName]);
+
+  const handleToggleCollapse = useCallback(() => {
+    toggleGroupCollapse(groupName);
+  }, [groupName, toggleGroupCollapse]);
+
+  return (
+    <View style={styles.groupContainer}>
+      <View style={styles.groupHeader}>
+        {/* COLLAPSE */}
+        <TouchableOpacity
+          style={styles.groupTitleContainer}
+          onPress={handleToggleCollapse}
+        >
+          <View style={styles.arrowContainer}>
+            <Ionicons
+              name={collapsedGroups[groupName] ? "chevron-forward" : "chevron-down"}
+              size={scale(18)}
+              color={colors.primary}
+            />
+          </View>
+          {/* GROUP NAME */}
+          <Text style={styles.groupTitle}>{groupName}</Text>
+          {/* MENU */}
+        <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
+          <Ionicons
+            name="ellipsis-horizontal"
+            size={scale(18)}
+            color={colors.onSurfaceSecondary2}
+          />
+        </TouchableOpacity>
+        </TouchableOpacity>
+        
+        
+        {/* Bottom slide up modal menu */}
+        <BottomModalMenu
+          isVisible={menuVisible}
+          isArchived={groupData?.isArchived ?? false}
+          groupName={groupName}
+          onClose={closeMenu}
+          onArchivePress={handleArchiveToggle}
+          onRenamePress={handleRename}
+          onDeletePress={handleDelete}
+        />
+
+        {/* Bottom slide up rename modal */}
+        <RenameBottomModal
+          isVisible={isRenaming}
+          initialName={groupName}
+          onClose={() => setIsRenaming(false)}
+          onSave={handleSaveRename}
+        />
+      </View>
+      {!collapsedGroups[groupName] &&
+        (Object.keys(groupData?.busStops || {}).length > 0 ? (
+          Object.entries(groupData?.busStops || {}).map(([busStopCode, likedServices]) => (
+            <MemoizedLikedBusesBusStopComponent
+              key={busStopCode}
+              busStopCode={busStopCode}
+              groupName={groupName}
+              likedServices={likedServices}
+              busStopDetails={busStopDetails[busStopCode]}
+            />
+          ))
+        ) : (
+          <View style={styles.noLikedBusesInGroupTextWrapper}>
+            <Text style={styles.noLikedBusesInGroupText}>
+              No liked buses in this group
+            </Text>
+          </View>
+        ))}
+    </View>
+  );
+});
+
 const LikedBusesPage = () => {
-  const { groups, order, deleteGroup, toggleIsArchived } = useLikedBuses();
+  const { groups, order, deleteGroup, toggleIsArchived, renameGroup } = useLikedBuses();
   const [collapsedGroups, setCollapsedGroups] = useState<{ [key: string]: boolean }>({});
   const [busStopDetails, setBusStopDetails] = useState<{ [key: string]: BusStopWithDist }>({});
   const [archivedModalVisible, setArchivedModalVisible] = useState(false);
-
-  const unarchivedGroupsOrder = order.filter(
-    groupName => !groups[groupName]?.isArchived
-  );
-
+  
+  // Load collapsed state from storage
   useEffect(() => {
     const loadCollapsedState = async () => {
       try {
@@ -42,26 +370,30 @@ const LikedBusesPage = () => {
         if (savedState) {
           setCollapsedGroups(JSON.parse(savedState));
         } else {
+          // Initialize with all groups collapsed
           const initialState = Object.fromEntries(
-            unarchivedGroupsOrder.map(groupName => [groupName, true])
+            order.map((name) => [name, true])
           );
           setCollapsedGroups(initialState);
+          AsyncStorage.setItem("groupCollapseState", JSON.stringify(initialState));
         }
       } catch (error) {
         console.error("Failed to load collapsed state", error);
       }
     };
     loadCollapsedState();
-  }, [groups, order]);
+  }, [order]);
 
-  const toggleGroupCollapse = async (groupName: string) => {
+  // Memoized toggle function to prevent re-renders
+  const toggleGroupCollapse = useCallback(async (groupName: string) => {
     setCollapsedGroups((prev) => {
       const newState = { ...prev, [groupName]: !prev[groupName] };
       AsyncStorage.setItem("groupCollapseState", JSON.stringify(newState));
       return newState;
     });
-  };
+  }, []);
 
+  // Fetch bus stop details 
   useEffect(() => {
     const fetchBusStopDetails = async () => {
       try {
@@ -73,10 +405,13 @@ const LikedBusesPage = () => {
         });
         if (busStopCodes.size > 0) {
           const details = await getBusStopsDetails(Array.from(busStopCodes));
-          const detailsMap = details.reduce((acc, busStop) => ({
-            ...acc,
-            [busStop.BusStopCode]: busStop,
-          }), {});
+          const detailsMap = details.reduce(
+            (acc, busStop) => ({
+              ...acc,
+              [busStop.BusStopCode]: busStop,
+            }),
+            {}
+          );
           setBusStopDetails(detailsMap);
         }
       } catch (error) {
@@ -86,82 +421,35 @@ const LikedBusesPage = () => {
     fetchBusStopDetails();
   }, [groups]);
 
-  const handleDeleteGroup = (groupName: string) => {
-    Alert.alert("Delete Group", `Delete "${groupName}"?`, [
-      { text: "Cancel", style: "cancel" },
-      { text: "Delete", onPress: async () => await deleteGroup(groupName), style: "destructive" },
-    ]);
-  };
+  // Memoized list of unarchived groups
+  const unarchivedGroupsOrder = useMemo(() => 
+    order.filter((groupName) => !groups[groupName]?.isArchived),
+    [groups, order]
+  );
 
-  const renderItem = ({
-    item,
-  }: {
-    item: string;
-  }) => {
-    const groupData = groups[item];
-    return (
-      <View>
-        <View style={styles.groupContainer}>
-          <View style={styles.groupHeader}>
-            <TouchableOpacity
-              style={styles.groupTitleContainer}
-              onPress={() => toggleGroupCollapse(item)}
-            >
-              <View style={styles.arrowContainer}>
-                <Ionicons
-                  name={collapsedGroups[item] ? "chevron-forward" : "chevron-down"}
-                  size={scale(18)}
-                  color={colors.primary}
-                />
-              </View>
-              <Text style={styles.groupTitle}>{item}</Text>
-            </TouchableOpacity>
+  // Memoized list of archived groups
+  const archivedGroupsOrder = useMemo(
+    () => Object.keys(groups).filter(groupName => groups[groupName]?.isArchived),
+    [groups]  // Only depend on groups, not order
+  );
 
-            <TouchableOpacity
-              style={styles.archiveButton}
-              onPress={() => toggleIsArchived(item)}
-            >
-              <Ionicons
-                name={groupData?.isArchived ? "eye-off" : "eye"}
-                size={scale(18)}
-                color={colors.onSurfaceSecondary2}
-              />
-            </TouchableOpacity>
+  // Memoized render item function for groups
+  const renderGroupItem = useCallback(({ item }: { item: string }) => (
+    <GroupItem 
+      groupName={item} 
+      busStopDetails={busStopDetails}
+      collapsedGroups={collapsedGroups}
+      toggleGroupCollapse={toggleGroupCollapse}
+      toggleIsArchived={toggleIsArchived}
+      renameGroup={renameGroup}
+      deleteGroup={deleteGroup}
+    />
+  ), [busStopDetails, collapsedGroups, toggleGroupCollapse, toggleIsArchived, renameGroup, deleteGroup]);
 
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={() => handleDeleteGroup(item)}
-            >
-              <Ionicons
-                name="trash-outline"
-                size={scale(18)}
-                color={colors.onSurfaceSecondary2}
-              />
-            </TouchableOpacity>
-          </View>
-
-          {!collapsedGroups[item] &&
-            (Object.keys(groupData?.busStops || {}).length > 0 ? (
-              Object.entries(groupData?.busStops || {}).map(([busStopCode, likedServices]) => (
-                <LikedBusesBusStopComponent
-                  key={busStopCode}
-                  busStopCode={busStopCode}
-                  groupName={item}
-                  likedServices={likedServices}
-                  busStopDetails={busStopDetails[busStopCode]}
-                />
-              ))
-            ) : (
-              <View style={styles.noLikedBusesInGroupTextWrapper}>
-                <Text style={styles.noLikedBusesInGroupText}>
-                  No liked buses in this group
-                </Text>
-              </View>
-            ))}
-        </View>
-      </View>
-    );
-  };
+  // Close modal handler
+  const closeArchivedModal = useCallback(() => {
+    setArchivedModalVisible(false);
+  }, []);
 
   return (
     <View style={containerStyles.pageContainer}>
@@ -169,19 +457,18 @@ const LikedBusesPage = () => {
         {unarchivedGroupsOrder.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Text style={containerStyles.globalInfoTextMessage}>
-              You haven't liked any buses
+              You haven't liked any buses /{"\n"}
+              groups are in archive
             </Text>
           </View>
         ) : (
-          // <GestureHandlerRootView style={{ flex: 1 }}>
-            <FlatList
-              data={unarchivedGroupsOrder}
-              keyExtractor={(item) => item}
-              renderItem={renderItem}
-              // onDragEnd={handleDragEnd}
-              // activationDistance={20}
-              contentContainerStyle={{ paddingBottom: scale(20) }}
-            />
+          <FlatList
+            data={unarchivedGroupsOrder}
+            keyExtractor={(item) => item}
+            renderItem={renderGroupItem}
+            contentContainerStyle={{ paddingBottom: scale(20) }}
+            keyboardShouldPersistTaps="handled"
+          />
         )}
       </View>
 
@@ -189,104 +476,52 @@ const LikedBusesPage = () => {
         style={styles.archivedGroupsButton}
         onPress={() => setArchivedModalVisible(true)}
       >
-        <Ionicons name="eye-off" size={scale(24)} color={colors.onSurfaceSecondary2} />
+        <Ionicons
+          name="eye-off"
+          size={scale(24)}
+          color={colors.onSurfaceSecondary2}
+        />
       </TouchableOpacity>
 
+      {/* Archived Groups Modal */}
       <Modal
         visible={archivedModalVisible}
         animationType="fade"
-        onRequestClose={() => setArchivedModalVisible(false)}
+        transparent
+        onRequestClose={closeArchivedModal}
       >
-        <View style={containerStyles.pageContainer}>
-          <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
-            <View style={styles.modalHeader}>
-              <TouchableOpacity
-                style={styles.modalBackButton}
-                onPress={() => setArchivedModalVisible(false)}
-              >
-                <Ionicons name="arrow-back" style={styles.modalBackIcon}/>
-              </TouchableOpacity>
-              <Text style={styles.modalHeaderText}>Archived Groups</Text>
-              <TouchableOpacity
-                style={styles.modalCloseButton}
-                onPress={() => setArchivedModalVisible(false)}
-              >
-                <Ionicons name="close" size={scale(15)}/>
-              </TouchableOpacity>
-            </View>
-
-            {Object.keys(groups).filter(groupName => groups[groupName]?.isArchived).length === 0 ? (
-              <View style={styles.emptyContainer}>
-                <Text style={containerStyles.globalInfoTextMessage}>No archived groups</Text>
+        <TouchableWithoutFeedback onPress={closeArchivedModal}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.bottomModalContainer, styles.archivedModalContainer]}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitleArchived}>Archived Groups</Text>
+                  <TouchableOpacity onPress={closeArchivedModal} style={styles.closeButton}>
+                    <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.modalDivider} />
+                
+                {archivedGroupsOrder.length === 0 ? (
+                  <View style={styles.emptyContainerArchived}>
+                    <Text style={[containerStyles.globalInfoTextMessage]}>
+                      No archived groups
+                    </Text>
+                  </View>
+                    
+                ) : (
+                  <FlatList
+                    data={archivedGroupsOrder}
+                    keyExtractor={(item) => item}
+                    renderItem={renderGroupItem}
+                    contentContainerStyle={{ paddingHorizontal: scale(7) }}
+                    keyboardShouldPersistTaps="handled"
+                  />
+                )}
               </View>
-            ) : (
-              <FlatList
-                data={Object.keys(groups).filter(groupName => groups[groupName]?.isArchived)}
-                keyExtractor={(groupName) => groupName}
-                renderItem={({ item }) => {
-                  const groupData = groups[item];
-                  return (
-                    <View style={styles.groupContainer}>
-                      <View style={styles.groupHeader}>
-                        <TouchableOpacity
-                          style={styles.groupTitleContainer}
-                          onPress={() => toggleGroupCollapse(item)}
-                        >
-                          <View style={styles.arrowContainer}>
-                            <Ionicons
-                              name={collapsedGroups[item] ? "chevron-forward" : "chevron-down"}
-                              size={scale(18)}
-                              color={colors.primary}
-                            />
-                          </View>
-                          <Text style={styles.groupTitle}>{item}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={styles.archiveButton}
-                          onPress={() => toggleIsArchived(item)}
-                        >
-                          <Ionicons
-                            name={groupData?.isArchived ? "eye-off" : "eye"}
-                            size={scale(18)}
-                            color={colors.onSurfaceSecondary2}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={styles.deleteButton}
-                          onPress={() => handleDeleteGroup(item)}
-                        >
-                          <Ionicons
-                            name="trash-outline"
-                            size={scale(18)}
-                            color={colors.onSurfaceSecondary2}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                      {!collapsedGroups[item] &&
-                        (Object.keys(groupData?.busStops || {}).length > 0 ? (
-                          Object.entries(groupData?.busStops || {}).map(([busStopCode, likedServices]) => (
-                            <LikedBusesBusStopComponent
-                              key={busStopCode}
-                              busStopCode={busStopCode}
-                              groupName={item}
-                              likedServices={likedServices}
-                              busStopDetails={busStopDetails[busStopCode]}
-                            />
-                          ))
-                        ) : (
-                          <View style={styles.noLikedBusesInGroupTextWrapper}>
-                            <Text style={styles.noLikedBusesInGroupText}>
-                              No liked buses in this group
-                            </Text>
-                          </View>
-                        ))}
-                    </View>
-                  );
-                }}
-              />
-            )}
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
@@ -296,65 +531,53 @@ const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+  },
+  emptyContainerArchived: {
+    height: scale(100),
+    justifyContent: "center",
   },
   groupContainer: {
     marginBottom: scale(10),
     borderRadius: scale(4),
+    overflow: "hidden",
     backgroundColor: colors.surface3,
   },
   groupHeader: {
     flexDirection: "row",
     alignItems: "center",
-    paddingRight: scale(10),
-  },
-  dragHandle: {
-    padding: scale(10),
-    marginRight: scale(5),
   },
   groupTitleContainer: {
     flexDirection: "row",
     flex: 1,
     alignItems: "center",
     padding: scale(10),
-  },
-  archiveButton: {
-    overflow: "hidden",
-    padding: scale(6),
-    marginRight: scale(6),
-  },
-  deleteButton: {
-    overflow: "hidden",
-    padding: scale(6),
-    paddingRight: 0,
+    paddingRight: scale(6),
   },
   arrowContainer: {
-    flex: 1,
-    alignItems: "center",
+    marginRight: scale(6),
+    justifyContent: "center",
   },
   groupTitle: {
-    flex: 10,
+    flex: 1,
     fontSize: scale(15),
-    marginLeft: scale(6),
+    marginRight: scale(6),
     fontFamily: font.bold,
     color: colors.primary,
+    width: "100%",
+  },
+  menuButton: {
+    padding: scale(4),
   },
   noLikedBusesInGroupTextWrapper: {
     alignItems: "center",
     justifyContent: "center",
     margin: scale(5),
-    paddingTop: scale(10),
-    paddingBottom: scale(10),
+    paddingVertical: scale(10),
     borderRadius: scale(4),
     backgroundColor: colors.surface2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     elevation: 2,
   },
   noLikedBusesInGroupText: {
-    flex: 1,
     fontFamily: font.bold,
     color: colors.onSurfaceSecondary,
     textAlign: "center",
@@ -368,32 +591,98 @@ const styles = StyleSheet.create({
     borderRadius: scale(30),
     elevation: 5,
   },
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    justifyContent: "flex-end", // Position at bottom
+  },
+  bottomModalContainer: {
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: scale(12),
+    borderTopRightRadius: scale(12),
+    padding: scale(10),
+    elevation: 5,
+  },
+  archivedModalContainer: {
+    maxHeight: "80%",
+  },
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: scale(10),
-    marginHorizontal: scale(5),
+    justifyContent: "space-between",
+    paddingHorizontal: scale(6),
+    paddingVertical: scale(4),
   },
-  modalHeaderText: {
-    flex: 1,
-    fontSize: scale(15),
+  modalTitle: {
+    fontSize: scale(16),
     fontFamily: font.bold,
     color: colors.primary,
+    flex: 1,
+  },
+  modalTitleArchived: {
+    fontSize: scale(16),
+    fontFamily: font.bold,
+    color: colors.onSurface,
+    flex: 1,
+  },
+  closeButton: {
+    padding: scale(4),
+  },
+  modalDivider: {
+    height: 1,
+    backgroundColor: colors.onSurfaceSecondary,
+    marginVertical: scale(10),
+    opacity: 0.2,
+  },
+  modalMenuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: scale(12),
+  },
+  modalMenuIcon: {
+    marginRight: scale(12),
+    width: scale(24),
     textAlign: "center",
   },
-  modalCloseButton: {
-    backgroundColor: colors.secondary,
-    padding: scale(4),
-    borderRadius: scale(30),
-    elevation: 5,
+  modalMenuItemText: {
+    fontSize: scale(16),
+    fontFamily: font.medium,
+    color: colors.primary,
   },
-  modalBackButton: {
-    elevation: 5,
+  // Text input and button styles for rename modal
+  modalTextInput: {
+    fontSize: scale(16),
+    fontFamily: font.semiBold,
+    color: colors.primary,
+    borderWidth: 1,
+    borderColor: colors.onSurfaceSecondary,
+    borderRadius: scale(8),
+    padding: scale(12),
+    marginVertical: scale(10),
   },
-  modalBackIcon: {
-    color: colors.secondary2,
-    fontSize: scale(20),
-  }
+  modalButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: scale(10),
+  },
+  modalButton: {
+    paddingVertical: scale(8),
+    paddingHorizontal: scale(16),
+    borderRadius: scale(4),
+    marginLeft: scale(10),
+  },
+  primaryButton: {
+    backgroundColor: colors.primary,
+  },
+  modalButtonText: {
+    fontSize: scale(14),
+    fontFamily: font.semiBold,
+    color: colors.primary,
+  },
+  primaryButtonText: {
+    color: colors.surface3,
+  },
 });
 
 export default LikedBusesPage;

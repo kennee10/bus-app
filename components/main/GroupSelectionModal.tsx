@@ -17,6 +17,7 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { colors, font, containerStyles } from "../../assets/styles/GlobalStyles";
 import { Platform } from "react-native";
 import { useLikedBuses } from "../context/likedBusesContext";
+import { Keyboard } from "react-native";
 
 type GroupSelectionModalProps = {
   busNumber: string;
@@ -35,13 +36,13 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
   const groupNameRef = useRef<string>("");
   // Use a ref for the TextInput component to clear its content after submission.
   const textInputRef = useRef<TextInput>(null);
-  const { groups, order, toggleLike, createGroup, deleteGroup } = useLikedBuses();
+  const { groups, order, toggleLike, createGroup, deleteGroup, createGroupAndLike } = useLikedBuses();
 
   const handleCreateGroup = async (groupName: string) => {
     const trimmedName = groupName.trim();
     if (trimmedName) {
-      await createGroup(trimmedName); // Create group first
-      await toggleLike(trimmedName, busStopCode, busNumber);
+      await createGroupAndLike(trimmedName, busStopCode, busNumber)
+      Keyboard.dismiss()
       // Clear the TextInput field and reset the ref value.
       textInputRef.current?.clear();
       groupNameRef.current = "";
@@ -69,15 +70,11 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
+
       <TouchableWithoutFeedback onPress={onClose}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? scale(100): 0 }
-          style={{ flex: 1}}
-        >
           <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-              <View style={styles.modalContent}>
+          <TouchableWithoutFeedback onPress={() => {}} accessible={false}>
+          <View style={styles.modalContent}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>Select a Group</Text>
                   <TouchableOpacity onPress={onClose}>
@@ -91,8 +88,9 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
                       data={allGroups}
                       keyExtractor={(item) => item}
                       style={styles.flatList}
+                      keyboardShouldPersistTaps="handled" // Ensures taps go through even when keyboard is openr
                       renderItem={({ item }) => (
-                        <View style={styles.groupItem}>
+                        <View style={[styles.groupItem, groups[item].isArchived && { opacity: 0.4 }]}>
                           <TouchableOpacity
                             style={styles.groupItemContent}
                             onPress={() => {
@@ -150,12 +148,9 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
                   </TouchableOpacity>
                 </View>
               </View>
-            </TouchableWithoutFeedback>
-           
+          </TouchableWithoutFeedback>
           </View>
-        </KeyboardAvoidingView> 
       </TouchableWithoutFeedback>
-      
       
     </Modal>
   );

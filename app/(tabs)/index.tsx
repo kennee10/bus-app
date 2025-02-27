@@ -8,7 +8,7 @@ import {
   TextInput, 
   StyleSheet,
   Keyboard,
-  BackHandler
+  BackHandler,
 } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
@@ -274,7 +274,9 @@ const NearbyBusStopsPage = () => {
               initialNumToRender={8}
               maxToRenderPerBatch={8}
               windowSize={11}
+              keyboardShouldPersistTaps="always" // Ensures taps go through even when keyboard is open
             />
+              
           ) : (
             nearbyBusStops.length > 0 ? (
               <View style={containerStyles.pageContainer}>

@@ -65,6 +65,7 @@ const LikedBusStopsPage = () => {
             <DraggableFlatList
               data={likedBusStopsDetails}
               keyExtractor={(item) => item.BusStopCode}
+              keyboardShouldPersistTaps="always"
               renderItem={({ item, drag, isActive }) => (
                 <LikedBusStopsBusStopComponent
                   BusStopCode={item.BusStopCode}

@@ -6,6 +6,7 @@ export const colors = {
     surface: "#212429",
     surface2: "#292b30",
     surface3: "#1d1f24",
+    surface4: "#15171B",
     
     onBackground: "#FFFFFF",
     onBackgroundSecondary: "#84848A",
@@ -19,7 +20,7 @@ export const colors = {
     onSurface2: "#FFFFFF",
     onSurface2Secondary: "#bdbdbd", // brighter than gray
     
-
+    primaryDark: "#9171CD",
     primary: "#a17ee4",
     secondary: "#b19aeb",
     secondary2: "#ccbff3",

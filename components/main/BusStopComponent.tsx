@@ -6,6 +6,7 @@ import { colors, font } from '../../assets/styles/GlobalStyles';
 import BusComponent from "./BusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
+import { Keyboard } from "react-native";
 
 type BusArrivalInfo = {
   OriginCode: string;
@@ -64,9 +65,8 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   const [isCollapsed, setIsCollapsed] = useState(true); // Initial state is collapsed
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { groups, toggleLike } = useLikedBuses();
+  const { groups } = useLikedBuses();
 
-  // Getting bus timings
   useEffect(() => {
     let intervalId; 
     let latestBusArrivalData = busArrivalData; // Create a local reference
@@ -131,7 +131,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
   return (
     <View style={styles.outerContainer}>
-      <TouchableOpacity onPress={() => {setIsCollapsed(!isCollapsed)}} style={styles.container}>
+      <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} style={styles.container}>
         {/* Upper Section */}
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
@@ -197,8 +197,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
                 nextBuses={busService.nextBuses}
                 isHearted={Object.values(groups).some(
                   (group) => group.busStops[props.BusStopCode]?.includes(busService.ServiceNo)
-                )}                
-                // onHeartToggle={toggleLike}
+                )}
               />
             ))
           ) : (

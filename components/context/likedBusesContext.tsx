@@ -28,7 +28,9 @@ type LikedBusesContextType = {
   toggleUnlike: (groupName: string, busStopCode: string, serviceNo: string) => Promise<void>;
   createGroup: (groupName: string) => Promise<void>;
   deleteGroup: (groupName: string) => Promise<void>;
+  createGroupAndLike: (groupName: string, busStopCode: string, serviceNo: string) => Promise<void>;
   toggleIsArchived: (groupName: string) => Promise<void>;
+  renameGroup: (groupName: string, newGroupName: string) => Promise<void>;
 };
 
 // Create Context
@@ -145,6 +147,23 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
     });
   };
 
+  const createGroupAndLike = async (groupName: string, busStopCode: string, serviceNo: string) => {
+    if (likedBusesData.groups[groupName]) {
+      Alert.alert('Duplicated Group', `Group "${groupName}" already exists.`);
+      return;
+    }
+  
+    const updatedGroups = {
+      ...likedBusesData.groups,
+      [groupName]: { isArchived: false, busStops: { [busStopCode]: [serviceNo] } },
+    };
+  
+    await saveToStorage({
+      groups: updatedGroups,
+      order: [...likedBusesData.order, groupName],
+    });
+  };
+
   // Toggle isArchived
   const toggleIsArchived = async (groupName: string) => {
     if (!likedBusesData.groups[groupName]) return;
@@ -169,6 +188,46 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
     });
   };
 
+  // Rename group
+  const renameGroup = async (groupName: string, newGroupName: string) => {
+    // Check if the original group exists
+    if (!likedBusesData.groups[groupName]) {
+      Alert.alert("Error", "The group you are trying to rename does not exist.");
+      return;
+    }
+    // Validate new name
+    if (!newGroupName || newGroupName.trim() === "") {
+      Alert.alert("Invalid Name", "Group name cannot be empty.");
+      return;
+    }
+    if (groupName === newGroupName) {
+      Alert.alert("Same Group Name", "Group name cannot be the same.");
+      return;
+    }
+    // Check if the new name is already taken
+    if (likedBusesData.groups[newGroupName]) {
+      Alert.alert("Duplicated Group", `Group "${newGroupName}" already exists.`);
+      return;
+    }
+    
+    // Create updated groups object
+    const updatedGroups = { ...likedBusesData.groups };
+    const groupData = updatedGroups[groupName];
+    delete updatedGroups[groupName];
+    updatedGroups[newGroupName] = groupData;
+    
+    // Update the order array using likedBusesData.order
+    const updatedOrder = likedBusesData.order.map(name => (name === groupName ? newGroupName : name));
+    
+    const updatedLikedBusesData: LikedBusesData = {
+      groups: updatedGroups,
+      order: updatedOrder,
+    };
+
+    await saveToStorage(updatedLikedBusesData);
+  };
+  
+
 
   return (
     <LikedBusesContext.Provider value={{ 
@@ -177,8 +236,10 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       toggleLike, 
       toggleUnlike, 
       createGroup, 
-      deleteGroup, 
+      deleteGroup,
+      createGroupAndLike,
       toggleIsArchived,
+      renameGroup
     }}>
       {children}
     </LikedBusesContext.Provider>
