@@ -34,17 +34,15 @@ export const colors = {
     accent7: "khaki",
 
     highlight: "#a17ee4",
+    busIcon: "powderblue",
 
     borderToPress: "rgba(255, 255, 255, 0.15)",
     borderToPress2: "rgba(255, 255, 255, 0.1)",
-    busIcon: "powderblue",
+    modalOverlayBackgroundColor: "rgba(0,0,0,0.8)",
 
     info: 'gray',
     warning: '#f99a07',
     error: '#FF6859',
-
-    modalOverlayBackgroundColor: "rgba(0,0,0,0.8)",
-
   };
   
 export const font = {

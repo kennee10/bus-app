@@ -93,7 +93,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                   value={inputValue}
                   onChangeText={setInputValue}
                   placeholder="Enter group name (eg. Home → Work)"
-                  placeholderTextColor={colors.onSurfaceSecondary}
+                  placeholderTextColor={colors.onSurfaceSecondary2}
                   returnKeyType="done"
                   onSubmitEditing={handleSave}
                 />

@@ -80,7 +80,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
                 <Ionicons
                   name={isArchived ? "eye-off" : "eye"}
                   size={scale(18)}
-                  color={colors.onSurface}
+                  color={colors.onSurfaceSecondary}
                   style={styles.modalMenuIcon}
                 />
                 <Text style={styles.modalMenuItemText}>
@@ -92,7 +92,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
                 <Ionicons
                   name="create-outline"
                   size={scale(18)}
-                  color={colors.onSurface}
+                  color={colors.onSurfaceSecondary}
                   style={styles.modalMenuIcon}
                 />
                 <Text style={styles.modalMenuItemText}>Rename</Text>
@@ -176,7 +176,7 @@ const RenameBottomModal: React.FC<RenameModalProps> = memo(({
                   value={name}
                   onChangeText={setName}
                   placeholder="Enter new name"
-                  placeholderTextColor={colors.onSurfaceSecondary}
+                  placeholderTextColor={colors.onSurfaceSecondary2}
                   returnKeyType="done"
                   onSubmitEditing={handleSave}
                 />
@@ -243,7 +243,6 @@ const GroupItem = memo(({
 
   const handleSaveRename = useCallback(async (newName: string) => {
     try {
-      // Only show toast if rename is successful
       await renameGroup(groupName, newName);
       
     } catch (error) {
@@ -536,7 +535,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   groupContainer: {
-    marginBottom: scale(5),
+    marginBottom: scale(7),
     borderRadius: scale(4),
     overflow: "hidden",
     backgroundColor: colors.surface3,
@@ -646,7 +645,7 @@ const styles = StyleSheet.create({
   modalMenuItemText: {
     fontSize: scale(14.5),
     fontFamily: font.medium,
-    color: colors.onSurface,
+    color: colors.onSurfaceSecondary,
   },
   // Text input and button styles for rename modal
   modalTextInput: {

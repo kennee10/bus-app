@@ -274,7 +274,7 @@ const NearbyBusStopsPage = () => {
               initialNumToRender={8}
               maxToRenderPerBatch={8}
               windowSize={11}
-              keyboardShouldPersistTaps="always" // Ensures taps go through even when keyboard is open
+              // keyboardShouldPersistTaps="always" // Ensures taps go through even when keyboard is open
             />
               
           ) : (
