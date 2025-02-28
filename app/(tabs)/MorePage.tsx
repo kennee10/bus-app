@@ -117,9 +117,11 @@ export default function App() {
         animationType="fade"
         onRequestClose={() => setIsPayNowVisible(false)}
       >
-        <TouchableWithoutFeedback onPress={() => setIsPayNowVisible(false)}>
           <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+            {/* Backdrop that closes the modal */}
+            <TouchableWithoutFeedback onPress={() => setIsPayNowVisible(false)}>
+              <View style={StyleSheet.absoluteFillObject} />
+            </TouchableWithoutFeedback>
               <View style={styles.bottomModalContainer}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>PayNow QR</Text>
@@ -135,9 +137,7 @@ export default function App() {
                   </Text>
                 </View>
               </View>
-            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
       </Modal>
 
       {/* MRT Map Modal via WebView */}

@@ -74,9 +74,10 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={onClose}>
+              <View style={StyleSheet.absoluteFillObject} />
+            </TouchableWithoutFeedback>
               <View style={styles.bottomModalContainer}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>Create New Group</Text>
@@ -111,9 +112,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                   </TouchableOpacity>
                 </View>
               </View>
-            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </Modal>
   );
@@ -199,9 +198,10 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={onClose}>
+            <View style={StyleSheet.absoluteFillObject} />
+          </TouchableWithoutFeedback>
             <View style={styles.bottomModalContainer}>
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Select a Group</Text>
@@ -239,9 +239,7 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
                 <Text style={styles.createGroupButtonText}>Create New Group</Text>
               </TouchableOpacity>
             </View>
-          </TouchableWithoutFeedback>
         </View>
-      </TouchableWithoutFeedback>
 
       {/* Create Group Modal */}
       <CreateGroupModal

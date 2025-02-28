@@ -64,9 +64,10 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={onClose}>
+            <View style={StyleSheet.absoluteFillObject} />
+          </TouchableWithoutFeedback>
             <View style={styles.bottomModalContainer}>
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>{groupName}</Text>
@@ -108,9 +109,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
                 <Text style={[styles.modalMenuItemText, {color: colors.accent3}]}>Delete</Text>
               </TouchableOpacity>
             </View>
-          </TouchableWithoutFeedback>
         </View>
-      </TouchableWithoutFeedback>
     </Modal>
   );
 });
@@ -157,9 +156,10 @@ const RenameBottomModal: React.FC<RenameModalProps> = memo(({
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={onClose}>
+              <View style={StyleSheet.absoluteFillObject} />
+            </TouchableWithoutFeedback>
               <View style={styles.bottomModalContainer}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>Rename Group</Text>
@@ -194,9 +194,7 @@ const RenameBottomModal: React.FC<RenameModalProps> = memo(({
                   </TouchableOpacity>
                 </View>
               </View>
-            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </Modal>
   );
@@ -303,14 +301,16 @@ const GroupItem = memo(({
           </View>
           {/* GROUP NAME */}
           <Text style={styles.groupTitle}>{groupName}</Text>
-          {/* MENU */}
+          
+        </TouchableOpacity>
+
+        {/* MENU */}
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Ionicons
             name="ellipsis-horizontal"
             size={scale(18)}
             color={colors.onSurfaceSecondary2}
           />
-        </TouchableOpacity>
         </TouchableOpacity>
         
         
@@ -489,9 +489,12 @@ const LikedBusesPage = () => {
         transparent
         onRequestClose={closeArchivedModal}
       >
-        <TouchableWithoutFeedback onPress={closeArchivedModal}>
           <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback>
+            {/* Backdrop that closes the modal */}
+            <TouchableWithoutFeedback onPress={closeArchivedModal}>
+              <View style={StyleSheet.absoluteFillObject} />
+            </TouchableWithoutFeedback>
+
               <View style={[styles.bottomModalContainer, styles.archivedModalContainer]}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>Archived Groups</Text>
@@ -513,13 +516,13 @@ const LikedBusesPage = () => {
                     data={archivedGroupsOrder}
                     keyExtractor={(item) => item}
                     renderItem={renderGroupItem}
-                    keyboardShouldPersistTaps="handled"
+                    keyboardShouldPersistTaps="always"
+                    contentContainerStyle={styles.archivedListContent}
+                    style={styles.archivedList}
                   />
                 )}
               </View>
-            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
@@ -545,6 +548,7 @@ const styles = StyleSheet.create({
   groupHeader: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between", // Add this
   },
   groupTitleContainer: {
     flexDirection: "row",
@@ -567,6 +571,7 @@ const styles = StyleSheet.create({
   },
   menuButton: {
     padding: scale(4),
+    marginRight: scale(6),
   },
   noLikedBusesInGroupTextWrapper: {
     alignItems: "center",
@@ -603,9 +608,17 @@ const styles = StyleSheet.create({
     borderTopRightRadius: scale(12),
     padding: scale(10),
     elevation: 5,
+    maxHeight: '80%',
   },
   archivedModalContainer: {
     maxHeight: "80%",
+    width: "100%",
+  },
+  archivedList : {
+    flexGrow: 1,
+  },
+  archivedListContent: {
+    // paddingBottom: scale(20),
   },
   modalHeader: {
     flexDirection: "row",

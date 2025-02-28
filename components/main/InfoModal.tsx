@@ -27,9 +27,10 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
-          <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+          <TouchableWithoutFeedback onPress={onClose}>
+            <View style={StyleSheet.absoluteFillObject} />
+          </TouchableWithoutFeedback>
             <View style={styles.bottomModalContainer}>
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Info</Text>
@@ -241,9 +242,7 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                 </View>
               </ScrollView>
             </View>
-          </TouchableWithoutFeedback>
         </View>
-      </TouchableWithoutFeedback>
     </Modal>
   );
 };
