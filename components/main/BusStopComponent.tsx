@@ -131,7 +131,11 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
 
   return (
     <View style={styles.outerContainer}>
-      <TouchableOpacity onPress={() => setIsCollapsed(!isCollapsed)} style={styles.container}>
+      <TouchableOpacity onPress={() => {
+        setIsCollapsed(!isCollapsed)
+        Keyboard.dismiss()
+        }}
+        style={styles.container}>
         {/* Upper Section */}
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
@@ -152,7 +156,10 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             style={styles.likeButtonWrapper}
             onStartShouldSetResponder={() => true}
           >
-            <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
+            <TouchableOpacity onPress={() => {
+              props.onLikeToggle(props.BusStopCode)
+              Keyboard.dismiss()
+              }}>
               <Ionicons
                 name={props.isLiked ? "star" : "star-outline"}
                 color={props.isLiked ? colors.accent4 : colors.onSurfaceSecondary2}

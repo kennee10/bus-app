@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderTopLeftRadius: scale(12),
     borderTopRightRadius: scale(12),
-    padding: scale(16),
+    padding: scale(10),
     elevation: 5,
     maxHeight: "80%",
   },
