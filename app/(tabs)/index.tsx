@@ -10,9 +10,8 @@ import {
   Keyboard,
   BackHandler,
 } from 'react-native';
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 import { calculateDistance } from "../../components/hooks/usefulFunctions";
 import { colors, containerStyles, font, navigationBarHeight } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from '../../components/main/BusStopComponent';
@@ -44,8 +43,7 @@ const NearbyBusStopsPage = () => {
   const inputRef = useRef<TextInput>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStopsOrder, toggleLike } = useLikedBusStops();
-
-  const insets = useSafeAreaInsets();
+  const [refreshing, setRefreshing] = useState(false);
 
   // Memoized bus stops data
   const allBusStops = useMemo(() => 
@@ -102,10 +100,12 @@ const NearbyBusStopsPage = () => {
   }, [searchQuery, nearbyBusStops, allBusStops]);
 
   // Pagination
-  const [limit, setLimit] = useState<number>(8);
-  const increaseLimit = useCallback(() => {
-    setLimit(prev => Math.min(prev + 8, filteredStops.length));
-  }, [filteredStops.length]);
+  const [limit, setLimit] = useState<number>(12);
+  const handleEndReached = useCallback(() => {
+    if (filteredStops.length > limit) {
+      setLimit(prev => Math.min(prev + 8, filteredStops.length));
+    }
+  }, [filteredStops.length, limit]);
 
   // Back handler
   useEffect(() => {
@@ -182,28 +182,6 @@ const NearbyBusStopsPage = () => {
     Keyboard.dismiss();
   }, []);
 
-  // Render footer for pagination
-  const renderFooter = useCallback(() => (
-    <View style={containerStyles.iconContainer}>
-      <TouchableOpacity
-        onPress={increaseLimit}
-        style={{
-          borderRadius: scale(12),
-          borderWidth: scale(1.3),
-          padding: scale(3),
-          borderColor: colors.secondary2,
-          opacity: 0.7,
-        }}
-      >
-        <Ionicons 
-          name="add-outline"
-          color={colors.secondary2}
-          size={scale(23)}
-        />
-      </TouchableOpacity>
-    </View>
-  ), [increaseLimit]);
-
   // Memoized FlatList render item
   const renderItem = useCallback(({ item }: { item: BusStopWithDist }) => (
     <BusStopComponent
@@ -273,15 +251,14 @@ const NearbyBusStopsPage = () => {
               data={filteredStops.slice(0, limit)}
               keyExtractor={(item) => item.BusStopCode}
               renderItem={renderItem}
-              ListFooterComponent={
-                filteredStops.length > limit ? renderFooter : null
-              }
               removeClippedSubviews
-              initialNumToRender={8}
+              initialNumToRender={12}
               maxToRenderPerBatch={8}
-              windowSize={11}
+              windowSize={12}
               keyboardShouldPersistTaps="handled"
-              contentContainerStyle={{ paddingBottom: navigationBarHeight}}
+              contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10)}}
+              onEndReached={handleEndReached}
+              onEndReachedThreshold={0.000001}
             />
               
           ) : (

@@ -474,7 +474,7 @@ const LikedBusesPage = () => {
             data={unarchivedGroupsOrder}
             keyExtractor={(item) => item}
             renderItem={renderGroupItem}
-            contentContainerStyle={{ paddingBottom: navigationBarHeight}}
+            contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10)}}
             keyboardShouldPersistTaps="handled"
             
           />
