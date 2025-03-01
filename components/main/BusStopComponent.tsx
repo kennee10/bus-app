@@ -244,10 +244,10 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
           </View>
         </View>
       )}
-      {/* where should i put my busmodal if i want access to the busesnotinoperation busnumbers and my busstopcode of this component? */}
       <BusModal
         busNumber={selectedBusNumber || ""}
         busStopCode={props.BusStopCode}
+        description={props.Description}
         isVisible={isBusModalVisible}
         onClose={() => setBusModalVisible(false)}
       />

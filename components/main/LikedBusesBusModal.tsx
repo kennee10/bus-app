@@ -9,23 +9,21 @@ import GroupSelectionModal from "./GroupSelectionModal";
 type BusModalProps = {
     busNumber: string;
     busStopCode: string;
-    description: string;
+    description?: string;
+    groupName: string;
     isVisible: boolean;
     onClose: () => void;
 }
 
-const BusModal: React.FC<BusModalProps> = ({
+const LikedBusesBusModal: React.FC<BusModalProps> = ({
     busNumber,
     busStopCode,
     description,
+    groupName,
     isVisible,
     onClose,
 }) => {
-    const [isModalVisible, setModalVisible] = useState(false);
-    const { groups } = useLikedBuses();
-
-    const isHearted = Object.values(groups).some((group) => group.busStops[busStopCode]?.includes(busNumber))
-
+    const { groups, toggleUnlike } = useLikedBuses();
     return (
         <Modal
             visible={isVisible}
@@ -51,10 +49,13 @@ const BusModal: React.FC<BusModalProps> = ({
 
                     <View style={styles.modalBody}>
                         <View style={styles.likeButtonWrapper}>
-                            <TouchableOpacity onPress={() => setModalVisible(true)}>
+                            <TouchableOpacity onPress={() => {
+                                toggleUnlike(groupName, busStopCode, busNumber)
+                                onClose()
+                                }}>
                                 <Ionicons
-                                name="heart-outline"
-                                color={isHearted ? colors.accent5 : colors.onSurfaceSecondary2}
+                                name="heart"
+                                color={colors.accent5}
                                 size={scale(18)}
                                 />
                             </TouchableOpacity>
@@ -62,12 +63,6 @@ const BusModal: React.FC<BusModalProps> = ({
                     </View>
                 </View>
             </View>
-            <GroupSelectionModal
-                busNumber={busNumber}
-                busStopCode={busStopCode}
-                isVisible={isModalVisible}
-                onClose={() => setModalVisible(false)}
-            />
         </Modal>
     )
 };
@@ -114,4 +109,4 @@ const styles = StyleSheet.create({
       },
 })
 
-export default BusModal;
+export default LikedBusesBusModal;

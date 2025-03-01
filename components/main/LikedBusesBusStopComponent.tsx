@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
 import { colors, font } from "../../assets/styles/GlobalStyles";
 import LikedBusesBusComponent from "./LikedBusesBusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
 import { scale } from "react-native-size-matters";
+import LikedBusesBusModal from "./LikedBusesBusModal";
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -46,6 +47,8 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { groups, toggleLike } = useLikedBuses();
+  const [isBusModalVisible, setBusModalVisible] = useState(false);
+  const [selectedBusNumber, setSelectedBusNumber] = useState<string | null>(null);
 
   // Getting bus timings
   useEffect(() => {
@@ -150,11 +153,27 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
           <Text style={styles.notOperationalText}>Not In Operation</Text>
           <View style={styles.notInOperationGrid}>
             {busesNotInOperation.map((busService) => (
-              <View key={busService} style={styles.notInOperationBox}>
-                <View style={styles.diagonalLine} />
-                <Text style={styles.notInOperationText}>{busService}</Text>
-              </View>
+              <TouchableOpacity
+                key={busService}
+                onPress={() => {
+                  setBusModalVisible(true)
+                  setSelectedBusNumber(busService)
+                }}
+              >
+                <View style={styles.notInOperationBox}>
+                  <View style={styles.diagonalLine} />
+                  <Text style={styles.notInOperationText}>{busService}</Text>
+                </View>
+              </TouchableOpacity>
             ))}
+            <LikedBusesBusModal
+              busNumber={selectedBusNumber || ""}
+              busStopCode={props.busStopCode}
+              description={props.busStopDetails?.Description}
+              groupName={props.groupName}
+              isVisible={isBusModalVisible}
+              onClose={() => setBusModalVisible(false)}
+            />
           </View>
         </View>
       )}
