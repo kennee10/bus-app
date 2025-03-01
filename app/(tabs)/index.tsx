@@ -10,10 +10,11 @@ import {
   Keyboard,
   BackHandler,
 } from 'react-native';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { scale } from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
 import { calculateDistance } from "../../components/hooks/usefulFunctions";
-import { colors, containerStyles, font } from '../../assets/styles/GlobalStyles';
+import { colors, containerStyles, font, navigationBarHeight } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from '../../components/main/BusStopComponent';
 import { useLikedBusStops } from "../../components/context/likedBusStopsContext";
 import { LocationWatcher } from "../../components/hooks/LocationWatcher";
@@ -43,6 +44,8 @@ const NearbyBusStopsPage = () => {
   const inputRef = useRef<TextInput>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStopsOrder, toggleLike } = useLikedBusStops();
+
+  const insets = useSafeAreaInsets();
 
   // Memoized bus stops data
   const allBusStops = useMemo(() => 
@@ -278,6 +281,7 @@ const NearbyBusStopsPage = () => {
               maxToRenderPerBatch={8}
               windowSize={11}
               keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{ paddingBottom: navigationBarHeight}}
             />
               
           ) : (

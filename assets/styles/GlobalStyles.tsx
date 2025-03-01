@@ -1,6 +1,8 @@
 import { StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
+export const navigationBarHeight = verticalScale(45);
+
 export const colors = {
     background: "#0d0d0d",
     surface: "#212429",

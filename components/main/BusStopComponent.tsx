@@ -7,6 +7,7 @@ import BusComponent from "./BusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
 import { Keyboard } from "react-native";
+import BusModal from "./BusModal";
 
 type BusArrivalInfo = {
   OriginCode: string;
@@ -66,6 +67,9 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { groups } = useLikedBuses();
+  const [isBusModalVisible, setBusModalVisible] = useState(false);
+  const [selectedBusNumber, setSelectedBusNumber] = useState<string | null>(null);
+
 
   useEffect(() => {
     let intervalId; 
@@ -203,8 +207,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
                 busStopCode={props.BusStopCode}
                 nextBuses={busService.nextBuses}
                 isHearted={Object.values(groups).some(
-                  (group) => group.busStops[props.BusStopCode]?.includes(busService.ServiceNo)
-                )}
+                  (group) => group.busStops[props.BusStopCode]?.includes(busService.ServiceNo))}
               />
             ))
           ) : (
@@ -214,6 +217,8 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
               </Text>
             </View>
           )}
+
+        
         </View>
       )}
 
@@ -223,14 +228,29 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
           <Text style={styles.notOperationalText}>Not In Operation</Text>
           <View style={styles.notInOperationGrid}>
             {busesNotInOperation.map((busService) => (
-              <View key={busService} style={styles.notInOperationBox}>
-                <View style={styles.diagonalLine} />
-                <Text style={styles.notInOperationText}>{busService}</Text>
+              <TouchableOpacity 
+                key={busService}
+                onPress={() => {
+                  setSelectedBusNumber(busService)
+                  setBusModalVisible(true);
+                }}
+              >
+              <View style={styles.notInOperationBox}>
+                  <View style={styles.diagonalLine} />
+                  <Text style={styles.notInOperationText}>{busService}</Text>
               </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
       )}
+      {/* where should i put my busmodal if i want access to the busesnotinoperation busnumbers and my busstopcode of this component? */}
+      <BusModal
+        busNumber={selectedBusNumber || ""}
+        busStopCode={props.BusStopCode}
+        isVisible={isBusModalVisible}
+        onClose={() => setBusModalVisible(false)}
+      />
     </View>
   );
 };

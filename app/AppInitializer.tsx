@@ -25,7 +25,7 @@ const AppInitializer: React.FC<AppInitializerProps> = ({
   };
   
   // Call this function once, then remove it
-  // resetAsyncStorage();
+  resetAsyncStorage();
 
   // Load fonts
   useEffect(() => {

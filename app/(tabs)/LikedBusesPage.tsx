@@ -16,7 +16,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useLikedBuses } from "../../components/context/likedBusesContext";
 import LikedBusesBusStopComponent from "../../components/main/LikedBusesBusStopComponent";
-import { colors, containerStyles, font } from "../../assets/styles/GlobalStyles";
+import { colors, containerStyles, font, navigationBarHeight } from "../../assets/styles/GlobalStyles";
 import { scale } from "react-native-size-matters";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
@@ -468,8 +468,9 @@ const LikedBusesPage = () => {
             data={unarchivedGroupsOrder}
             keyExtractor={(item) => item}
             renderItem={renderGroupItem}
-            contentContainerStyle={{ paddingBottom: scale(20) }}
+            contentContainerStyle={{ paddingBottom: navigationBarHeight}}
             keyboardShouldPersistTaps="handled"
+            
           />
         )}
       </View>

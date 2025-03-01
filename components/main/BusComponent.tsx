@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Touchable } from "react-native";
 import { scale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { colors } from "../../assets/styles/GlobalStyles";
 import ArrivalTimingComponent from "./ArrivalTimingComponent";
 import GroupSelectionModal from "./GroupSelectionModal";
+import BusModal from "./BusModal";
 
 type NextBusInfo = {
   OriginCode: string;
@@ -32,11 +33,14 @@ const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, nex
 
   return (
     <View style={styles.container}>
-      <View style={styles.busNumberWrapper}>
-        <Text style={styles.busNumber} adjustsFontSizeToFit numberOfLines={1}>
-          {busNumber}
-        </Text>
-      </View>
+      
+        <View style={styles.busNumberWrapper}>
+          <Text style={styles.busNumber} adjustsFontSizeToFit numberOfLines={1}>
+            {busNumber}
+          </Text>
+        </View>
+      
+      
 
       <View style={styles.busInfoWrapper}>
         {nextBuses.map((arrival, index) => (

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,14 +9,12 @@ import {
   Alert,
   StyleSheet,
   TouchableWithoutFeedback,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 import { scale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
-import { colors, font, containerStyles } from "../../assets/styles/GlobalStyles";
+import { colors, font } from "../../assets/styles/GlobalStyles";
 import { useLikedBuses } from "../context/likedBusesContext";
 
 type GroupSelectionModalProps = {
@@ -286,7 +284,7 @@ const styles = StyleSheet.create({
     marginVertical: scale(10),
   },
   modalBody: {
-    maxHeight: scale(300),
+    maxHeight: "80%",
   },
   emptyContainer: {
     alignItems: "center",
