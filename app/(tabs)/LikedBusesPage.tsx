@@ -458,10 +458,16 @@ const LikedBusesPage = () => {
       <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
         {unarchivedGroupsOrder.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Text style={containerStyles.globalInfoTextMessage}>
-              You haven't liked any buses /{"\n"}
-              groups are in archive
-            </Text>
+            {archivedGroupsOrder.length === 0 ? (
+              <Text style={containerStyles.globalInfoTextMessage}>
+                You haven't liked any buses
+              </Text>
+            ) : (
+              <Text style={containerStyles.globalInfoTextMessage}>
+                Groups are in archive
+              </Text>
+            )}
+            
           </View>
         ) : (
           <DraggableFlatList
