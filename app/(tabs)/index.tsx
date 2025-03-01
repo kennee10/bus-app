@@ -19,6 +19,8 @@ import { useLikedBusStops } from "../../components/context/likedBusStopsContext"
 import { LocationWatcher } from "../../components/hooks/LocationWatcher";
 import InfoModal from "../../components/main/InfoModal";
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
+import DraggableFlatList from "react-native-draggable-flatlist";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type BusStopData = {
   Description: string;
@@ -215,7 +217,8 @@ const NearbyBusStopsPage = () => {
   ), [likedBusStopsOrder, searchQuery, toggleLike]);
 
   return (
-    <View style={containerStyles.pageContainer}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={containerStyles.pageContainer}>
       <View style={containerStyles.innerPageContainer}>
         <View style={styles.headerContainer}>
           <View style={styles.searchContainer}>
@@ -263,7 +266,7 @@ const NearbyBusStopsPage = () => {
           />
         ) : (
           filteredStops.length > 0 ? (
-            <FlatList
+            <DraggableFlatList
               data={filteredStops.slice(0, limit)}
               keyExtractor={(item) => item.BusStopCode}
               renderItem={renderItem}
@@ -274,8 +277,7 @@ const NearbyBusStopsPage = () => {
               initialNumToRender={8}
               maxToRenderPerBatch={8}
               windowSize={11}
-              keyboardShouldPersistTaps="handled" // Ensures taps go through even when keyboard is open
-              // onScrollBeginDrag={Keyboard.dismiss}
+              keyboardShouldPersistTaps="handled"
             />
               
           ) : (
@@ -292,6 +294,8 @@ const NearbyBusStopsPage = () => {
         )}
       </View>
     </View>
+    </GestureHandlerRootView>
+    
   );
 };
 
