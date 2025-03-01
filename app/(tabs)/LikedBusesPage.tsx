@@ -20,6 +20,8 @@ import { colors, containerStyles, font } from "../../assets/styles/GlobalStyles"
 import { scale } from "react-native-size-matters";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
+import DraggableFlatList from "react-native-draggable-flatlist";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -451,7 +453,8 @@ const LikedBusesPage = () => {
   }, []);
 
   return (
-    <View style={containerStyles.pageContainer}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={containerStyles.pageContainer}>
       <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
         {unarchivedGroupsOrder.length === 0 ? (
           <View style={styles.emptyContainer}>
@@ -461,7 +464,7 @@ const LikedBusesPage = () => {
             </Text>
           </View>
         ) : (
-          <FlatList
+          <DraggableFlatList
             data={unarchivedGroupsOrder}
             keyExtractor={(item) => item}
             renderItem={renderGroupItem}
@@ -525,6 +528,8 @@ const LikedBusesPage = () => {
           </View>
       </Modal>
     </View>
+    </GestureHandlerRootView>
+    
   );
 };
 
