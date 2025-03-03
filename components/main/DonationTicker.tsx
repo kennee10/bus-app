@@ -6,8 +6,8 @@ import { scale } from "react-native-size-matters";
 // Define donations with a type annotation
 const donations: string[] = [
   // Add your donation messages here
-  // "Fellycia donated $10.40",
-  // "Yenn donated $5.00",
+  "Fellycia donated $10.40",
+  "Yenn donated $5.00",
 //   "Yenn2 donated $5.00",
 //   "Yenn3 donated $5.00",
 //   "Yenn4 donated $5.00",

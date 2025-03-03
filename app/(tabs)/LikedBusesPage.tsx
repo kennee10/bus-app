@@ -522,13 +522,12 @@ const LikedBusesPage = () => {
                   </View>
                     
                 ) : (
-                  <FlatList
+                  <DraggableFlatList
                     data={archivedGroupsOrder}
                     keyExtractor={(item) => item}
                     renderItem={renderGroupItem}
                     keyboardShouldPersistTaps="always"
-                    contentContainerStyle={styles.archivedListContent}
-                    style={styles.archivedList}
+                    contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10)}}
                   />
                 )}
               </View>
@@ -625,12 +624,6 @@ const styles = StyleSheet.create({
   archivedModalContainer: {
     maxHeight: "80%",
     width: "100%",
-  },
-  archivedList : {
-    flexGrow: 1,
-  },
-  archivedListContent: {
-    // paddingBottom: scale(20),
   },
   modalHeader: {
     flexDirection: "row",
