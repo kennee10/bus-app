@@ -218,8 +218,6 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                     style={styles.flatList}
                     keyboardShouldPersistTaps="handled"
-                    scrollIndicatorInsets={{ right: 1 }} // Fix for Android scrollbar
-                    contentContainerStyle={{ paddingBottom: scale(8) }}
                   />
                 ) : (
                   <View style={styles.emptyContainer}>

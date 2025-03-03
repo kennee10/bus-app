@@ -175,10 +175,10 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
         {/* Lower Section */}
         <View style={styles.lower}>
           <View style={styles.distanceWrapper}>
-            <Text style={styles.distance}>{props.Distance}m</Text>
+            <Text style={styles.distance} adjustsFontSizeToFit numberOfLines={1}>{props.Distance}m</Text>
           </View>
           <View style={styles.roadNameWrapper}>
-            <Text style={styles.roadName}>
+            <Text style={styles.roadName} adjustsFontSizeToFit numberOfLines={1}>
               {props.searchQuery
                 ? highlightText(props.RoadName, props.searchQuery)
                 : props.RoadName}

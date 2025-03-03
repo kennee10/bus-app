@@ -39,10 +39,14 @@ const BusModal: React.FC<BusModalProps> = ({
                 </TouchableWithoutFeedback>
                 <View style={styles.bottomModalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>
-                            {description}{`\n`}
-                            {busNumber}
-                        </Text>
+                        <View style={styles.modalHeaderText}>
+                            <Text style={styles.modalTitle} adjustsFontSizeToFit numberOfLines={1}>
+                                {description}
+                            </Text>
+                            <Text style={styles.modalTitle}>
+                                {busNumber}
+                            </Text>
+                        </View>
                         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                             <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
                         </TouchableOpacity>
@@ -91,12 +95,16 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: scale(6),
+        backgroundColor: 'yellow'
+      },
+      modalHeaderText:{
+        flexDirection: "column",
+        backgroundColor: 'red'
       },
       modalTitle: {
         fontSize: scale(16),
         fontFamily: font.bold,
         color: colors.primary,
-        flex: 1,
       },
       closeButton: {
         padding: scale(4),
