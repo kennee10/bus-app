@@ -83,7 +83,7 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
       return;
     }
 
-    showToast(`bus liked`);
+    showToast(`Bus '${serviceNo}' liked`);
     // for 1 group
     const updatedBusStops = {
       ...group.busStops, // other bus stop codes

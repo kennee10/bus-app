@@ -24,45 +24,56 @@ type NextBusInfo = {
 type BusComponentProps = {
   busNumber: string;
   busStopCode: string;
+  description: string;
   nextBuses: NextBusInfo[];
   isHearted: boolean;
 };
 
-const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, nextBuses, isHearted }) => {
+const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, description, nextBuses, isHearted }) => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isBusModalVisible, setBusModalVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      
+      <TouchableOpacity
+        onPress={() => {
+          setBusModalVisible(true);
+        }}
+        style={styles.touchableOpacity}
+      >
         <View style={styles.busNumberWrapper}>
           <Text style={styles.busNumber} adjustsFontSizeToFit numberOfLines={1}>
             {busNumber}
           </Text>
         </View>
-      
-      
-
       <View style={styles.busInfoWrapper}>
         {nextBuses.map((arrival, index) => (
           <ArrivalTimingComponent key={index} arrivalInfo={arrival} />
         ))}
       </View>
-
-      <View style={styles.likeButtonWrapper}>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Ionicons
-            name="heart-outline"
-            color={isHearted ? colors.accent5 : colors.onSurfaceSecondary2}
-            size={scale(18)}
-          />
-        </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
+        
+      <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.likeButtonWrapper}>
+        <Ionicons
+          name="heart-outline"
+          color={isHearted ? colors.accent5 : colors.onSurfaceSecondary2}
+          size={scale(18)}
+        />
+      </TouchableOpacity>
 
       <GroupSelectionModal
         busNumber={busNumber}
         busStopCode={busStopCode}
         isVisible={isModalVisible}
         onClose={() => setModalVisible(false)}
+      />
+
+      <BusModal
+        busNumber={busNumber}
+        busStopCode={busStopCode}
+        description={description}
+        isVisible={isBusModalVisible}
+        onClose={() => setBusModalVisible(false)}
       />
     </View>
   );
@@ -79,8 +90,16 @@ const styles = StyleSheet.create({
     marginLeft: scale(5),
     marginRight: scale(5),
     borderRadius: scale(4),
-    backgroundColor: colors.surface2,
     elevation: 2,
+    backgroundColor: colors.surface2,
+  },
+  touchableOpacity: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  likeButtonWrapper: {
+    marginLeft: scale(14)
   },
   busNumberWrapper: {
     flex: 2,
@@ -96,11 +115,6 @@ const styles = StyleSheet.create({
     flex: 12,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginRight: scale(14),
-  },
-  likeButtonWrapper: {
-    flex: 1,
-    alignItems: "center",
   },
 });
 

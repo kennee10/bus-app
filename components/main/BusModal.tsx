@@ -95,11 +95,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: scale(6),
-        backgroundColor: 'yellow'
       },
       modalHeaderText:{
         flexDirection: "column",
-        backgroundColor: 'red'
       },
       modalTitle: {
         fontSize: scale(16),

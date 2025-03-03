@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Touchable } from "react-native";
 import { scale, verticalScale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { colors, font } from '../../assets/styles/GlobalStyles';
@@ -201,14 +201,16 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
             <ActivityIndicator size="large" color={colors.onSurfaceSecondary} />
           ) : busArrivalData.length > 0 && busArrivalData[0].nextBuses.length > 0 ? (
             busArrivalData.map((busService, index) => (
-              <BusComponent
-                key={index}
-                busNumber={busService.ServiceNo}
-                busStopCode={props.BusStopCode}
-                nextBuses={busService.nextBuses}
-                isHearted={Object.values(groups).some(
-                  (group) => group.busStops[props.BusStopCode]?.includes(busService.ServiceNo))}
-              />
+                  <BusComponent
+                  key={index}
+                  busNumber={busService.ServiceNo}
+                  busStopCode={props.BusStopCode}
+                  description={props.Description}
+                  nextBuses={busService.nextBuses}
+                  isHearted={Object.values(groups).some(
+                    (group) => group.busStops[props.BusStopCode]?.includes(busService.ServiceNo))}
+                />
+              
             ))
           ) : (
             <View style={styles.noBusesWrapper}>
