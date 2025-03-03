@@ -43,7 +43,6 @@ const NearbyBusStopsPage = () => {
   const inputRef = useRef<TextInput>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStopsOrder, toggleLike } = useLikedBusStops();
-  const [refreshing, setRefreshing] = useState(false);
 
   // Memoized bus stops data
   const allBusStops = useMemo(() => 

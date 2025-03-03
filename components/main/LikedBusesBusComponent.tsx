@@ -5,6 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { colors } from '../../assets/styles/GlobalStyles';
 import ArrivalTimingComponent from "./ArrivalTimingComponent";
 import { useLikedBuses } from "../context/likedBusesContext";
+import LikedBusesBusModal from "./LikedBusesBusModal";
 
 type NextBusInfo = {
   OriginCode: string;
@@ -23,6 +24,7 @@ type NextBusInfo = {
 type LikedBusesBusComponent = {
   busNumber: string;
   busStopCode: string;
+  description?: string;
   groupName: string;
   nextBuses: NextBusInfo[];
   isHearted: boolean;
@@ -30,6 +32,7 @@ type LikedBusesBusComponent = {
 
 const LikedBusesBusComponent: React.FC<LikedBusesBusComponent> = (props) => {
   const { toggleUnlike } = useLikedBuses();
+  const [isBusModalVisible, setBusModalVisible] = useState(false);
 
   const handleHeartPress = async () => {
     await toggleUnlike(props.groupName, props.busStopCode, props.busNumber);
@@ -37,30 +40,45 @@ const LikedBusesBusComponent: React.FC<LikedBusesBusComponent> = (props) => {
 
   return (
     <View style={styles.container}>
-      {/* Bus Number */}
-      <View style={styles.busNumberWrapper}>
-        <Text style={styles.busNumber} adjustsFontSizeToFit numberOfLines={1}>
-          {props.busNumber}
-        </Text>
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          setBusModalVisible(true);
+        }}
+        style={styles.touchableOpacity}
+      >
+        {/* Bus Number */}
+        <View style={styles.busNumberWrapper}>
+          <Text style={styles.busNumber} adjustsFontSizeToFit numberOfLines={1}>
+            {props.busNumber}
+          </Text>
+        </View>
 
-      {/* Timings Wrapper */}
-      <View style={styles.busInfoWrapper}>
-        {props.nextBuses.map((arrival, index) => (
-          <ArrivalTimingComponent key={index} arrivalInfo={arrival} />
-        ))}
-      </View>
+        {/* Timings Wrapper */}
+        <View style={styles.busInfoWrapper}>
+          {props.nextBuses.map((arrival, index) => (
+            <ArrivalTimingComponent key={index} arrivalInfo={arrival} />
+          ))}
+        </View>
+      </TouchableOpacity>
+      
 
       {/* Like Button */}
-      <View style={styles.likeButtonWrapper}>
-        <TouchableOpacity onPress={handleHeartPress}>
+        <TouchableOpacity onPress={handleHeartPress} style={styles.likeButtonWrapper}>
           <Ionicons
             name={props.isHearted ? "heart" : "heart-outline"}
             color={props.isHearted ? colors.accent5 : colors.onSurfaceSecondary2}
             size={scale(18)}
           />
         </TouchableOpacity>
-      </View>
+      
+      <LikedBusesBusModal
+        busNumber={props.busNumber}
+        busStopCode={props.busStopCode}
+        description={props.description}
+        groupName={props.groupName}
+        isVisible={isBusModalVisible}
+        onClose={() => setBusModalVisible(false)}
+      />
     </View>
   );
 };
@@ -74,7 +92,6 @@ const styles = StyleSheet.create({
     paddingRight: scale(8),
     borderRadius: scale(4),
     backgroundColor: colors.surface2,
-    // backgroundColor: "#FFE4E1",
     
     // shadow stuff
     shadowColor: "#000",
@@ -82,6 +99,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 2,
+  },
+  touchableOpacity: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  likeButtonWrapper: {
+    marginLeft: scale(14)
   },
   busNumberWrapper: {
     flex: 2,
@@ -97,12 +122,8 @@ const styles = StyleSheet.create({
     flex: 12,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginRight: scale(14),
   },
-  likeButtonWrapper: {
-    flex: 1,
-    alignItems: "center",
-  },
+  
 });
 
 export default LikedBusesBusComponent;

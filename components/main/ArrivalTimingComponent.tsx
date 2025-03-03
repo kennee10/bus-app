@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { scale } from "react-native-size-matters";
 import { colors, font } from '../../assets/styles/GlobalStyles';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import EntypoIcons from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import InfoModal from "./InfoModal";
 
 
 type BusArrivalInfo = {
@@ -99,6 +100,7 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
 }) => {
   const { EstimatedArrival, Monitored, Latitude, Longitude, Load, Type, lastUpdated } = arrivalInfo;
   const { mins, secs } = calculateTimeLeft(EstimatedArrival);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const determineDotColor = () => {
     if (!lastUpdated) return colors.onSurface2Secondary; // Default color if no updates yet
@@ -114,8 +116,8 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
   const dotColor = determineDotColor();
 
   return (
+    <TouchableOpacity onPress={() => setIsModalVisible(true)}>
     <View style={styles.container}>
-      
       {Monitored === 0 && mins !== "-" && (
         <View style={styles.monitoredWrapper}>
           <MaterialCommunityIcons
@@ -139,9 +141,6 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
         </View>
       )}
 
-      
-      
-      
       
       <View style={styles.timingWrapper}>
         <View style={styles.minsWrapper}>
@@ -183,7 +182,15 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
           {getBusType(Type)}
         </View>
       </View>
+     
+      
+      
+      <InfoModal 
+          isVisible={isModalVisible} 
+          onClose={() => setIsModalVisible(false)}
+        />
     </View>
+     </TouchableOpacity>
   );
 };
 

@@ -134,6 +134,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
               key={busService.ServiceNo}
               busNumber={busService.ServiceNo}
               busStopCode={props.busStopCode}
+              description={props.busStopDetails?.Description}
               groupName={props.groupName}
               nextBuses={busService.nextBuses}
               isHearted={true}

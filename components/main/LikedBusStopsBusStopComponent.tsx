@@ -12,6 +12,7 @@ import { colors, font } from "../../assets/styles/GlobalStyles";
 import BusComponent from "./BusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
+import BusModal from "./BusModal";
 
 type BusArrivalInfo = {
   OriginCode: string;
@@ -74,7 +75,9 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
   const [isCollapsed, setIsCollapsed] = useState(true); // Initial state is collapsed
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { groups, toggleLike } = useLikedBuses();
+  const { groups } = useLikedBuses();
+  const [isBusModalVisible, setBusModalVisible] = useState(false);
+  const [selectedBusNumber, setSelectedBusNumber] = useState<string | null>(null);
 
   // Fetch bus arrival data
   useEffect(() => {
@@ -194,11 +197,11 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
                 key={index}
                 busNumber={busService.ServiceNo}
                 busStopCode={props.BusStopCode}
+                description={props.Description}
                 nextBuses={busService.nextBuses}
                 isHearted={Object.values(groups).some((group) =>
                   group.busStops[props.BusStopCode]?.includes(busService.ServiceNo)
                 )}
-                // onHeartToggle={toggleLike}
               />
             ))
           ) : (
@@ -215,14 +218,30 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
           <Text style={styles.notOperationalText}>Not In Operation</Text>
           <View style={styles.notInOperationGrid}>
             {busesNotInOperation.map((busService) => (
-              <View key={busService} style={styles.notInOperationBox}>
-                <View style={styles.diagonalLine} />
-                <Text style={styles.notInOperationText}>{busService}</Text>
-              </View>
+              <TouchableOpacity 
+                key={busService}
+                onPress={() => {
+                  setSelectedBusNumber(busService)
+                  setBusModalVisible(true);
+                }}
+              >
+                <View style={styles.notInOperationBox}>
+                  <View style={styles.diagonalLine} />
+                  <Text style={styles.notInOperationText}>{busService}</Text>
+                </View>
+              </TouchableOpacity>
+              
             ))}
           </View>
         </View>
       )}
+      <BusModal
+        busNumber={selectedBusNumber || ""}
+        busStopCode={props.BusStopCode}
+        description={props.Description}
+        isVisible={isBusModalVisible}
+        onClose={() => setBusModalVisible(false)}
+      />
     </View>
   );
 };
