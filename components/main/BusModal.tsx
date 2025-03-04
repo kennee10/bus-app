@@ -6,6 +6,27 @@ import { colors, font } from "../../assets/styles/GlobalStyles";
 import { scale } from "react-native-size-matters";
 import GroupSelectionModal from "./GroupSelectionModal";
 import { SafeAreaView } from "react-native-safe-area-context";
+import busFirstLastTimingsData from "../../assets/busFirstLastTimings.json"
+
+
+interface BusDirection {
+    WD_FirstBus: string;
+    WD_LastBus: string;
+    SAT_FirstBus: string;
+    SAT_LastBus: string;
+    SUN_FirstBus: string;
+    SUN_LastBus: string;
+  }
+  
+  interface BusFirstLastTimings {
+    [serviceNo: string]: {
+      [busStopCode: string]: {
+        [direction: string]: BusDirection;
+      };
+    };
+  }
+
+const busFirstLastTimings: BusFirstLastTimings = busFirstLastTimingsData as BusFirstLastTimings;
 
 type BusModalProps = {
     busNumber: string;
@@ -26,6 +47,11 @@ const BusModal: React.FC<BusModalProps> = ({
     const { groups } = useLikedBuses();
 
     const isHearted = Object.values(groups).some((group) => group.busStops[busStopCode]?.includes(busNumber))
+    
+    
+
+    const busTimings = busFirstLastTimings[busNumber]?.[busStopCode];
+    const timings = busTimings?.["2"] || busTimings?.["1"]
 
     return (
         <Modal
@@ -64,9 +90,28 @@ const BusModal: React.FC<BusModalProps> = ({
                                 />
                             </TouchableOpacity>
                         </View>
+
+                        <View style={styles.busFirstLastTimings}>
+              {timings ? (
+                <>
+                  <Text style={styles.timingText}>
+                    🕒 Weekday: {timings.WD_FirstBus} - {timings.WD_LastBus}
+                  </Text>
+                  <Text style={styles.timingText}>
+                    🕒 Saturday: {timings.SAT_FirstBus} - {timings.SAT_LastBus}
+                  </Text>
+                  <Text style={styles.timingText}>
+                    🕒 Sunday: {timings.SUN_FirstBus} - {timings.SUN_LastBus}
+                  </Text>
+                </>
+              ) : (
+                <Text style={styles.timingText}>No bus timings available.</Text>
+              )}
+            </View>
                     </View>
                 </View>
             </SafeAreaView>
+
             <GroupSelectionModal
                 busNumber={busNumber}
                 busStopCode={busStopCode}
@@ -118,6 +163,16 @@ const styles = StyleSheet.create({
       },
       likeButtonWrapper: {
         alignItems: "flex-end"
+      },
+      busFirstLastTimings: {
+        marginTop: scale(8),
+        paddingHorizontal: scale(10),
+      },
+      timingText: {
+        fontSize: scale(14),
+        fontFamily: font.medium,
+        color: colors.onSurfaceSecondary2,
+        marginBottom: scale(4),
       },
 })
 
