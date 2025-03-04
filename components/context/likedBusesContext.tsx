@@ -53,7 +53,10 @@ export const LikedBusesProvider: React.FC<{ children: ReactNode }> = ({ children
     const loadLikedBuses = async () => {
       try {
         const storedData = await AsyncStorage.getItem('likedBuses');
-        setLikedBusesData(storedData ? JSON.parse(storedData) : { groups: {}, order: [] });
+        setLikedBusesData(storedData ? JSON.parse(storedData) : { 
+          groups: { Pinned: {isArchived: false, busStops: {} } }, 
+          order: ["Pinned"] 
+        });
       } catch (error) {
         console.error('Failed to load liked buses:', error);
       }

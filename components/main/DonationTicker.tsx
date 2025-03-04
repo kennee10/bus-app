@@ -87,6 +87,8 @@ const styles = StyleSheet.create({
     alignItems: "center", // Center the text
   },
   donationText: {
+    height: scale(30),
+    lineHeight: scale(30),
     fontSize: scale(14),
     fontFamily: font.semiBold,
     color: colors.primary,
