@@ -5,6 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { colors, font } from "../../assets/styles/GlobalStyles";
 import { scale } from "react-native-size-matters";
 import GroupSelectionModal from "./GroupSelectionModal";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type BusModalProps = {
     busNumber: string;
@@ -33,7 +34,7 @@ const BusModal: React.FC<BusModalProps> = ({
             animationType="fade"
             onRequestClose={onClose}
         >
-            <View style={styles.modalOverlay}>
+            <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
                 <TouchableWithoutFeedback onPress={onClose}>
                     <View style={StyleSheet.absoluteFillObject} />
                 </TouchableWithoutFeedback>
@@ -65,7 +66,7 @@ const BusModal: React.FC<BusModalProps> = ({
                         </View>
                     </View>
                 </View>
-            </View>
+            </SafeAreaView>
             <GroupSelectionModal
                 busNumber={busNumber}
                 busStopCode={busStopCode}

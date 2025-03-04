@@ -16,6 +16,7 @@ import { scale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { colors, font } from "../../assets/styles/GlobalStyles";
 import { useLikedBuses } from "../context/likedBusesContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type GroupSelectionModalProps = {
   busNumber: string;
@@ -72,7 +73,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-          <View style={styles.modalOverlay}>
+          <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
             <TouchableWithoutFeedback onPress={onClose}>
               <View style={StyleSheet.absoluteFillObject} />
             </TouchableWithoutFeedback>
@@ -110,7 +111,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                   </TouchableOpacity>
                 </View>
               </View>
-          </View>
+          </SafeAreaView>
       </KeyboardAvoidingView>
     </Modal>
   );
@@ -196,7 +197,7 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-        <View style={styles.modalOverlay}>
+        <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
           <TouchableWithoutFeedback onPress={onClose}>
             <View style={StyleSheet.absoluteFillObject} />
           </TouchableWithoutFeedback>
@@ -235,7 +236,7 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
                 <Text style={styles.createGroupButtonText}>Create New Group</Text>
               </TouchableOpacity>
             </View>
-        </View>
+        </SafeAreaView>
 
       {/* Create Group Modal */}
       <CreateGroupModal

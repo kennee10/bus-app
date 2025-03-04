@@ -13,6 +13,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { colors, font } from '../../assets/styles/GlobalStyles'; 
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 interface BusModalProps {
   isVisible: boolean;
@@ -27,7 +29,7 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
       animationType="fade"
       onRequestClose={onClose}
     >
-        <View style={styles.modalOverlay}>
+        <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
           <TouchableWithoutFeedback onPress={onClose}>
             <View style={StyleSheet.absoluteFillObject} />
           </TouchableWithoutFeedback>
@@ -242,7 +244,7 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                 </View>
               </ScrollView>
             </View>
-        </View>
+        </SafeAreaView>
     </Modal>
   );
 };

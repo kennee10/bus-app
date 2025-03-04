@@ -8,6 +8,7 @@ import { LikedBusStopsProvider } from "../components/context/likedBusStopsContex
 import { LikedBusesProvider } from "../components/context/likedBusesContext";
 import AppInitializer from "./AppInitializer";
 import * as NavigationBar from 'expo-navigation-bar'; // Add this import
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function RootLayout() {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -52,7 +53,7 @@ export default function RootLayout() {
         style="light" 
         backgroundColor={colors.background} 
       />
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaProvider style={styles.safeArea}>
         <LikedBusStopsProvider>
           <LikedBusesProvider>
             <Stack
@@ -69,7 +70,7 @@ export default function RootLayout() {
             </Stack>
           </LikedBusesProvider>
         </LikedBusStopsProvider>
-      </SafeAreaView>
+      </SafeAreaProvider>
     </>
   );
 }

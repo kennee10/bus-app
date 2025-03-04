@@ -22,6 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -66,7 +67,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
       animationType="fade"
       onRequestClose={onClose}
     >
-        <View style={styles.modalOverlay}>
+        <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
           <TouchableWithoutFeedback onPress={onClose}>
             <View style={StyleSheet.absoluteFillObject} />
           </TouchableWithoutFeedback>
@@ -111,7 +112,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
                 <Text style={[styles.modalMenuItemText, {color: colors.accent3}]}>Delete</Text>
               </TouchableOpacity>
             </View>
-        </View>
+        </SafeAreaView>
     </Modal>
   );
 });
@@ -158,7 +159,7 @@ const RenameBottomModal: React.FC<RenameModalProps> = memo(({
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-          <View style={styles.modalOverlay}>
+          <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
             <TouchableWithoutFeedback onPress={onClose}>
               <View style={StyleSheet.absoluteFillObject} />
             </TouchableWithoutFeedback>
@@ -196,7 +197,7 @@ const RenameBottomModal: React.FC<RenameModalProps> = memo(({
                   </TouchableOpacity>
                 </View>
               </View>
-          </View>
+          </SafeAreaView>
       </KeyboardAvoidingView>
     </Modal>
   );

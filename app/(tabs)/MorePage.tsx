@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView, TouchableWithoutFeedback, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { WebView } from "react-native-webview"; // Make sure to install: expo install react-native-webview
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -9,6 +9,7 @@ import { scale } from "react-native-size-matters";
 import { colors, containerStyles, font } from "@/assets/styles/GlobalStyles";
 import PayPalComponent from "@/components/main/PayPalComponent";
 import paynowQR from "../../assets/images/paynow.jpg";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Instead of importing as a module, use require so we can use Asset.fromModule
 const MRTMap = require("../../assets/images/MRTMap.svg");
@@ -117,7 +118,7 @@ export default function App() {
         animationType="fade"
         onRequestClose={() => setIsPayNowVisible(false)}
       >
-          <View style={styles.modalOverlay}>
+          <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
             {/* Backdrop that closes the modal */}
             <TouchableWithoutFeedback onPress={() => setIsPayNowVisible(false)}>
               <View style={StyleSheet.absoluteFillObject} />
@@ -137,7 +138,7 @@ export default function App() {
                   </Text>
                 </View>
               </View>
-          </View>
+          </SafeAreaView>
       </Modal>
 
       {/* MRT Map Modal via WebView */}
@@ -147,7 +148,7 @@ export default function App() {
         animationType="fade"
         onRequestClose={() => setIsMRTMapVisible(false)}
       >
-        <View style={styles.modalOverlay}>
+        <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
           <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer, {padding: 0}]}>
             <View style={[styles.modalHeader, {paddingTop: scale(10), paddingHorizontal: scale(10)}]}>
               <Text style={styles.modalTitle}>MRT Map</Text>
@@ -169,7 +170,7 @@ export default function App() {
               )}
             </View>
           </View>
-        </View>
+        </SafeAreaView>
       </Modal>
     </View>
     </ScrollView>
