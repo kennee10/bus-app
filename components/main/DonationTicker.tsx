@@ -8,7 +8,7 @@ const donations: string[] = [
   "🥇 Alexei donated $20.00",  
   "🥈 Sam donated $15.50",  
   "🥉 Jordan donated $10.00",  
-  "Emily donated $7.25",  
+  "Emilyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy donated $7.25",  
   "Chris donated $5.00",  
   "Nathaniel donated $12.75",  
   "Ava donated $8.50",  
@@ -34,7 +34,7 @@ const donations: string[] = [
   "Matthew donated $9.80",  
   "Hannah donated $10.25",  
   "Jasper donated $8.75",  
-  "Seraphina donated $12.00",
+  "Seraphina donated $12.00", 
 ];
 
 const { width } = Dimensions.get("window");
@@ -78,7 +78,7 @@ export default function DonationDisplay() {
             { opacity: fadeAnim }, // Apply the fade effect
           ]}
         >
-          <Text style={styles.donationText}>{donations[currentDonationIndex]}</Text>
+          <Text style={styles.donationText} adjustsFontSizeToFit numberOfLines={1}>{donations[currentDonationIndex]}</Text>
         </Animated.View>
       ) : (
         <Text style={styles.noDonationsText}>-</Text> // Display a message when the donations array is empty
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     color: colors.onSurfaceSecondary2,
   },
   donationContainer: {
-    width: width, // Ensure container takes up full width
+    width: "100%", // Ensure container takes up full width
     alignItems: "center", // Center the text
   },
   donationText: {
