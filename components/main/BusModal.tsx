@@ -153,7 +153,7 @@ const BusModal: React.FC<BusModalProps> = ({
     return (
         <Modal
             visible={isVisible}
-            transparent
+            transparent={true}
             animationType="fade"
             onRequestClose={onClose}
         >
@@ -276,13 +276,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 
-
-  timingText: {
-    fontSize: scale(14),
-    fontFamily: font.medium,
-    color: colors.onSurfaceSecondary2,
-    marginBottom: scale(4),
-  },
   currentTime: {
     flex: 1,
     fontSize: scale(13),
@@ -305,21 +298,21 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     textAlign: "center",
-    fontSize: scale(14),
+    fontSize: scale(13),
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
   },
   cellLast: {
     flex: 0.7,
     textAlign: "center",
-    fontSize: scale(14),
+    fontSize: scale(13),
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
   },
   cellDay: {
     flex: 0.5,
     textAlign: "right",
-    fontSize: scale(14),
+    fontSize: scale(13),
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
   },
@@ -327,7 +320,7 @@ const styles = StyleSheet.create({
     color: colors.secondary,
   },
   noData: {
-    fontSize: scale(14),
+    fontSize: scale(13),
     color: colors.onSurfaceSecondary2,
     textAlign: "center",
     marginTop: scale(10),

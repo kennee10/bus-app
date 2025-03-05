@@ -105,7 +105,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
         latestBusArrivalData = updatedData; // Update local reference
         setBusArrivalData(updatedData);
       } catch (error) {
-        console.error("BusStopComponent.tsx: Failed to fetch bus data:", error);
+        // console.error("BusStopComponent.tsx: Failed to fetch bus data:", error);
       } finally {
         setIsLoading(false);
       }

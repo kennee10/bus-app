@@ -88,7 +88,7 @@ export default async function fetchBusArrival(
 
     return busServices;
   } catch (error) {
-    console.error("fetchBusArrival.tsx: Error fetching bus arrival data:", error);
+    // console.error("fetchBusArrival.tsx: Error fetching bus arrival data:", error);
     throw error;
   }
 }

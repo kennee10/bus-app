@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     color: colors.onSurfaceSecondary2,
   },
   donationContainer: {
-    width: "100%", // Ensure container takes up full width
+    flex: 1,
     alignItems: "center", // Center the text
   },
   donationText: {

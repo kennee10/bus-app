@@ -71,109 +71,111 @@ export default function App() {
   };
 
   return (
-    <ScrollView style={{backgroundColor: colors.background}}>
-      <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: scale(15) }]}>
-      {/* Contact Me */}
-      <View style={styles.oneContainer}>
-        <Text style={styles.heading}>Contact Me</Text>
-        <View style={styles.content}>
-          <TouchableOpacity onPress={onEmailPress}>
-            <MaterialCommunityIcons
-              name="email"
-              color={colors.onSurfaceSecondary}
-              size={scale(23)}
-              style={{ marginLeft: scale(5) }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Donate */}
-      <View style={styles.oneContainer}>
-        <Text style={styles.heading}>Donate</Text>
-        <View style={styles.content}>
-          <TouchableOpacity onPress={onPayNowPress} style={containerStyles.button}>
-            <Text style={containerStyles.globalTextMessage}>PayNow</Text>
-          </TouchableOpacity>
-          <PayPalComponent />
-        </View>
-        <DonationTicker/>
-      </View>
-
-      {/* MRT Map */}
-      <View style={styles.oneContainer}>
-        <Text style={styles.heading}>MRT Map</Text>
-        <View style={styles.content}>
-          <TouchableOpacity onPress={onMRTMapPress} style={containerStyles.button}>
-            <Text style={containerStyles.globalTextMessage}>View MRT Map</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-
-      {/* PayNow Modal */}
-      <Modal
-        visible={isPayNowVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setIsPayNowVisible(false)}
-      >
-          <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
-            {/* Backdrop that closes the modal */}
-            <TouchableWithoutFeedback onPress={() => setIsPayNowVisible(false)}>
-              <View style={StyleSheet.absoluteFillObject} />
-            </TouchableWithoutFeedback>
-              <View style={styles.bottomModalContainer}>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>PayNow QR</Text>
-                  <TouchableOpacity onPress={() => setIsPayNowVisible(false)} style={styles.closeButton}>
-                    <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.modalDivider} />
-                <View style={styles.payNowImageContainer}>
-                  <Image source={paynowQR} style={styles.image} />
-                  <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>
-                    Screenshot and Scan this QR code in your preferred Bank app
-                  </Text>
-                </View>
-              </View>
-          </SafeAreaView>
-      </Modal>
-
-      {/* MRT Map Modal via WebView */}
-      <Modal
-        visible={isMRTMapVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setIsMRTMapVisible(false)}
-      >
-        <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
-          <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer, {padding: 0}]}>
-            <View style={[styles.modalHeader, {paddingTop: scale(10), paddingHorizontal: scale(10)}]}>
-              <Text style={styles.modalTitle}>MRT Map</Text>
-              <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
-                <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.webViewContainer}>
-              {svgHtml ? (
-                <WebView
-                  source={{ html: svgHtml }}
-                  style={{ flex: 1, width: "100%" }}
-                  scalesPageToFit={true}
-                  javaScriptEnabled={true}
-                  domStorageEnabled={true}
-                />
-              ) : (
-                <Text style={containerStyles.globalTextMessage}>Loading SVG...</Text>
-              )}
-            </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <ScrollView style={{backgroundColor: colors.background}}>
+        <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: scale(15) }]}>
+        {/* Contact Me */}
+        <View style={styles.oneContainer}>
+          <Text style={styles.heading}>Contact Me</Text>
+          <View style={styles.content}>
+            <TouchableOpacity onPress={onEmailPress}>
+              <MaterialCommunityIcons
+                name="email"
+                color={colors.onSurfaceSecondary}
+                size={scale(23)}
+                style={{ marginLeft: scale(5) }}
+              />
+            </TouchableOpacity>
           </View>
-        </SafeAreaView>
-      </Modal>
-    </View>
-    </ScrollView>
+        </View>
+
+        {/* Donate */}
+        <View style={styles.oneContainer}>
+          <Text style={styles.heading}>Donate</Text>
+          <View style={styles.content}>
+            <TouchableOpacity onPress={onPayNowPress} style={containerStyles.button}>
+              <Text style={containerStyles.globalTextMessage}>PayNow</Text>
+            </TouchableOpacity>
+            <PayPalComponent />
+          </View>
+          <DonationTicker/>
+        </View>
+
+        {/* MRT Map */}
+        <View style={styles.oneContainer}>
+          <Text style={styles.heading}>MRT Map</Text>
+          <View style={styles.content}>
+            <TouchableOpacity onPress={onMRTMapPress} style={containerStyles.button}>
+              <Text style={containerStyles.globalTextMessage}>View MRT Map</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+
+        {/* PayNow Modal */}
+        <Modal
+          visible={isPayNowVisible}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setIsPayNowVisible(false)}
+        >
+            <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
+              {/* Backdrop that closes the modal */}
+              <TouchableWithoutFeedback onPress={() => setIsPayNowVisible(false)}>
+                <View style={StyleSheet.absoluteFillObject} />
+              </TouchableWithoutFeedback>
+                <View style={styles.bottomModalContainer}>
+                  <View style={styles.modalHeader}>
+                    <Text style={styles.modalTitle}>PayNow QR</Text>
+                    <TouchableOpacity onPress={() => setIsPayNowVisible(false)} style={styles.closeButton}>
+                      <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.modalDivider} />
+                  <View style={styles.payNowImageContainer}>
+                    <Image source={paynowQR} style={styles.image} />
+                    <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>
+                      Screenshot and Scan this QR code in your preferred Bank app
+                    </Text>
+                  </View>
+                </View>
+            </SafeAreaView>
+        </Modal>
+
+        {/* MRT Map Modal via WebView */}
+        <Modal
+          visible={isMRTMapVisible}
+          animationType="fade"
+          onRequestClose={() => setIsMRTMapVisible(false)}
+        >
+          <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
+            <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer, {padding: 0}]}>
+              <View style={[styles.modalHeader, {paddingTop: scale(10), paddingHorizontal: scale(10)}]}>
+                <Text style={styles.modalTitle}>MRT Map</Text>
+                <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
+                  <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.webViewContainer}>
+                {svgHtml ? (
+                  <WebView
+                    source={{ html: svgHtml }}
+                    style={{ flex: 1, width: "100%" }}
+                    scalesPageToFit={true}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                  />
+                ) : (
+                  <Text style={containerStyles.globalTextMessage}>Loading SVG...</Text>
+                )}
+              </View>
+            </View>
+          </SafeAreaView>
+        </Modal>
+      </View>
+      </ScrollView>
+    </SafeAreaView>
+    
     
   );
 }

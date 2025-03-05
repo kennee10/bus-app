@@ -3,9 +3,12 @@ import { Tabs } from "expo-router";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
 import { colors, navigationBarHeight } from "../../assets/styles/GlobalStyles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabsLayout() {
   console.log("_layout.tsx(tabs): Tabs layout rendering...");
+
+  const insets = useSafeAreaInsets(); // Get safe area insets
 
   return (
     <Tabs
@@ -17,11 +20,12 @@ export default function TabsLayout() {
           fontFamily: "Nunito-Bold",
         },
         tabBarStyle: {
-          backgroundColor: colors.background,
+          // backgroundColor: colors.background,
+          backgroundColor: "red",
           borderTopWidth: 0,
-          height: navigationBarHeight,
-          paddingBottom: scale(10),
           width: "100%",
+          // height: navigationBarHeight,
+          // paddingBottom: scale(10),
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.onBackgroundSecondary2,
