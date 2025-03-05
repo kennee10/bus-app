@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Alert,
   Modal,
-  FlatList,
   TextInput,
   TouchableWithoutFeedback,
   ToastAndroid,
@@ -642,7 +641,7 @@ const styles = StyleSheet.create({
     padding: scale(4),
   },
   modalDivider: {
-    height: 1,
+    height: scale(1),
     backgroundColor: colors.borderToPress,
     marginVertical: scale(10),
   },

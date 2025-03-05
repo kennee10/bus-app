@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { scale } from "react-native-size-matters";
-import { colors, font } from '../../assets/styles/GlobalStyles';
+import { colors } from '../../assets/styles/GlobalStyles';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import EntypoIcons from "react-native-vector-icons/Entypo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -25,7 +25,6 @@ type ArrivalTimingComponentProps = {
 
 const getBusLoad = (load: string): JSX.Element => {
   if (load === "SEA") {
-    // return <View style={styles.circle} />
     return <View style={{flexDirection: 'row'}}>
               <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
             </View>

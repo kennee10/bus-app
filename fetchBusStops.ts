@@ -40,6 +40,7 @@ interface TimingsData {
 }
 
 interface BusDirection {
+    Direction: number;
     WD_FirstBus: string;
     WD_LastBus: string;
     SAT_FirstBus: string;
@@ -51,7 +52,7 @@ interface BusDirection {
 interface BusFirstLastTimings {
   [serviceNo: string]: {
     [busStopCode: string]: {
-      [direction: string]: BusDirection
+      [stopSequence: string]: BusDirection
     };
   };
 }
@@ -81,7 +82,7 @@ async function fetchAllTimings(): Promise<BusFirstLastTimings> {
 
       if (data.value.length > 0) {
         data.value.forEach((timingsData: TimingsData) => {
-          const { ServiceNo, BusStopCode, Direction, ...busTimings } = timingsData;
+          const { ServiceNo, BusStopCode, StopSequence, ...busTimings } = timingsData;
 
           if (!busFirstLastTimings[ServiceNo]) {
             busFirstLastTimings[ServiceNo] = {};
@@ -90,7 +91,8 @@ async function fetchAllTimings(): Promise<BusFirstLastTimings> {
             busFirstLastTimings[ServiceNo][BusStopCode] = {};
           }
 
-          busFirstLastTimings[ServiceNo][BusStopCode][Direction] = {
+          busFirstLastTimings[ServiceNo][BusStopCode][StopSequence] = {
+            Direction: busTimings.Direction,
             WD_FirstBus: busTimings.WD_FirstBus,
             WD_LastBus: busTimings.WD_LastBus,
             SAT_FirstBus: busTimings.SAT_FirstBus,

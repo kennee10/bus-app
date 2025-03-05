@@ -3,16 +3,38 @@ import React, { useEffect, useState, useRef } from "react";
 import { View, Text, Animated, StyleSheet, Dimensions } from "react-native";
 import { scale } from "react-native-size-matters";
 
-// Define donations with a type annotation
+
 const donations: string[] = [
-  // Add your donation messages here
-  "🥇 Fellycia donated $10.40",
-  "🥈 Yenn donated $5.00",
-  "🥉 Malcom donated $5.00",
-  "Karen donated $5.00",
-//   "Yenn4 donated $5.00",
-//   "Yenn5 donated $5.00",
-  // etc.
+  "🥇 Alexei donated $20.00",  
+  "🥈 Sam donated $15.50",  
+  "🥉 Jordan donated $10.00",  
+  "Emily donated $7.25",  
+  "Chris donated $5.00",  
+  "Nathaniel donated $12.75",  
+  "Ava donated $8.50",  
+  "Zoe donated $6.00",  
+  "Jonathan donated $14.20",  
+  "Mia donated $9.00",  
+  "Benjamin donated $13.33",  
+  "Olivia donated $11.80",  
+  "Ethan donated $6.75",  
+  "Sophie donated $7.90",  
+  "Daniel donated $10.50",  
+  "Charlotte donated $5.60",  
+  "Leo donated $8.20",  
+  "Madeline donated $6.40",  
+  "Xander donated $9.99",  
+  "Isabella donated $4.75",  
+  "Tyler donated $5.50",  
+  "Victoria donated $13.00",  
+  "Ryan donated $11.25",  
+  "Grace donated $7.00",  
+  "Sebastian donated $14.50",  
+  "Lily donated $6.90",  
+  "Matthew donated $9.80",  
+  "Hannah donated $10.25",  
+  "Jasper donated $8.75",  
+  "Seraphina donated $12.00",
 ];
 
 const { width } = Dimensions.get("window");

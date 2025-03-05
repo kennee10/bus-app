@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { scale, verticalScale } from "react-native-size-matters";
+import { scale } from "react-native-size-matters";
 import { colors, navigationBarHeight } from "../../assets/styles/GlobalStyles";
 
 export default function TabsLayout() {

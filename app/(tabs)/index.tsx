@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { 
-  Text, 
-  FlatList, 
+  Text,
   TouchableOpacity, 
   View, 
   ActivityIndicator, 
