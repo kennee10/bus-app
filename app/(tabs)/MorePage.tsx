@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView, TouchableWithoutFeedback } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Linking, Image, ScrollView, TouchableWithoutFeedback, Platform } from "react-native";
 import { WebView } from "react-native-webview"; // Make sure to install: expo install react-native-webview
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -34,7 +34,10 @@ export default function App() {
             <html>
               <head>
                 <meta name="viewport" content="width=device-width, initial-scale=0.95, user-scalable=yes" />
-                <style>body { margin: 0; padding: 0; background-color: white; }</style>
+                <style>
+                  body { margin: 0; padding: 0; background-color: white; }
+                  svg { width: 100vw; height: auto; }
+                </style>
               </head>
               <body>
                 ${svgContent}
@@ -149,7 +152,7 @@ export default function App() {
           onRequestClose={() => setIsMRTMapVisible(false)}
         >
           <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
-            <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer, {padding: 0}]}>
+            <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer , {padding: 0}]}>
               <View style={[styles.modalHeader, {paddingTop: scale(10), paddingHorizontal: scale(10)}]}>
                 <Text style={styles.modalTitle}>MRT Map</Text>
                 <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
@@ -160,7 +163,7 @@ export default function App() {
                 {svgHtml ? (
                   <WebView
                     source={{ html: svgHtml }}
-                    style={{ flex: 1, width: "100%" }}
+                    style={{ flex: 1, width: "100%"}}
                     scalesPageToFit={true}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
@@ -216,10 +219,13 @@ const styles = StyleSheet.create({
     borderTopRightRadius: scale(12),
     padding: scale(10),
     elevation: 5,
+    // paddingTop: Platform.OS === 'ios' ? scale(20) : 0
+
   },
   mrtMapModalContainer: {
-    height: "100%", // Increased height for better map viewing
-    paddingBottom: 0, // Remove bottom padding to maximize space
+    flex: 1,
+    // height: "100%", // Increased height for better map viewing
+    // paddingBottom: 0, // Remove bottom padding to maximize space
   },
   webViewContainer: {
     flex: 1,
