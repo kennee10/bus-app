@@ -252,7 +252,7 @@ const NearbyBusStopsPage = () => {
                 keyExtractor={(item) => item.BusStopCode}
                 renderItem={renderItem}
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10), backgroundColor: 'yellow'}}
+                contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10)}}
                 onScrollBeginDrag={() => Keyboard.dismiss()}
                 removeClippedSubviews
                 initialNumToRender={12}

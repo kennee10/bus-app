@@ -475,7 +475,7 @@ const LikedBusesPage = () => {
               data={unarchivedGroupsOrder}
               keyExtractor={(item) => item}
               renderItem={renderGroupItem}
-              contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10), backgroundColor: 'yellow'}}
+              contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10)}}
               keyboardShouldPersistTaps="handled"
               
             />

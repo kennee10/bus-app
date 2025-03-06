@@ -72,6 +72,7 @@ export const containerStyles = StyleSheet.create({
     innerPageContainer: {
       flex: 1,
       width: '97%',
+      backgroundColor: colors.background,
       // backgroundColor: 'green',
     },
     button: {

@@ -21,8 +21,8 @@ export default function TabsLayout() {
           fontFamily: "Nunito-Bold",
         },
         tabBarStyle: {
-          // backgroundColor: colors.background,
-          backgroundColor: "red",
+          backgroundColor: colors.background,
+          // backgroundColor: "red",
           borderTopWidth: 0,
           width: "100%",
           ...(Platform.OS === "android" ? { height: navigationBarHeight } : {}),
