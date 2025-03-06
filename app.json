@@ -27,7 +27,8 @@
         "monochromeImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0d0d0d"
       },
-      "package": "com.kennee10.busapp"
+      "package": "com.kennee10.busapp",
+      "versionCode": 2
     },
     "web": {
       "bundler": "metro",

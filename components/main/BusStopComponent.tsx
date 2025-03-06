@@ -278,10 +278,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   upper: {
-    flex: 1,
-    height: scale(30),
-    width: "100%",
     flexDirection: "row",
+    flex: 1,
+    width: "100%",
+    height: scale(30),
   },
   lower: {
     flex: 1,
