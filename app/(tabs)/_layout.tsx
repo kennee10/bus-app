@@ -4,6 +4,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { scale } from "react-native-size-matters";
 import { colors, navigationBarHeight } from "../../assets/styles/GlobalStyles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Platform } from "react-native";
 
 export default function TabsLayout() {
   console.log("_layout.tsx(tabs): Tabs layout rendering...");
@@ -24,7 +25,7 @@ export default function TabsLayout() {
           backgroundColor: "red",
           borderTopWidth: 0,
           width: "100%",
-          // height: navigationBarHeight,
+          ...(Platform.OS === "android" ? { height: navigationBarHeight } : {}),
           // paddingBottom: scale(10),
         },
         tabBarActiveTintColor: colors.primary,
