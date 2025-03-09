@@ -58,7 +58,7 @@ const LikedBusStopsPage = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={containerStyles.pageContainer}>
           <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
@@ -95,7 +95,7 @@ const LikedBusStopsPage = () => {
           </View>
         </View>
       </GestureHandlerRootView>
-    </SafeAreaView>
+    // </SafeAreaView>
     
   );
 };

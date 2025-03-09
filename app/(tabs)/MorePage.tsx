@@ -75,7 +75,7 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView style={{backgroundColor: colors.background}}>
         <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: scale(15) }]}>
         {/* Contact Me */}
@@ -153,7 +153,7 @@ export default function App() {
           animationType="fade"
           onRequestClose={() => setIsMRTMapVisible(false)}
         >
-          <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
+          <SafeAreaView style={styles.modalOverlayMRT} edges={['top', 'bottom']}>
             <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer , {padding: 0}]}>
               <View style={[styles.modalHeader, {paddingTop: scale(10), paddingHorizontal: scale(10)}]}>
                 <Text style={styles.modalTitle}>MRT Map</Text>
@@ -179,9 +179,6 @@ export default function App() {
         </Modal>
       </View>
       </ScrollView>
-    </SafeAreaView>
-    
-    
   );
 }
 
@@ -215,6 +212,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.modalOverlayBackgroundColor,
     justifyContent: "flex-end", // Position at bottom
   },
+  modalOverlayMRT: {
+    flex: 1,
+    backgroundColor: colors.background,
+    justifyContent: "flex-end", // Position at bottom
+  },
   bottomModalContainer: {
     backgroundColor: colors.surface,
     borderTopLeftRadius: scale(12),
@@ -225,8 +227,8 @@ const styles = StyleSheet.create({
 
   },
   mrtMapModalContainer: {
-    flex: 1,
-    // height: "100%", // Increased height for better map viewing
+    // flex: 1,
+    height: "100%", // Increased height for better map viewing
     // paddingBottom: 0, // Remove bottom padding to maximize space
   },
   webViewContainer: {

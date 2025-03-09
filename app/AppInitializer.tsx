@@ -3,6 +3,7 @@ import { View, ActivityIndicator } from "react-native";
 import * as Font from "expo-font";
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface AppInitializerProps {
   onInitializationComplete: () => void; // Called when both fetching and font loading are complete
@@ -54,13 +55,13 @@ const AppInitializer: React.FC<AppInitializerProps> = ({
 
   // Loading indicator
   return (
-    <View style={containerStyles.globalContainer}>
+    <SafeAreaView style={containerStyles.globalContainer}>
       <ActivityIndicator
         size="large"
         color={colors.onBackgroundSecondary}
         style={{ flex: 1 }}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -53,7 +53,7 @@ export default function RootLayout() {
         style="light" 
         backgroundColor={colors.background} 
       />
-      <SafeAreaProvider style={styles.safeArea}>
+      <SafeAreaView style={styles.safeArea}>
         <LikedBusStopsProvider>
           <LikedBusesProvider>
             <Stack
@@ -70,7 +70,7 @@ export default function RootLayout() {
             </Stack>
           </LikedBusesProvider>
         </LikedBusStopsProvider>
-      </SafeAreaProvider>
+      </SafeAreaView>
     </>
   );
 }
@@ -80,6 +80,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: colors.background,
-    // paddingTop: Platform.OS === "android" ? StatusBar.currentHeight || scale(42) : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight || scale(42) : 0,
   },
 });

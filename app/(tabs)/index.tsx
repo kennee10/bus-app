@@ -197,7 +197,7 @@ const NearbyBusStopsPage = () => {
   ), [likedBusStopsOrder, searchQuery, toggleLike]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={containerStyles.pageContainer}>
         <View style={containerStyles.innerPageContainer}>
@@ -271,15 +271,14 @@ const NearbyBusStopsPage = () => {
           )}
         </View>
       </View>
-      </GestureHandlerRootView>
-
       <InfoModal 
             isVisible={isModalVisible} 
             onClose={() => setIsModalVisible(false)}
           />
-    </SafeAreaView>
-    
-    
+      </GestureHandlerRootView>
+
+      
+    // </SafeAreaView>
   );
 };
 
