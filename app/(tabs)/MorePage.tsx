@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 // Instead of importing as a module, use require so we can use Asset.fromModule
 const MRTMap = require("../../assets/images/MRTMap.svg");
 import DonationTicker from '@/components/main/DonationTicker'; // Make sure to create this file
+import PayNowLinkComponent from "@/components/main/PayNowLinkComponent";
 
 export default function App() {
   const [isPayNowVisible, setIsPayNowVisible] = useState(false);
@@ -100,6 +101,7 @@ export default function App() {
               <Text style={containerStyles.globalTextMessage}>PayNow</Text>
             </TouchableOpacity>
             <PayPalComponent />
+            {/* <PayNowLinkComponent /> */}
           </View>
           <DonationTicker/>
         </View>

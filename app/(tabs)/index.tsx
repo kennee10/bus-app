@@ -233,11 +233,6 @@ const NearbyBusStopsPage = () => {
               )}
             </View>
           </View>
-        
-          <InfoModal 
-            isVisible={isModalVisible} 
-            onClose={() => setIsModalVisible(false)}
-          />
 
           {loading ? (
             <ActivityIndicator
@@ -277,6 +272,11 @@ const NearbyBusStopsPage = () => {
         </View>
       </View>
       </GestureHandlerRootView>
+
+      <InfoModal 
+            isVisible={isModalVisible} 
+            onClose={() => setIsModalVisible(false)}
+          />
     </SafeAreaView>
     
     

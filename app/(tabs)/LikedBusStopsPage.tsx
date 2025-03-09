@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
+import { colors, containerStyles, navigationBarHeight } from '../../assets/styles/GlobalStyles';
 import LikedBusStopsBusStopComponent from '../../components/main/LikedBusStopsBusStopComponent';
 import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
 import { getBusStopsDetails } from '../../components/hooks/getBusStopsDetails';
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
-import DraggableFlatList from 'react-native-draggable-flatlist';
+import FlatList from 'react-native-draggable-flatlist';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 
 type BusStopWithDist = {
   BusStopCode: string;
