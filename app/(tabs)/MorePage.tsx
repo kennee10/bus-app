@@ -153,7 +153,7 @@ export default function App() {
           animationType="fade"
           onRequestClose={() => setIsMRTMapVisible(false)}
         >
-          <SafeAreaView style={styles.modalOverlayMRT} edges={['top', 'bottom']}>
+          <View style={styles.modalOverlayMRT}>
             <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer , {padding: 0}]}>
               <View style={[styles.modalHeader, {paddingTop: scale(10), paddingHorizontal: scale(10)}]}>
                 <Text style={styles.modalTitle}>MRT Map</Text>
@@ -175,7 +175,7 @@ export default function App() {
                 )}
               </View>
             </View>
-          </SafeAreaView>
+          </View>
         </Modal>
       </View>
       </ScrollView>
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   },
   mrtMapModalContainer: {
     // flex: 1,
-    height: "100%", // Increased height for better map viewing
+    height: Platform.OS === "android" ? "100%" : "95%", // Increased height for better map viewing
     // paddingBottom: 0, // Remove bottom padding to maximize space
   },
   webViewContainer: {

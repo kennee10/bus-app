@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { scale } from "react-native-size-matters";
+import { scale, verticalScale } from "react-native-size-matters";
 import { colors, navigationBarHeight } from "../../assets/styles/GlobalStyles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Platform } from "react-native";
@@ -22,10 +22,10 @@ export default function TabsLayout() {
         },
         tabBarStyle: {
           backgroundColor: colors.background,
-          // backgroundColor: "red",
           borderTopWidth: 0,
+          paddingBottom: scale(20),
           width: "100%",
-          height: navigationBarHeight,
+          height: Platform.OS === "android" ? navigationBarHeight : verticalScale(37),
           // ...(Platform.OS === "android" ? { height: navigationBarHeight } : {}),
           // paddingBottom: scale(10),
         },
