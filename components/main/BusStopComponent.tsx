@@ -294,6 +294,8 @@ const styles = StyleSheet.create({
   },
   descriptionWrapper: {
     flex: 19,
+    backgroundColor: 'red',
+    
   },
   likeButtonWrapper: {
     flex: 2.5,

@@ -109,7 +109,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
               <Text style={styles.busStopCode}>{props.busStopCode}</Text>
             </View>
             <View style={styles.descriptionWrapper}>
-              <Text style={styles.description} adjustsFontSizeToFit numberOfLines={1}>
+              <Text style={styles.description}>
                 {props.busStopDetails?.Description}
               </Text>
             </View>
@@ -210,6 +210,8 @@ const styles = StyleSheet.create({
   },
   descriptionWrapper: {
     flex: 19,
+    backgroundColor: 'red',
+    
   },
   busStopCode: {
     fontSize: scale(11),
