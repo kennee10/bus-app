@@ -210,7 +210,6 @@ const styles = StyleSheet.create({
   },
   descriptionWrapper: {
     flex: 19,
-    backgroundColor: 'red',
     
   },
   busStopCode: {
