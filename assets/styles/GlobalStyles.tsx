@@ -34,6 +34,7 @@ export const colors = {
     accent5: "#2fa7f3",
     accent6: "sienna",
     accent7: "khaki",
+    accent8: "#348cc0",
 
     highlight: "#a17ee4",
     busIcon: "powderblue",

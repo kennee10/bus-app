@@ -3,7 +3,7 @@ import { calculateDistance } from "./usefulFunctions";
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
 
 
-type BusStopWithDistance = {
+export type BusStopWithDistance = {
   BusStopCode: string;
   Description: string;
   RoadName: string;

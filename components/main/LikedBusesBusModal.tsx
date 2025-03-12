@@ -1,321 +1,423 @@
-import React from "react";
-import { View, Text, Modal, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, } from "react-native";
-import { useLikedBuses } from "../context/likedBusesContext";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors, font } from "../../assets/styles/GlobalStyles";
-import { scale } from "react-native-size-matters";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  ScrollView,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import busFirstLastTimingsData from "../../assets/busFirstLastTimings.json"
-
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { scale } from "react-native-size-matters";
+import { useLikedBuses } from "../context/likedBusesContext";
+import { colors, font } from "../../assets/styles/GlobalStyles";
+import busFirstLastTimingsData from "../../assets/busFirstLastTimings.json";
+import { getBusStopsDetails, BusStopWithDistance } from "../hooks/getBusStopsDetails";
 
 interface BusDirection {
-    Direction: string;
-    WD_FirstBus: string;
-    WD_LastBus: string;
-    SAT_FirstBus: string;
-    SAT_LastBus: string;
-    SUN_FirstBus: string;
-    SUN_LastBus: string;
+  Direction: number;
+  WD_FirstBus: string;
+  WD_LastBus: string;
+  SAT_FirstBus: string;
+  SAT_LastBus: string;
+  SUN_FirstBus: string;
+  SUN_LastBus: string;
+  StopSequence?: number;
 }
-  
+
 interface BusFirstLastTimings {
-    [serviceNo: string]: {
-        [busStopCode: string]: {
-            [stopSequence: string]: BusDirection;
-        };
+  [serviceNo: string]: {
+    [busStopCode: string]: {
+      [stopSequence: string]: BusDirection;
     };
+  };
 }
 
 const busFirstLastTimings: BusFirstLastTimings = busFirstLastTimingsData as BusFirstLastTimings;
 
 type BusModalProps = {
-    busNumber: string;
-    busStopCode: string;
-    description?: string;
-    groupName: string;
-    isVisible: boolean;
-    onClose: () => void;
-}
+  busNumber: string;
+  busStopCode: string;
+  description?: string;
+  groupName: string;
+  isVisible: boolean;
+  onClose: () => void;
+};
 
 const LikedBusesBusModal: React.FC<BusModalProps> = ({
-    busNumber,
-    busStopCode,
-    description,
-    groupName,
-    isVisible,
-    onClose,
+  busNumber,
+  busStopCode,
+  description = "",
+  groupName,
+  isVisible,
+  onClose,
 }) => {
-    const { groups, toggleUnlike } = useLikedBuses();
-    const now = new Date();
-    const currentDay = now.toLocaleString('en-US', { weekday: 'long' });
-    const currentTime = now.toLocaleString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit', 
-        hour12: true 
+  const { toggleUnlike } = useLikedBuses();
+  const now = new Date();
+  const currentDay = now.toLocaleString("en-US", { weekday: "long" });
+  const currentTime = now.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  // State for timings dropdown expansion and bus stop details
+  const [isTimingsExpanded, setIsTimingsExpanded] = useState(false);
+  const [busStopsDetails, setBusStopsDetails] = useState<BusStopWithDistance[]>([]);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  // Format time (from "HHmm" to AM/PM format)
+  const formatTime = (time: string) => {
+    if (time === "-") return "-";
+    const paddedTime = time.padStart(4, "0");
+    const hour = paddedTime.slice(0, 2);
+    const minute = paddedTime.slice(2);
+    const date = new Date(2000, 0, 1, Number(hour), Number(minute));
+    return date.toLocaleString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     });
+  };
 
-    const formatTime = (time: string) => {
-      // Ensure time is in HH:mm format
-      const [hour, minute] = time.padStart(4, '0').match(/.{1,2}/g) || ['00', '00'];
-      const formattedDate = new Date(2000, 0, 1, Number(hour), Number(minute));
-  
-      // Check if the date is valid
-      if (isNaN(formattedDate.getTime())) {
-          return "-";
-      }
-  
-      return formattedDate.toLocaleString('en-US', { 
-          hour: 'numeric', 
-          minute: '2-digit', 
-          hour12: true 
-      });
-    };
-    
-    const getBusTimings = (busNumber: string, busStopCode: string) => {
-        const busTimings = busFirstLastTimings[busNumber]?.[busStopCode];
+  // Get bus timings from JSON based on busNumber and busStopCode
+  const getBusTimings = (busNumber: string, busStopCode: string) => {
+    const busTimings = busFirstLastTimings[busNumber]?.[busStopCode];
+    if (!busTimings) return null;
+    if (busTimings["1"]) return busTimings["1"];
+    const firstAvailableSequence = Object.keys(busTimings)[0];
+    return busTimings[firstAvailableSequence] || null;
+  };
 
-        if (!busTimings) return null;
+  const timings = getBusTimings(busNumber, busStopCode);
+  const direction = timings?.Direction ?? 1;
 
-        if (busTimings["1"]) {
-            return busTimings["1"];
+  // Helper: sort bus stops in the travel direction
+  const getSortedStopsInDirection = (busNumber: string, direction: number) => {
+    const busStops = busFirstLastTimings[busNumber];
+    if (!busStops) return [];
+    const stopsWithSequence = Object.entries(busStops)
+      .flatMap(([stopCode, sequences]) =>
+        Object.entries(sequences).map(([sequence, data]) => ({
+          stopCode,
+          sequence: parseInt(sequence, 10),
+          ...data,
+        }))
+      )
+      .filter((stop) => stop.Direction === direction)
+      .sort((a, b) => a.sequence - b.sequence);
+    return stopsWithSequence;
+  };
+
+  const sortedStops = useMemo(
+    () => getSortedStopsInDirection(busNumber, direction),
+    [busNumber, direction]
+  );
+
+  const currentStopIndex = sortedStops.findIndex(
+    (stop) => stop.stopCode === busStopCode
+  );
+
+  // Scroll to current bus stop when the modal opens
+  // useEffect(() => {
+  //   if (isVisible && scrollViewRef.current && currentStopIndex >= 0) {
+  //     scrollViewRef.current.scrollTo({ y: currentStopIndex * scale(40), animated: true });
+  //   }
+  // }, [isVisible, currentStopIndex]);
+
+  // Fetch details for each bus stop
+  useEffect(() => {
+    const fetchBusStopsDetails = async () => {
+      try {
+        if (sortedStops.length > 0) {
+          const stopCodes = sortedStops.map((stop) => stop.stopCode);
+          const details = await getBusStopsDetails(stopCodes);
+          setBusStopsDetails(details);
         }
-        const firstAvailableSequence = Object.keys(busTimings)[0];
-        return busTimings[firstAvailableSequence] || null;
-    }
-    
-    const timings = getBusTimings(busNumber, busStopCode);
-
-    // Add these helper functions
-    const timeToMinutes = (time: string) => {
-      const hours = parseInt(time.substring(0, 2), 10);
-      const minutes = parseInt(time.substring(2), 10);
-      return hours * 60 + minutes;
+      } catch (error) {
+        console.error("Error fetching bus stops details:", error);
+      }
     };
+    fetchBusStopsDetails();
+  }, [sortedStops]);
 
-    const isTimeBetween = (start: string, end: string, current: Date) => {
-      const currentMinutes = current.getHours() * 60 + current.getMinutes();
-      const startMinutes = timeToMinutes(start);
-      let endMinutes = timeToMinutes(end);
+  const toggleTimings = () => {
+    setIsTimingsExpanded(!isTimingsExpanded);
+  };
 
-      // Handle overnight services (end time < start time)
-      if (endMinutes < startMinutes) {
-        endMinutes += 1440; // Add 24 hours
-        const currentForOvernight = currentMinutes < startMinutes 
-          ? currentMinutes + 1440 
-          : currentMinutes;
-        return currentForOvernight >= startMinutes && currentForOvernight <= endMinutes;
-      }
-      
-      return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
-    };
+  // Optionally, determine the active schedule for highlighting purposes
+  const getActiveSchedule = () => {
+    if (!timings) return null;
+    if (["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].includes(currentDay))
+      return "weekday";
+    if (currentDay === "Saturday") return "saturday";
+    if (currentDay === "Sunday") return "sunday";
+    return null;
+  };
 
-    // Determine which schedule to highlight
-    const getActiveSchedule = () => {
-      if (!timings) return null;
+  const activeSchedule = getActiveSchedule();
 
-      const currentDate = new Date();
-      
-      // Check weekday schedule first (Mon-Fri)
-      if (currentDate.getDay() >= 1 && currentDate.getDay() <= 5) {
-        return 'weekday';
-      }
-      
-      // Check if current time falls within weekday overnight service
-      if (isTimeBetween(timings.WD_FirstBus, timings.WD_LastBus, currentDate)) {
-        return 'weekday';
-      }
-
-      // Check Saturday schedule
-      if (currentDate.getDay() === 6) {
-        return 'saturday';
-      }
-
-      // Check Sunday schedule
-      if (currentDate.getDay() === 0) {
-        return 'sunday';
-      }
-
-      // Handle weekend overnight services that extend into Monday
-      if (currentDate.getDay() === 1) { // Monday
-        if (isTimeBetween('0000', timings.WD_LastBus, currentDate)) {
-          return 'weekday';
-        }
-      }
-
-      return null;
-    };
-
-    // Use in your render method
-    const activeSchedule = getActiveSchedule();
-    return (
-        <Modal
-            visible={isVisible}
-            transparent
-            animationType="fade"
-            onRequestClose={onClose}
-        >
-            <SafeAreaView style={styles.modalOverlay} edges={['top', 'bottom']}>
-                <TouchableWithoutFeedback onPress={onClose}>
-                    <View style={StyleSheet.absoluteFillObject} />
-                </TouchableWithoutFeedback>
-                <View style={styles.bottomModalContainer}>
-                    <View style={styles.modalHeader}>
-                        <View style={styles.modalHeaderText}>
-                            <Text style={styles.modalTitle} adjustsFontSizeToFit numberOfLines={1}>
-                                {description}
-                            </Text>
-                            <Text style={styles.modalTitle}>
-                                {busNumber}
-                            </Text>
-                        </View>
-                        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                            <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.modalDivider} />
-
-                    <View style={styles.modalBody}>
-                        <View style={styles.likeButtonWrapper}>
-                            <Text style={styles.currentTime}>
-                                {currentDay} {currentTime}
-                            </Text>
-                            <TouchableOpacity onPress={() => {
-                                toggleUnlike(groupName, busStopCode, busNumber)
-                                onClose()
-                                }}>
-                                <Ionicons
-                                name="heart"
-                                color={colors.accent5}
-                                size={scale(18)}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        {timings ? (
-                            <View style={styles.table}>
-                            <View style={styles.row}>
-                                <Text style={styles.cellDay}></Text>
-                                <Text style={styles.cell}>First Bus</Text>
-                                <Text style={styles.cellLast}>Last Bus</Text>
-                            </View>
-                            <View style={[styles.row]}>
-                                <Text style={[styles.cellDay, activeSchedule === 'weekday' ? styles.highlightText : null]}>Weekday</Text>
-                                <Text style={[styles.cell, activeSchedule === 'weekday' ? styles.highlightText : null]}>{formatTime(timings.WD_FirstBus)}</Text>
-                                <Text style={[styles.cellLast, activeSchedule === 'weekday' ? styles.highlightText : null]}>{formatTime(timings.WD_LastBus)}</Text>
-                            </View>
-
-                            <View style={[styles.row]}>
-                                <Text style={[styles.cellDay, activeSchedule === 'saturday' ? styles.highlightText : null]}>Saturday</Text>
-                                <Text style={[styles.cell, activeSchedule === 'saturday' ? styles.highlightText : null]}>{formatTime(timings.SAT_FirstBus)}</Text>
-                                <Text style={[styles.cellLast, activeSchedule === 'saturday' ? styles.highlightText : null]}>{formatTime(timings.SAT_LastBus)}</Text>
-                            </View>
-
-                            <View style={[styles.row]}>
-                                <Text style={[styles.cellDay, activeSchedule === 'sunday' ? styles.highlightText : null]}>Sunday</Text>
-                                <Text style={[styles.cell, activeSchedule === 'sunday' ? styles.highlightText : null]}>{formatTime(timings.SUN_FirstBus)}</Text>
-                                <Text style={[styles.cellLast, activeSchedule === 'sunday' ? styles.highlightText : null]}>{formatTime(timings.SUN_LastBus)}</Text>
-                            </View>
-                            </View>
-                        ) : (
-                            <Text style={styles.noData}>No bus timings available.</Text>
-                        )}
-                    </View>
+  return (
+    <Modal visible={isVisible} transparent animationType="fade" onRequestClose={onClose}>
+      <SafeAreaView style={styles.modalOverlay} edges={["top", "bottom"]}>
+        <TouchableWithoutFeedback onPress={onClose}>
+          <View style={StyleSheet.absoluteFill} />
+        </TouchableWithoutFeedback>
+        <View style={styles.bottomModalContainer}>
+          <View style={styles.modalHeader}>
+            <View style={styles.modalHeaderText}>
+              <Text style={styles.modalTitle} adjustsFontSizeToFit numberOfLines={1}>
+                {description}
+              </Text>
+              <Text style={styles.modalTitle}>{busNumber}</Text>
+            </View>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.modalDivider} />
+          <View style={styles.modalBody}>
+            <View style={styles.bodyHeader}>
+              <TouchableOpacity onPress={toggleTimings} style={styles.timingsToggle}>
+                <Ionicons
+                  name={isTimingsExpanded ? "chevron-down" : "chevron-forward"}
+                  size={scale(14)}
+                  color={colors.onSurfaceSecondary}
+                />
+                <Text style={styles.toggleText}>First / Last Bus</Text>
+              </TouchableOpacity>
+              <View style={{ flex: 1 }} />
+              <View style={styles.likeButtonWrapper}>
+                <Text style={styles.currentTime}>
+                  {currentDay} {currentTime}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    toggleUnlike(groupName, busStopCode, busNumber);
+                    onClose();
+                  }}
+                >
+                  <Ionicons name="heart" color={colors.accent5} size={scale(18)} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            {isTimingsExpanded && timings ? (
+              <View style={styles.table}>
+                <View style={styles.row}>
+                  <Text style={styles.cellDay}></Text>
+                  <Text style={styles.cellFirst}>First Bus</Text>
+                  <Text style={styles.cellLast}>Last Bus</Text>
                 </View>
-            </SafeAreaView>
-        </Modal>
-    )
+                <View style={styles.row}>
+                  <Text style={[styles.cellDay, activeSchedule === "weekday" && styles.highlightText]}>
+                    Weekday
+                  </Text>
+                  <Text style={[styles.cellFirst, activeSchedule === "weekday" && styles.highlightText]}>
+                    {formatTime(timings.WD_FirstBus)}
+                  </Text>
+                  <Text style={[styles.cellLast, activeSchedule === "weekday" && styles.highlightText]}>
+                    {formatTime(timings.WD_LastBus)}
+                  </Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={[styles.cellDay, activeSchedule === "saturday" && styles.highlightText]}>
+                    Saturday
+                  </Text>
+                  <Text style={[styles.cellFirst, activeSchedule === "saturday" && styles.highlightText]}>
+                    {formatTime(timings.SAT_FirstBus)}
+                  </Text>
+                  <Text style={[styles.cellLast, activeSchedule === "saturday" && styles.highlightText]}>
+                    {formatTime(timings.SAT_LastBus)}
+                  </Text>
+                </View>
+                <View style={styles.row}>
+                  <Text style={[styles.cellDay, activeSchedule === "sunday" && styles.highlightText]}>
+                    Sunday
+                  </Text>
+                  <Text style={[styles.cellFirst, activeSchedule === "sunday" && styles.highlightText]}>
+                    {formatTime(timings.SUN_FirstBus)}
+                  </Text>
+                  <Text style={[styles.cellLast, activeSchedule === "sunday" && styles.highlightText]}>
+                    {formatTime(timings.SUN_LastBus)}
+                  </Text>
+                </View>
+              </View>
+            ) : null}
+            <ScrollView
+              ref={scrollViewRef}
+              style={styles.busStopsList}
+              onLayout={() => {
+                if (scrollViewRef.current && currentStopIndex >= 0) {
+                  scrollViewRef.current.scrollTo({ y: currentStopIndex * scale(40), animated: true });
+                }
+              }}
+            >
+              {sortedStops.map((stop, index) => {
+                const isPast = index < currentStopIndex;
+                const isCurrent = index === currentStopIndex;
+                const detail = busStopsDetails.find((d) => d.BusStopCode === stop.stopCode);
+                const stopDescription = isCurrent ? description : detail?.Description || "";
+                return (
+                  <View
+                    key={`${busNumber}-${stop.stopCode}-${stop.sequence}`}
+                    style={[
+                      styles.busStopItem,
+                      isCurrent && styles.currentBusStopItem,
+                      isPast && styles.pastBusStopItem,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.busStopText,
+                        { color: isPast ? colors.onSurfaceSecondary2 : colors.onSurface },
+                      ]}
+                    >
+                      {stop.stopCode} - {stopDescription}
+                    </Text>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </View>
+      </SafeAreaView>
+    </Modal>
+  );
 };
 
 const styles = StyleSheet.create({
-    modalOverlay: {
-        flex: 1,
-        backgroundColor: colors.modalOverlayBackgroundColor,
-        justifyContent: "flex-end",
-      },
-      bottomModalContainer: {
-        backgroundColor: colors.surface,
-        borderTopLeftRadius: scale(12),
-        borderTopRightRadius: scale(12),
-        padding: scale(10),
-        elevation: 5,
-        maxHeight: "80%",
-      },
-      modalHeader: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingHorizontal: scale(6),
-      },
-      modalHeaderText:{
-        flexDirection: "column",
-      },
-      modalTitle: {
-        fontSize: scale(16),
-        fontFamily: font.bold,
-        color: colors.primary,
-      },
-      closeButton: {
-        padding: scale(4),
-      },
-      modalDivider: {
-        height: scale(1),
-        backgroundColor: colors.borderToPress,
-        marginVertical: scale(10),
-      },
-      modalBody: {
-        maxHeight: "80%",
-      },
-      likeButtonWrapper: {
-        flexDirection: "row"
-      },
-      currentTime: {
-        flex: 1,
-        fontSize: scale(13),
-        color: colors.secondary,
-        marginTop: scale(4),
-      },
-      table: {
-        borderWidth: scale(1),
-        borderColor: colors.borderToPress,
-        borderRadius: scale(5),
-        marginVertical: scale(15),
-      },
-      row: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        paddingVertical: scale(8),
-        paddingHorizontal: scale(10),
-        borderBottomColor: colors.borderToPress,
-      },
-      cell: {
-        flex: 1,
-        textAlign: "center",
-        fontSize: scale(13),
-        fontFamily: font.medium,
-        color: colors.onSurfaceSecondary,
-      },
-      cellLast: {
-        flex: 0.7,
-        textAlign: "center",
-        fontSize: scale(13),
-        fontFamily: font.medium,
-        color: colors.onSurfaceSecondary,
-      },
-      cellDay: {
-        flex: 0.5,
-        textAlign: "right",
-        fontSize: scale(13),
-        fontFamily: font.medium,
-        color: colors.onSurfaceSecondary,
-      },
-      highlightText: {
-        color: colors.secondary,
-      },
-      noData: {
-        fontSize: scale(13),
-        color: colors.onSurfaceSecondary2,
-        textAlign: "center",
-        marginTop: scale(10),
-      },
-})
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: colors.modalOverlayBackgroundColor,
+    justifyContent: "flex-end",
+  },
+  bottomModalContainer: {
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: scale(12),
+    borderTopRightRadius: scale(12),
+    padding: scale(10),
+    paddingBottom: 0,
+    elevation: 5,
+    maxHeight: "80%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: scale(6),
+  },
+  modalHeaderText: {
+    flexDirection: "column",
+  },
+  modalTitle: {
+    fontSize: scale(16),
+    fontFamily: font.bold,
+    color: colors.primary,
+  },
+  closeButton: {
+    padding: scale(4),
+  },
+  modalDivider: {
+    height: scale(1),
+    backgroundColor: colors.borderToPress,
+    marginVertical: scale(10),
+  },
+  modalBody: {
+    maxHeight: "80%",
+  },
+  bodyHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: scale(10),
+  },
+  timingsToggle: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  toggleText: {
+    fontSize: scale(13),
+    fontFamily: font.medium,
+    color: colors.onSurfaceSecondary,
+    marginLeft: scale(4),
+  },
+  likeButtonWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  currentTime: {
+    fontSize: scale(13),
+    color: colors.secondary,
+    marginRight: scale(8),
+  },
+  table: {
+    borderWidth: scale(1),
+    borderColor: colors.borderToPress,
+    borderRadius: scale(4),
+    paddingVertical: scale(6),
+    marginBottom: scale(10),
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: scale(4),
+    paddingHorizontal: scale(10),
+  },
+  cellDay: {
+    flex: 0.5,
+    textAlign: "right",
+    fontSize: scale(13),
+    fontFamily: font.medium,
+    color: colors.onSurfaceSecondary,
+  },
+  cellFirst: {
+    flex: 1.05,
+    textAlign: "center",
+    fontSize: scale(13),
+    fontFamily: font.medium,
+    color: colors.onSurfaceSecondary,
+  },
+  cellLast: {
+    flex: 0.7,
+    textAlign: "center",
+    fontSize: scale(13),
+    fontFamily: font.medium,
+    color: colors.onSurfaceSecondary,
+  },
+  
+  highlightText: {
+    color: colors.secondary,
+  },
+  busStopsList: {
+    marginTop: scale(10),
+    backgroundColor: colors.surface4,
+    padding: scale(8),
+    borderRadius: scale(4),
+  },
+  busStopItem: {
+    padding: scale(8),
+    marginBottom: scale(8),
+    borderRadius: scale(4),
+    backgroundColor: colors.surface2,
+    borderWidth: scale(0.6),
+    borderColor: colors.accent8,
+  },
+  pastBusStopItem: {
+    padding: scale(8),
+    marginBottom: scale(8),
+    borderRadius: scale(4),
+    backgroundColor: colors.surface2,
+    borderWidth: scale(0.6),
+    borderColor: colors.borderToPress,
+  },
+  currentBusStopItem: {
+    backgroundColor: colors.accent8,
+  },
+  busStopText: {
+    fontSize: scale(13),
+    fontFamily: font.medium,
+  },
+});
 
 export default LikedBusesBusModal;

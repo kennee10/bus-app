@@ -26249,8 +26249,8 @@
   "46569": {
     "Description": "Blk 178",
     "RoadName": "Woodlands St 13",
-    "Latitude": 1.434395,
-    "Longitude": 103.777132,
+    "Latitude": 1.434776,
+    "Longitude": 103.777485,
     "ServiceNos": [
       "911",
       "911A",
@@ -64772,9 +64772,14 @@
     "Latitude": 1.28027629959632,
     "Longitude": 103.84029791443083,
     "ServiceNos": [
+      "12",
       "124",
+      "12e",
       "143",
       "147",
+      "190",
+      "2",
+      "54",
       "961",
       "961M"
     ]
