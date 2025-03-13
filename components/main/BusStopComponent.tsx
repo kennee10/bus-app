@@ -143,7 +143,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
         {/* Upper Section */}
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
-            <Text style={styles.busStopCode} adjustsFontSizeToFit numberOfLines={1}>
+            <Text style={styles.busStopCode}>
               {props.searchQuery
                 ? highlightText(props.BusStopCode, props.searchQuery)
                 : props.BusStopCode}
@@ -175,10 +175,10 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
         {/* Lower Section */}
         <View style={styles.lower}>
           <View style={styles.distanceWrapper}>
-            <Text style={styles.distance} adjustsFontSizeToFit numberOfLines={1}>{props.Distance}m</Text>
+            <Text style={styles.distance}>{props.Distance}m</Text>
           </View>
           <View style={styles.roadNameWrapper}>
-            <Text style={styles.roadName} adjustsFontSizeToFit numberOfLines={1}>
+            <Text style={styles.roadName}>
               {props.searchQuery
                 ? highlightText(props.RoadName, props.searchQuery)
                 : props.RoadName}

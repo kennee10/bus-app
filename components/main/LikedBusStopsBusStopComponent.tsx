@@ -141,14 +141,14 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
         {/* Upper Section */}
         <View style={styles.upper}>
           <View style={styles.busStopCodeWrapper}>
-            <Text style={styles.busStopCode} adjustsFontSizeToFit numberOfLines={1}>
+            <Text style={styles.busStopCode}>
               {props.searchQuery
                 ? highlightText(props.BusStopCode, props.searchQuery)
                 : props.BusStopCode}
             </Text>
           </View>
           <View style={styles.descriptionWrapper}>
-            <Text style={styles.description} adjustsFontSizeToFit numberOfLines={1}>
+            <Text style={styles.description}  adjustsFontSizeToFit numberOfLines={1}>
               {props.searchQuery
                 ? highlightText(props.Description, props.searchQuery)
                 : props.Description}
