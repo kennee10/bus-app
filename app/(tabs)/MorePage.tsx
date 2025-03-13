@@ -94,17 +94,17 @@ export default function App() {
         </View>
 
         {/* Donate */}
-        <View style={styles.oneContainer}>
+        {/* <View style={styles.oneContainer}>
           <Text style={styles.heading}>Donate</Text>
           <View style={styles.content}>
             <TouchableOpacity onPress={onPayNowPress} style={containerStyles.button}>
               <Text style={containerStyles.globalTextMessage}>PayNow</Text>
             </TouchableOpacity>
             <PayPalComponent />
-            {/* <PayNowLinkComponent /> */}
+            <PayNowLinkComponent />
           </View>
           <DonationTicker/>
-        </View>
+        </View> */}
 
         {/* MRT Map */}
         <View style={styles.oneContainer}>

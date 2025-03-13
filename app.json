@@ -28,7 +28,7 @@
         "backgroundColor": "#0d0d0d"
       },
       "package": "com.kennee10.busapp",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "bundler": "metro",
