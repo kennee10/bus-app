@@ -247,7 +247,7 @@ const NearbyBusStopsPage = () => {
                 keyExtractor={(item) => item.BusStopCode}
                 renderItem={renderItem}
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10)}}
+                contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
                 onScrollBeginDrag={() => Keyboard.dismiss()}
                 removeClippedSubviews
                 initialNumToRender={12}
@@ -291,36 +291,36 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     overflow: "hidden",
-    marginTop: scale(5),
-    marginBottom: scale(10),
-    borderRadius: scale(10),
-    borderWidth: scale(1.3),
+    marginTop: 5,
+    marginBottom: 10,
+    borderRadius: 10,
+    borderWidth: 1.3,
     alignItems: "center",
     backgroundColor: colors.surface,
     borderColor: colors.onBackgroundSecondary,
   },
   searchIcon: {
-    fontSize: scale(18),
-    padding: scale(10),
+    fontSize: 18,
+    padding: 10,
     color: colors.secondary2,
     opacity: 0.8,
   },
   crossIcon: {
-    fontSize: scale(24),
+    fontSize: 24,
     color: colors.secondary2,
-    padding: scale(7),
+    padding: 7,
   },
   searchInput: {
     flex: 1,
     color: colors.onSurfaceSecondary,
     fontFamily: font.semiBold,
-    height: scale(40),
-    fontSize: scale(12),
+    height: 45,
+    fontSize: 13,
   },
   infoIcon: {
-    fontSize: scale(22),
+    fontSize: 22,
     color: colors.secondary2,
-    padding: scale(7),
+    padding: 7,
     opacity: 0.8,
   },
 });

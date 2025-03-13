@@ -123,7 +123,7 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
   // Scroll to current bus stop when the modal opens
   // useEffect(() => {
   //   if (isVisible && scrollViewRef.current && currentStopIndex >= 0) {
-  //     scrollViewRef.current.scrollTo({ y: currentStopIndex * scale(40), animated: true });
+  //     scrollViewRef.current.scrollTo({ y: currentStopIndex * 40), animated: true });
   //   }
   // }, [isVisible, currentStopIndex]);
 
@@ -174,7 +174,7 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
               <Text style={styles.modalTitle}>{busNumber}</Text>
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+              <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
             </TouchableOpacity>
           </View>
           <View style={styles.modalDivider} />
@@ -183,7 +183,7 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
               <TouchableOpacity onPress={toggleTimings} style={styles.timingsToggle}>
                 <Ionicons
                   name={isTimingsExpanded ? "chevron-down" : "chevron-forward"}
-                  size={scale(14)}
+                  size={14}
                   color={colors.onSurfaceSecondary}
                 />
                 <Text style={styles.toggleText}>First / Last Bus</Text>
@@ -199,7 +199,7 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
                     onClose();
                   }}
                 >
-                  <Ionicons name="heart" color={colors.accent5} size={scale(18)} />
+                  <Ionicons name="heart" color={colors.accent5} size={18} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -250,7 +250,7 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
               style={styles.busStopsList}
               onLayout={() => {
                 if (scrollViewRef.current && currentStopIndex >= 0) {
-                  scrollViewRef.current.scrollTo({ y: currentStopIndex * scale(40), animated: true });
+                  scrollViewRef.current.scrollTo({ y: currentStopIndex * 40, animated: true });
                 }
               }}
             >
@@ -295,9 +295,9 @@ const styles = StyleSheet.create({
   },
   bottomModalContainer: {
     backgroundColor: colors.surface,
-    borderTopLeftRadius: scale(12),
-    borderTopRightRadius: scale(12),
-    padding: scale(10),
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 10,
     paddingBottom: 0,
     elevation: 5,
     maxHeight: "80%",
@@ -306,23 +306,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: scale(6),
+    paddingHorizontal: 6,
   },
   modalHeaderText: {
     flexDirection: "column",
   },
   modalTitle: {
-    fontSize: scale(16),
+    fontSize: 16,
     fontFamily: font.bold,
     color: colors.primary,
   },
   closeButton: {
-    padding: scale(4),
+    padding: 4,
   },
   modalDivider: {
-    height: scale(1),
+    height: 1,
     backgroundColor: colors.borderToPress,
-    marginVertical: scale(10),
+    marginVertical: 10,
   },
   modalBody: {
     maxHeight: "80%",
@@ -330,58 +330,58 @@ const styles = StyleSheet.create({
   bodyHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: scale(10),
+    marginBottom: 10,
   },
   timingsToggle: {
     flexDirection: "row",
     alignItems: "center",
   },
   toggleText: {
-    fontSize: scale(13),
+    fontSize: 13,
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
-    marginLeft: scale(4),
+    marginLeft: 4,
   },
   likeButtonWrapper: {
     flexDirection: "row",
     alignItems: "center",
   },
   currentTime: {
-    fontSize: scale(13),
+    fontSize: 13,
     color: colors.secondary,
-    marginRight: scale(8),
+    marginRight: 8,
   },
   table: {
-    borderWidth: scale(1),
+    borderWidth: 1,
     borderColor: colors.borderToPress,
-    borderRadius: scale(4),
-    paddingVertical: scale(6),
-    marginBottom: scale(10),
+    borderRadius: 4,
+    paddingVertical: 6,
+    marginBottom: 10,
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: scale(4),
-    paddingHorizontal: scale(10),
+    paddingVertical: 4,
+    paddingHorizontal: 10,
   },
   cellDay: {
     flex: 0.5,
     textAlign: "right",
-    fontSize: scale(13),
+    fontSize: 13,
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
   },
   cellFirst: {
     flex: 1.05,
     textAlign: "center",
-    fontSize: scale(13),
+    fontSize: 13,
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
   },
   cellLast: {
     flex: 0.7,
     textAlign: "center",
-    fontSize: scale(13),
+    fontSize: 13,
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
   },
@@ -390,32 +390,32 @@ const styles = StyleSheet.create({
     color: colors.secondary,
   },
   busStopsList: {
-    marginTop: scale(10),
+    marginTop: 10,
     backgroundColor: colors.surface4,
-    padding: scale(8),
-    borderRadius: scale(4),
+    padding: 8,
+    borderRadius: 4,
   },
   busStopItem: {
-    padding: scale(8),
-    marginBottom: scale(8),
-    borderRadius: scale(4),
+    padding: 8,
+    marginBottom: 8,
+    borderRadius: 4,
     backgroundColor: colors.surface2,
-    borderWidth: scale(0.6),
+    borderWidth: 0.6,
     borderColor: colors.accent8,
   },
   pastBusStopItem: {
-    padding: scale(8),
-    marginBottom: scale(8),
-    borderRadius: scale(4),
+    padding: 8,
+    marginBottom: 8,
+    borderRadius: 4,
     backgroundColor: colors.surface2,
-    borderWidth: scale(0.6),
+    borderWidth: 0.6,
     borderColor: colors.borderToPress,
   },
   currentBusStopItem: {
     backgroundColor: colors.accent8,
   },
   busStopText: {
-    fontSize: scale(13),
+    fontSize: 13,
     fontFamily: font.medium,
   },
 });

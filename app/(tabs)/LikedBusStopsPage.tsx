@@ -61,7 +61,7 @@ const LikedBusStopsPage = () => {
     // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={containerStyles.pageContainer}>
-          <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
+          <View style={[containerStyles.innerPageContainer, { marginTop: 10 }]}>
             {loading ? (
               <ActivityIndicator size="large" color={colors.onBackgroundSecondary} style={{ flex: 1 }} />
             ) : likedBusStopsDetails.length > 0 ? (

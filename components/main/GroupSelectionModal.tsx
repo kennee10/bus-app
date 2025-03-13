@@ -81,7 +81,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>Create New Group</Text>
                   <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                    <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                    <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.modalDivider} />
@@ -170,7 +170,7 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
       <View style={styles.groupItemIcons}>
         <Ionicons
           name={groups[item]?.isArchived ? "eye-off" : "eye"}
-          size={scale(16)}
+          size={16}
           color={colors.onSurfaceSecondary2}
           style={styles.archiveIcon}
         />
@@ -182,7 +182,7 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
         >
           <Ionicons
             name="trash-outline"
-            size={scale(16)}
+            size={16}
             color={colors.accent3}
           />
         </TouchableOpacity>
@@ -205,7 +205,7 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Select a Group</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                  <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
                 </TouchableOpacity>
               </View>
               <View style={styles.modalDivider} />
@@ -256,9 +256,9 @@ const styles = StyleSheet.create({
   },
   bottomModalContainer: {
     backgroundColor: colors.surface,
-    borderTopLeftRadius: scale(12),
-    borderTopRightRadius: scale(12),
-    padding: scale(10),
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 10,
     elevation: 5,
     maxHeight: "80%",
   },
@@ -266,21 +266,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: scale(6),
+    paddingHorizontal: 6,
   },
   modalTitle: {
-    fontSize: scale(16),
+    fontSize: 16,
     fontFamily: font.bold,
     color: colors.primary,
     flex: 1,
   },
   closeButton: {
-    padding: scale(4),
+    padding: 4,
   },
   modalDivider: {
-    height: scale(1),
+    height: 1,
     backgroundColor: colors.borderToPress,
-    marginVertical: scale(10),
+    marginVertical: 10,
   },
   modalBody: {
     maxHeight: "80%",
@@ -288,11 +288,11 @@ const styles = StyleSheet.create({
   emptyContainer: {
     alignItems: "center",
     justifyContent: "center",
-    padding: scale(20),
+    padding: 20,
   },
   emptyText: {
     fontFamily: font.medium,
-    fontSize: scale(14),
+    fontSize: 14,
     color: colors.onSurfaceSecondary,
     textAlign: "center",
   },
@@ -304,16 +304,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: colors.surface3,
-    borderRadius: scale(4),
-    borderWidth: scale(0.5),
+    borderRadius: 4,
+    borderWidth: 0.5,
     borderColor: colors.borderToPress2,
   },
   groupItemContent: {
     flex: 1,
-    padding: scale(10),
+    padding: 10,
   },
   groupItemText: {
-    fontSize: scale(14),
+    fontSize: 14,
     color: colors.primary,
     fontFamily: font.semiBold,
   },
@@ -322,25 +322,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   archiveIcon: {
-    marginRight: scale(4),
+    marginRight: 4,
   },
   deleteButton: {
-    paddingHorizontal: scale(12),
-    paddingVertical: scale(10),
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   separator: {
-    height: scale(5),
+    height: 5,
   },
   createGroupButton: {
     backgroundColor: colors.primary,
-    borderRadius: scale(8),
-    padding: scale(12),
+    borderRadius: 8,
+    padding: 12,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: scale(16),
+    marginTop: 16,
   },
   createGroupButtonText: {
-    fontSize: scale(14),
+    fontSize: 14,
     fontFamily: font.semiBold,
     color: colors.surface3,
   },
@@ -350,30 +350,30 @@ const styles = StyleSheet.create({
   },
   // Styles for the new Create Group modal
   modalTextInput: {
-    fontSize: scale(14),
+    fontSize: 14,
     fontFamily: font.medium,
     color: colors.primary,
-    borderWidth: scale(1),
+    borderWidth: 1,
     borderColor: colors.borderToPress,
-    borderRadius: scale(8),
-    padding: scale(12),
-    marginBottom: scale(10),
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
   },
   modalButtonsContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
   },
   modalButton: {
-    paddingVertical: scale(6),
-    paddingHorizontal: scale(12),
-    borderRadius: scale(4),
-    marginLeft: scale(8),
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    marginLeft: 8,
   },
   primaryButton: {
     backgroundColor: colors.primary,
   },
   modalButtonText: {
-    fontSize: scale(14),
+    fontSize: 14,
     fontFamily: font.semiBold,
     color: colors.primary,
   },

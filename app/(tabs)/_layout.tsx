@@ -17,17 +17,17 @@ export default function TabsLayout() {
       screenOptions={{
         headerShown: false,
         tabBarLabelStyle: {
-          fontSize: scale(9),
+          fontSize: 9,
           fontFamily: "Nunito-Bold",
         },
         tabBarStyle: {
           backgroundColor: colors.background,
           borderTopWidth: 0,
-          paddingBottom: scale(20),
+          paddingBottom: 20,
           width: "100%",
-          height: Platform.OS === "android" ? navigationBarHeight : verticalScale(37),
+          height: Platform.OS === "android" ? navigationBarHeight : 50,
           // ...(Platform.OS === "android" ? { height: navigationBarHeight } : {}),
-          // paddingBottom: scale(10),
+          // paddingBottom: 10),
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.onBackgroundSecondary2,

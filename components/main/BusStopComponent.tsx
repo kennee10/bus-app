@@ -167,7 +167,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
               <Ionicons
                 name={props.isLiked ? "star" : "star-outline"}
                 color={props.isLiked ? colors.accent4 : colors.onSurfaceSecondary2}
-                size={scale(21)}
+                size={21}
               />
             </TouchableOpacity>
           </View>
@@ -266,9 +266,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     overflow: "hidden",
-    padding: scale(2),
-    marginBottom: verticalScale(7),
-    borderRadius: scale(4),
+    padding: 2,
+    marginBottom: 7,
+    borderRadius: 4,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.borderToPress,
@@ -281,11 +281,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1,
     width: "100%",
-    height: scale(30),
+    height: 30,
   },
   lower: {
     flex: 1,
-    height: scale(25),
+    height: 25,
     width: "100%",
     flexDirection: "row",
   },
@@ -294,49 +294,49 @@ const styles = StyleSheet.create({
   },
   descriptionWrapper: {
     flex: 19,
-    
   },
   likeButtonWrapper: {
     flex: 2.5,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-end",
+    marginRight: 5,
   },
   busStopCode: {
-    fontSize: scale(14),
-    lineHeight: scale(30),
-    paddingLeft: scale(7),
+    fontSize: 14,
+    lineHeight: 30,
+    paddingLeft: 7,
     fontFamily: font.bold,
     color: colors.onSurface,
   },
   description: {
-    fontSize: scale(16.5),
-    lineHeight: scale(30),
+    fontSize: 16.5,
+    lineHeight: 30,
     fontFamily: font.bold,
     color: colors.onSurface,
   },
   distanceWrapper: {
     flex: 6.1,
-    height: scale(25),
+    height: 25,
     justifyContent: 'center',
   },
   roadNameWrapper: {
     flex: 19,
-    height: scale(25),
-    paddingBottom: scale(2),
+    height: 25,
+    paddingBottom: 2,
     justifyContent: 'center',
   },
   blackSpace2: {
     flex: 2.5,
   },
   distance: {
-    fontSize: scale(10),
-    paddingLeft: scale(7),
+    fontSize: 10,
+    paddingLeft: 7,
     textAlign: "left",
     fontFamily: font.semiBold,
     color: colors.onSurfaceSecondary,
   },
   roadName: {
-    fontSize: scale(14),
+    fontSize: 14,
     fontFamily: font.semiBold,
     color: colors.onSurfaceSecondary,
   },
@@ -347,10 +347,10 @@ const styles = StyleSheet.create({
   noBusesWrapper: {
     alignItems: "center",
     justifyContent: "center",
-    margin: scale(2.5),
-    paddingTop: scale(10),
-    paddingBottom: scale(10),
-    borderRadius: scale(4),
+    margin: 2.5,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 4,
     backgroundColor: colors.surface2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -365,11 +365,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   notInOperationContainer: {
-    marginTop: scale(8),
-    marginLeft: scale(5),
-    marginRight: scale(5),
-    padding: scale(8),
-    borderRadius: scale(4),
+    marginTop: 8,
+    marginLeft: 5,
+    marginRight: 5,
+    padding: 8,
+    borderRadius: 4,
     backgroundColor: colors.surface2,
 
     shadowColor: "#000",
@@ -379,20 +379,20 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   notOperationalText: {
-    fontSize: scale(10.5),
+    fontSize: 10.5,
     fontFamily: font.semiBold,
-    marginBottom: scale(4),
+    marginBottom: 4,
     color: colors.onSurfaceSecondary2,
   },
   notInOperationGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: scale(6),
+    gap: 6,
   },
   notInOperationBox: {
-    borderRadius: scale(4),
-    width: scale(33),
-    height: scale(33),
+    borderRadius: 4,
+    width: 33,
+    height: 33,
     backgroundColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   diagonalLine: {
     position: "absolute",
     width: "140%", // Ensures the line covers the box diagonally
-    height: scale(1.5),
+    height: 1.5,
     backgroundColor: colors.warning, // Use a distinct color for the cross-out
     transform: [{ rotate: "-45deg" }],
     top: "50%",
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
     opacity: 0.25,
   },
   notInOperationText: {
-    fontSize: scale(11),
+    fontSize: 11,
     fontFamily: font.semiBold,
     color: colors.onSurfaceSecondary2,
     textAlign: "center",

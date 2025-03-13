@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters'
 
-export const navigationBarHeight = verticalScale(45);
+export const navigationBarHeight = 55;
 
 export const colors = {
     background: "#0d0d0d",
@@ -78,8 +78,8 @@ export const containerStyles = StyleSheet.create({
     },
     button: {
       backgroundColor: colors.surface2, // Background color
-      padding: scale(10), // Padding inside the button
-      borderRadius: scale(5), // Rounded corners
+      padding: 10, // Padding inside the button
+      borderRadius: 5, // Rounded corners
       justifyContent: "center", // Center content vertically
       alignItems: "center", // Center content horizontally
       shadowColor: "#000", // Shadow color
@@ -87,38 +87,38 @@ export const containerStyles = StyleSheet.create({
       shadowOpacity: 0.25, // Shadow opacity
       shadowRadius: 3.84, // Shadow radius
       elevation: 5, // Shadow for Android
-      margin: scale(5)
+      margin: 5
     },
     iconContainer: {
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      paddingBottom: scale(10),
+      paddingBottom: 10,
     },
     loadingText: {
-      fontSize: scale(14),
+      fontSize: 14,
       color: colors.onBackgroundSecondary
     },
     globalTextMessage: {
-      fontSize: scale(14),
+      fontSize: 14,
       fontFamily: font.bold,
       color: colors.onBackground,
       textAlign: "center",
     },
     globalInfoTextMessage: {
-      fontSize: scale(14),
+      fontSize: 14,
       fontFamily: font.bold,
       color: colors.onSurfaceSecondary,
       textAlign: "center",
     },
     globalWarningText: {
-      fontSize: scale(14),
+      fontSize: 14,
       fontFamily: font.bold,
       color: colors.warning,
       textAlign: "center",
     },
     globalErrorText: {
-      fontSize: scale(14),
+      fontSize: 14,
       fontFamily: font.bold,
       color: colors.error,
       textAlign: "center",

@@ -67,7 +67,7 @@ const LikedBusesBusComponent: React.FC<LikedBusesBusComponent> = (props) => {
           <Ionicons
             name={props.isHearted ? "heart" : "heart-outline"}
             color={props.isHearted ? colors.accent5 : colors.onSurfaceSecondary2}
-            size={scale(18)}
+            size={18}
           />
         </TouchableOpacity>
       
@@ -88,9 +88,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingLeft: scale(8),
-    paddingRight: scale(8),
-    borderRadius: scale(4),
+    paddingLeft: 8,
+    paddingRight: 8,
+    borderRadius: 4,
     backgroundColor: colors.surface2,
     
     // shadow stuff
@@ -106,22 +106,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   likeButtonWrapper: {
-    marginLeft: scale(14)
+    marginLeft: 16
   },
   busNumberWrapper: {
     flex: 2,
     alignItems: "center",
-    marginRight: scale(16),
+    marginRight: 16,
   },
   busNumber: {
-    fontSize: scale(19),
+    fontSize: 21,
     fontWeight: "bold",
     color: colors.secondary,
   },
   busInfoWrapper: {
-    flex: 12,
+    flex: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
   },
   
 });

@@ -26,44 +26,44 @@ type ArrivalTimingComponentProps = {
 const getBusLoad = (load: string): JSX.Element => {
   if (load === "SEA") {
     return <View style={{flexDirection: 'row'}}>
-              <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+              <FontAwesome6 name="user" color={colors.accent5} size={6}/>
             </View>
   } else if (load === "SDA") {
     // Return two dot-single elements for SDA
     return (
         <View style={{flexDirection: 'row'}}>
-          <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
-          <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+          <FontAwesome6 name="user" color={colors.accent5} size={6}/>
+          <FontAwesome6 name="user" color={colors.accent5} size={6}/>
         </View>
     );
   } else if (load === "LSD") {
     // Return three dot-single elements for LSD
     return (
       <View style={{flexDirection: 'row'}}>
-        <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
-        <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
-        <FontAwesome6 name="user" color={colors.accent5} size={scale(6)}/>
+        <FontAwesome6 name="user" color={colors.accent5} size={6}/>
+        <FontAwesome6 name="user" color={colors.accent5} size={6}/>
+        <FontAwesome6 name="user" color={colors.accent5} size={6}/>
       </View>
     );
   } else {
-    return <EntypoIcons name="help-with-circle" color={colors.info} size={scale(9)} />;
+    return <EntypoIcons name="help-with-circle" color={colors.info} size={9} />;
   }
 };
 
 const getBusType = (type: string): JSX.Element => {
   if (type === "SD") {
-    return <MaterialCommunityIcons name="bus-side" color={colors.busIcon} size={scale(13)} />
+    return <MaterialCommunityIcons name="bus-side" color={colors.busIcon} size={13} />
   } else if (type === "DD") {
-    return <MaterialCommunityIcons name="bus-double-decker" color={colors.busIcon} size={scale(13)} />
+    return <MaterialCommunityIcons name="bus-double-decker" color={colors.busIcon} size={13} />
   } else if (type === "BD") {
     return (
     <View style={{flexDirection: 'row'}}>
-      <MaterialCommunityIcons name="bus-articulated-end" color={colors.busIcon} size={scale(13)} />
-      <MaterialCommunityIcons name="bus-articulated-front" color={colors.busIcon} size={scale(13)} style={{right: scale(4)}}/>
+      <MaterialCommunityIcons name="bus-articulated-end" color={colors.busIcon} size={13} />
+      <MaterialCommunityIcons name="bus-articulated-front" color={colors.busIcon} size={13} style={{right: 4}}/>
     </View>
     )
   } else {
-      return <MaterialIcons name="bus-alert" color={colors.info} size={scale(11)} style={{bottom: scale(1.1)}}/>
+      return <MaterialIcons name="bus-alert" color={colors.info} size={11} style={{bottom: 1.1}}/>
   }
 }
 
@@ -122,7 +122,7 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
           <MaterialCommunityIcons
             name="clock-alert"
             color={colors.accent7}
-            size={scale(8)}
+            size={8}
           />
         </View>
       )}
@@ -131,9 +131,9 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
       {Monitored === 1 && mins !== "-" && (
         <View style={styles.dotWrapper}>
           <View style={{
-            width: scale(1.5),
-            height: scale(6),
-            borderRadius: scale(5), // Makes it a circle
+            width: 1.5,
+            height: 6,
+            borderRadius: 5, // Makes it a circle
             backgroundColor: dotColor
           }} />
           {/* <BlinkingDotComponent dotColor={dotColor}/> */}
@@ -195,17 +195,18 @@ const ArrivalTimingComponent: React.FC<ArrivalTimingComponentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: scale(5),
+    padding: 5,
     alignItems: 'center',
     justifyContent: 'center',
+    // marginRight: 28,
     // backgroundColor: "white",
   },
   
   timingWrapper: {
-    width: scale(50),
+    width: 50,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: scale(3),
+    marginBottom: 3,
     // backgroundColor: 'yellow',
   },
   minsWrapper : {
@@ -213,35 +214,35 @@ const styles = StyleSheet.create({
     // backgroundColor: 'yellow',
   },
   mins: {
-    fontSize: scale(18.5),
+    fontSize: 20,
     fontWeight: "bold",
     color: colors.onSurface2Secondary,
   },
   
   secsWrapper : {
     justifyContent: 'flex-end',
-    marginLeft: scale(2),
+    marginLeft: 2,
     // backgroundColor: 'red',
   },
   secs: {
-    fontSize: scale(5.8),
+    fontSize: 6.3,
     fontWeight: "bold",
-    marginBottom: scale(4),
+    marginBottom: 4,
     color: colors.onSurface2Secondary,
     // backgroundColor: 'darkseagreen'
   },
   dotWrapper: {
     position: "absolute",
-    top: scale(5.5),
-    left: scale(8),
+    top: 5.5,
+    left: 8,
   },
   arrivalText: {
     color: colors.accent3,
   },
   monitoredWrapper : {
     position: "absolute",
-    top: scale(4),
-    right: scale(6),
+    top: 4,
+    right: 6,
     opacity: 0.7
   },
   
@@ -253,15 +254,13 @@ const styles = StyleSheet.create({
   busLoadWrapper: {
     justifyContent: 'flex-end',
     flexDirection: 'column',
-    padding: scale(5),
+    padding: 5,
     // backgroundColor: 'green'
   },
   busTypeWrapper: {
     justifyContent: 'center',
     // backgroundColor: 'red',
   },
-
-
 });
 
 export default ArrivalTimingComponent;

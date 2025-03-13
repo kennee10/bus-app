@@ -74,7 +74,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>{groupName}</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                  <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
                 </TouchableOpacity>
               </View>
               <View style={styles.modalDivider} />
@@ -82,7 +82,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
               <TouchableOpacity onPress={onArchivePress} style={styles.modalMenuItem}>
                 <Ionicons
                   name={isArchived ? "eye-off" : "eye"}
-                  size={scale(18)}
+                  size={18}
                   color={colors.onSurfaceSecondary}
                   style={styles.modalMenuIcon}
                 />
@@ -94,7 +94,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
               <TouchableOpacity onPress={onRenamePress} style={styles.modalMenuItem}>
                 <Ionicons
                   name="create-outline"
-                  size={scale(18)}
+                  size={18}
                   color={colors.onSurfaceSecondary}
                   style={styles.modalMenuIcon}
                 />
@@ -104,7 +104,7 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
               <TouchableOpacity onPress={onDeletePress} style={styles.modalMenuItem}>
                 <Ionicons
                   name="trash-outline"
-                  size={scale(18)}
+                  size={18}
                   color={colors.accent3}
                   style={styles.modalMenuIcon}
                 />
@@ -166,7 +166,7 @@ const RenameBottomModal: React.FC<RenameModalProps> = memo(({
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>Rename Group</Text>
                   <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                    <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                    <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.modalDivider} />
@@ -297,7 +297,7 @@ const GroupItem = memo(({
           <View style={styles.arrowContainer}>
             <Ionicons
               name={collapsedGroups[groupName] ? "chevron-forward" : "chevron-down"}
-              size={scale(18)}
+              size={18}
               color={colors.primary}
             />
           </View>
@@ -310,7 +310,7 @@ const GroupItem = memo(({
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Ionicons
             name="ellipsis-horizontal"
-            size={scale(18)}
+            size={18}
             color={colors.onSurfaceSecondary2}
           />
         </TouchableOpacity>
@@ -456,7 +456,7 @@ const LikedBusesPage = () => {
     // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={containerStyles.pageContainer}>
-        <View style={[containerStyles.innerPageContainer, { marginTop: scale(10) }]}>
+        <View style={[containerStyles.innerPageContainer, { marginTop: 10 }]}>
           {unarchivedGroupsOrder.length === 0 ? (
             <View style={styles.emptyContainer}>
               {archivedGroupsOrder.length === 0 ? (
@@ -475,7 +475,7 @@ const LikedBusesPage = () => {
               data={unarchivedGroupsOrder}
               keyExtractor={(item) => item}
               renderItem={renderGroupItem}
-              contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10)}}
+              contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
               keyboardShouldPersistTaps="handled"
               
             />
@@ -488,7 +488,7 @@ const LikedBusesPage = () => {
         >
           <Ionicons
             name="eye-off"
-            size={scale(24)}
+            size={24}
             color={colors.onSurfaceSecondary2}
           />
         </TouchableOpacity>
@@ -510,7 +510,7 @@ const LikedBusesPage = () => {
                   <View style={styles.modalHeader}>
                     <Text style={styles.modalTitle}>Archived Groups</Text>
                     <TouchableOpacity onPress={closeArchivedModal} style={styles.closeButton}>
-                      <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                      <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
                     </TouchableOpacity>
                   </View>
                   <View style={styles.modalDivider} />
@@ -528,7 +528,7 @@ const LikedBusesPage = () => {
                       keyExtractor={(item) => item}
                       renderItem={renderGroupItem}
                       keyboardShouldPersistTaps="always"
-                      contentContainerStyle={{ paddingBottom: navigationBarHeight + scale(10)}}
+                      contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
                     />
                   )}
                 </View>
@@ -545,15 +545,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   emptyContainerArchived: {
-    height: scale(100),
+    height: 100,
     justifyContent: "center",
   },
   groupContainer: {
-    marginBottom: scale(7),
-    borderRadius: scale(4),
+    marginBottom: 7,
+    borderRadius: 4,
     overflow: "hidden",
     backgroundColor: colors.surface3,
-    borderWidth: scale(0.5),
+    borderWidth: 0.5,
     borderColor: colors.borderToPress2,
   },
   groupHeader: {
@@ -565,31 +565,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1,
     alignItems: "center",
-    padding: scale(10),
-    paddingRight: scale(6),
+    padding: 10,
+    paddingRight: 6,
   },
   arrowContainer: {
-    marginRight: scale(6),
+    marginRight: 6,
     justifyContent: "center",
   },
   groupTitle: {
     flex: 1,
-    fontSize: scale(15),
-    marginRight: scale(6),
+    fontSize: 15,
+    marginRight: 6,
     fontFamily: font.bold,
     color: colors.primary,
     width: "100%",
   },
   menuButton: {
-    padding: scale(4),
-    marginRight: scale(6),
+    padding: 4,
+    marginRight: 6,
   },
   noLikedBusesInGroupTextWrapper: {
     alignItems: "center",
     justifyContent: "center",
-    margin: scale(5),
-    paddingVertical: scale(10),
-    borderRadius: scale(4),
+    margin: 5,
+    paddingVertical: 10,
+    borderRadius: 4,
     backgroundColor: colors.surface2,
     elevation: 2,
   },
@@ -600,11 +600,11 @@ const styles = StyleSheet.create({
   },
   archivedGroupsButton: {
     position: "absolute",
-    bottom: scale(20),
-    right: scale(20),
+    bottom: 20,
+    right: 20,
     backgroundColor: colors.surface3,
-    padding: scale(10),
-    borderRadius: scale(30),
+    padding: 10,
+    borderRadius: 30,
     elevation: 5,
   },
   // Modal styles
@@ -615,9 +615,9 @@ const styles = StyleSheet.create({
   },
   bottomModalContainer: {
     backgroundColor: colors.surface,
-    borderTopLeftRadius: scale(12),
-    borderTopRightRadius: scale(12),
-    padding: scale(10),
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 10,
     elevation: 5,
     maxHeight: '80%',
   },
@@ -629,68 +629,68 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: scale(6),
+    paddingHorizontal: 6,
   },
   modalTitle: {
-    fontSize: scale(16),
+    fontSize: 16,
     fontFamily: font.bold,
     color: colors.primary,
     flex: 1,
   },
   closeButton: {
-    padding: scale(4),
+    padding: 4,
   },
   modalDivider: {
-    height: scale(1),
+    height: 1,
     backgroundColor: colors.borderToPress,
-    marginVertical: scale(10),
+    marginVertical: 10,
   },
   modalMenuItem: {
     flexDirection: "row",
     alignItems: "center",
-    padding: scale(10),
-    marginBottom: scale(5),
-    borderRadius: scale(4),
+    padding: 10,
+    marginBottom: 5,
+    borderRadius: 4,
     backgroundColor: colors.surface3,
-    borderWidth: scale(0.5),
+    borderWidth: 0.5,
     borderColor: colors.borderToPress,
   },
   modalMenuIcon: {
-    marginRight: scale(8),
-    paddingHorizontal: scale(6),
+    marginRight: 8,
+    paddingHorizontal: 6,
     textAlign: "center",
   },
   modalMenuItemText: {
-    fontSize: scale(14.5),
+    fontSize: 14.5,
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
   },
   // Text input and button styles for rename modal
   modalTextInput: {
-    fontSize: scale(14.5),
+    fontSize: 14.5,
     fontFamily: font.medium,
     color: colors.primary,
-    borderWidth: scale(1),
+    borderWidth: 1,
     borderColor: colors.borderToPress,
-    borderRadius: scale(8),
-    padding: scale(12),
+    borderRadius: 8,
+    padding: 12,
   },
   modalButtonsContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    marginTop: scale(10),
+    marginTop: 10,
   },
   modalButton: {
-    paddingVertical: scale(6),
-    paddingHorizontal: scale(12),
-    borderRadius: scale(4),
-    marginLeft: scale(2),
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    marginLeft: 2,
   },
   primaryButton: {
     backgroundColor: colors.primary,
   },
   modalButtonText: {
-    fontSize: scale(14),
+    fontSize: 14,
     fontFamily: font.semiBold,
     color: colors.primary,
   },

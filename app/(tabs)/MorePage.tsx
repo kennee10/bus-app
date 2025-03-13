@@ -77,7 +77,7 @@ export default function App() {
   return (
     // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView style={{backgroundColor: colors.background}}>
-        <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: scale(15) }]}>
+        <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: 15 }]}>
         {/* Contact Me */}
         <View style={styles.oneContainer}>
           <Text style={styles.heading}>Contact Me</Text>
@@ -86,8 +86,8 @@ export default function App() {
               <MaterialCommunityIcons
                 name="email"
                 color={colors.onSurfaceSecondary}
-                size={scale(23)}
-                style={{ marginLeft: scale(5) }}
+                size={23}
+                style={{ marginLeft: 5 }}
               />
             </TouchableOpacity>
           </View>
@@ -133,13 +133,13 @@ export default function App() {
                   <View style={styles.modalHeader}>
                     <Text style={styles.modalTitle}>PayNow QR</Text>
                     <TouchableOpacity onPress={() => setIsPayNowVisible(false)} style={styles.closeButton}>
-                      <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                      <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
                     </TouchableOpacity>
                   </View>
                   <View style={styles.modalDivider} />
                   <View style={styles.payNowImageContainer}>
                     <Image source={paynowQR} style={styles.image} />
-                    <Text style={[containerStyles.globalTextMessage, { padding: scale(10) }]}>
+                    <Text style={[containerStyles.globalTextMessage, { padding: 10 }]}>
                       Screenshot and Scan this QR code in your preferred Bank app
                     </Text>
                   </View>
@@ -155,10 +155,10 @@ export default function App() {
         >
           <View style={styles.modalOverlayMRT}>
             <View style={[styles.bottomModalContainer, styles.mrtMapModalContainer , {padding: 0}]}>
-              <View style={[styles.modalHeader, {paddingTop: scale(10), paddingHorizontal: scale(10)}]}>
+              <View style={[styles.modalHeader, {paddingTop: 10, paddingHorizontal: 10}]}>
                 <Text style={styles.modalTitle}>MRT Map</Text>
                 <TouchableOpacity onPress={() => setIsMRTMapVisible(false)} style={styles.closeButton}>
-                  <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                  <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
                 </TouchableOpacity>
               </View>
               <View style={styles.webViewContainer}>
@@ -184,28 +184,28 @@ export default function App() {
 
 const styles = StyleSheet.create({
   heading: {
-    fontSize: scale(14),
+    fontSize: 14,
     fontFamily: font.bold,
     color: colors.onSurface,
     textAlign: "left",
   },
   image: {
-    width: scale(180),
-    height: scale(180),
-    marginBottom: scale(10)
+    width: 180,
+    height: 180,
+    marginBottom: 10
   },
   oneContainer: {
-    padding: scale(12),
-    borderRadius: scale(4),
+    padding: 12,
+    borderRadius: 4,
     backgroundColor: colors.surface,
-    borderWidth: scale(1),
+    borderWidth: 1,
     borderColor: colors.borderToPress2,
-    margin: scale(7.5),
+    margin: 7.5,
     width: "95%",
   },
   content: {
     flexDirection: "row",
-    marginTop: scale(10),
+    marginTop: 10,
   },
   modalOverlay: {
     flex: 1,
@@ -219,11 +219,11 @@ const styles = StyleSheet.create({
   },
   bottomModalContainer: {
     backgroundColor: colors.surface,
-    borderTopLeftRadius: scale(12),
-    borderTopRightRadius: scale(12),
-    padding: scale(10),
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 10,
     elevation: 5,
-    // paddingTop: Platform.OS === 'ios' ? scale(20) : 0
+    // paddingTop: Platform.OS === 'ios' ? 20) : 0
 
   },
   mrtMapModalContainer: {
@@ -234,30 +234,30 @@ const styles = StyleSheet.create({
   webViewContainer: {
     flex: 1,
     width: "100%",
-    marginTop: scale(5),
+    marginTop: 5,
   },
   modalHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: scale(6),
+    paddingHorizontal: 6,
   },
   modalTitle: {
-    fontSize: scale(16),
+    fontSize: 16,
     fontFamily: font.bold,
     color: colors.primary,
     flex: 1,
   },
   closeButton: {
-    padding: scale(4),
+    padding: 4,
   },
   modalDivider: {
-    height: scale(1),
+    height: 1,
     backgroundColor: colors.borderToPress,
-    marginVertical: scale(10),
+    marginVertical: 10,
   },
   payNowImageContainer: {
     alignItems: "center",
-    padding: scale(10),
+    padding: 10,
   },
 });

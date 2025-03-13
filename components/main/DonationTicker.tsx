@@ -92,16 +92,16 @@ const styles = StyleSheet.create({
     width: "100%",
     overflow: "hidden",
     backgroundColor: colors.surface3,
-    marginTop: scale(10),
-    borderRadius: scale(4),
-    paddingVertical: scale(6),
+    marginTop: 10,
+    borderRadius: 4,
+    paddingVertical: 6,
     justifyContent: "center", // Center the donation message vertically
     alignItems: "center", // Center the donation message horizontally
   },
   containerHeader: {
-    fontSize: scale(10.5),
+    fontSize: 10.5,
     fontFamily: font.semiBold,
-    marginBottom: scale(4),
+    marginBottom: 4,
     color: colors.onSurfaceSecondary2,
   },
   donationContainer: {
@@ -109,14 +109,14 @@ const styles = StyleSheet.create({
     alignItems: "center", // Center the text
   },
   donationText: {
-    height: scale(30),
-    lineHeight: scale(30),
-    fontSize: scale(14),
+    height: 30,
+    lineHeight: 30,
+    fontSize: 14,
     fontFamily: font.semiBold,
     color: colors.primary,
   },
   noDonationsText: {
-    fontSize: scale(13),
+    fontSize: 13,
     fontFamily: font.semiBold,
     color: colors.onSurfaceSecondary2,
   },

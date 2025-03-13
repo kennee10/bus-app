@@ -37,7 +37,7 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>Info</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <Ionicons name="close" size={scale(20)} color={colors.onSurfaceSecondary2} />
+                  <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
                 </TouchableOpacity>
               </View>
               <View style={styles.modalDivider} />
@@ -87,12 +87,12 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                     <View style={styles.oneLine}>
                       <View style={styles.leftSide}>
                         <View style={{
-                            width: scale(3),
-                            height: scale(12),
-                            borderRadius: scale(5),
+                            width: 3,
+                            height: 12,
+                            borderRadius: 5,
                             backgroundColor: colors.accent,
                             position: 'absolute',
-                            top: scale(4)
+                            top: 4
                           }} />
                       </View>
                       <View style={styles.rightSide}>
@@ -104,12 +104,12 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                     <View style={styles.oneLine}>
                       <View style={styles.leftSide}>
                         <View style={{
-                            width: scale(3),
-                            height: scale(12),
-                            borderRadius: scale(5),
+                            width: 3,
+                            height: 12,
+                            borderRadius: 5,
                             backgroundColor: colors.warning,
                             position: 'absolute',
-                            top: scale(4)
+                            top: 4
                           }} />
                       </View>
                       <View style={styles.rightSide}>
@@ -121,12 +121,12 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                     <View style={styles.oneLine}>
                       <View style={styles.leftSide}>
                         <View style={{
-                            width: scale(3),
-                            height: scale(12),
-                            borderRadius: scale(5),
+                            width: 3,
+                            height: 12,
+                            borderRadius: 5,
                             backgroundColor: colors.error,
                             position: 'absolute',
-                            top: scale(4)
+                            top: 4
                           }} />
                       </View>
                       <View style={styles.rightSide}>
@@ -144,8 +144,8 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                         <MaterialCommunityIcons
                           name="clock-alert"
                           color={colors.accent7}
-                          size={scale(14)}
-                          style={{ position: 'absolute', top: scale(4) }}
+                          size={14}
+                          style={{ position: 'absolute', top: 4 }}
                         />
                       </View>
                       <View style={styles.rightSide}>
@@ -160,8 +160,8 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                   <View style={styles.oneInfoContainer}>
                     <View style={styles.oneLine}>
                       <View style={styles.leftSide}>
-                        <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
-                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                        <View style={{ flexDirection: 'row', position: 'absolute', top: 4 }}>
+                          <FontAwesome6 name="user" color={colors.accent5} size={8} />
                         </View>
                       </View>
                       <View style={styles.rightSide}>
@@ -170,9 +170,9 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                     </View>
                     <View style={styles.oneLine}>
                       <View style={styles.leftSide}>
-                        <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
-                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
-                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                        <View style={{ flexDirection: 'row', position: 'absolute', top: 4 }}>
+                          <FontAwesome6 name="user" color={colors.accent5} size={8} />
+                          <FontAwesome6 name="user" color={colors.accent5} size={8} />
                         </View>
                       </View>
                       <View style={styles.rightSide}>
@@ -181,10 +181,10 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                     </View>
                     <View style={styles.oneLine}>
                       <View style={styles.leftSide}>
-                        <View style={{ flexDirection: 'row', position: 'absolute', top: scale(4) }}>
-                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
-                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
-                          <FontAwesome6 name="user" color={colors.accent5} size={scale(8)} />
+                        <View style={{ flexDirection: 'row', position: 'absolute', top: 4 }}>
+                          <FontAwesome6 name="user" color={colors.accent5} size={8} />
+                          <FontAwesome6 name="user" color={colors.accent5} size={8} />
+                          <FontAwesome6 name="user" color={colors.accent5} size={8} />
                         </View>
                       </View>
                       <View style={styles.rightSide}>
@@ -200,7 +200,7 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                         <MaterialCommunityIcons 
                           name="bus-side" 
                           color={colors.busIcon} 
-                          size={scale(15)} 
+                          size={15} 
                         />
                       </View>
                       <View style={styles.rightSide}>
@@ -212,7 +212,7 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                         <MaterialCommunityIcons 
                           name="bus-double-decker" 
                           color={colors.busIcon} 
-                          size={scale(15)} 
+                          size={15} 
                         />
                       </View>
                       <View style={styles.rightSide}>
@@ -225,13 +225,13 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
                           <MaterialCommunityIcons 
                             name="bus-articulated-end" 
                             color={colors.busIcon} 
-                            size={scale(15)} 
+                            size={15} 
                           />
                           <MaterialCommunityIcons 
                             name="bus-articulated-front" 
                             color={colors.busIcon} 
-                            size={scale(15)} 
-                            style={{ right: scale(4) }}
+                            size={15} 
+                            style={{ right: 4 }}
                           />
                         </View>
                       </View>
@@ -252,16 +252,16 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
 const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: "column",
-    gap: scale(12.5),
-    paddingHorizontal: scale(10),
-    paddingBottom: scale(20),
+    gap: 12.5,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   oneInfoContainer: {
     flexDirection: "column",
-    gap: scale(10),
-    borderBottomWidth: scale(1),
+    gap: 10,
+    borderBottomWidth: 1,
     borderBottomColor: colors.borderToPress2,
-    paddingBottom: scale(12.5),
+    paddingBottom: 12.5,
   },
   oneLine: {
     flexDirection: "row",
@@ -271,43 +271,43 @@ const styles = StyleSheet.create({
   },
   rightSide: {
     flex: 6,
-    marginRight: scale(27),
+    marginRight: 27,
   },
   infoText: {
-    fontSize: scale(12),
+    fontSize: 12,
     fontFamily: font.bold,
     color: colors.onSurface,
     textAlign: "justify",
   },
   proTipText: {
-    fontSize: scale(11),
+    fontSize: 11,
     fontFamily: font.medium,
     color: colors.onSurfaceSecondary,
     textAlign: "justify",
-    marginTop: scale(2),
+    marginTop: 2,
   },
   timingWrapper: {
-    width: scale(50),
+    width: 50,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    marginBottom: scale(3),
+    marginBottom: 3,
   },
   minsWrapper: {
     justifyContent: 'flex-end',
   },
   mins: {
-    fontSize: scale(20),
+    fontSize: 20,
     fontWeight: "bold",
     color: colors.onSurface2Secondary,
   },
   secsWrapper: {
     justifyContent: 'flex-end',
-    marginLeft: scale(2),
+    marginLeft: 2,
   },
   secs: {
-    fontSize: scale(6.5),
+    fontSize: 6.5,
     fontWeight: "bold",
-    marginBottom: scale(4),
+    marginBottom: 4,
     color: colors.onSurface2Secondary,
   },
   modalOverlay: {
@@ -317,9 +317,9 @@ const styles = StyleSheet.create({
   },
   bottomModalContainer: {
     backgroundColor: colors.surface,
-    borderTopLeftRadius: scale(12),
-    borderTopRightRadius: scale(12),
-    padding: scale(10),
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 10,
     elevation: 5,
     maxHeight: "80%",
   },
@@ -327,21 +327,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: scale(6),
+    paddingHorizontal: 6,
   },
   modalTitle: {
-    fontSize: scale(16),
+    fontSize: 16,
     fontFamily: font.bold,
     color: colors.primary,
     flex: 1,
   },
   closeButton: {
-    padding: scale(4),
+    padding: 4,
   },
   modalDivider: {
-    height: scale(1),
+    height: 1,
     backgroundColor: colors.borderToPress,
-    marginVertical: scale(10),
+    marginVertical: 10,
   },
   scrollContainer: {
     flexGrow: 1,
