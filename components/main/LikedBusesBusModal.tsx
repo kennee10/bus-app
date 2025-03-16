@@ -190,9 +190,9 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
               </TouchableOpacity>
               <View style={{ flex: 1 }} />
               <View style={styles.likeButtonWrapper}>
-                <Text style={styles.currentTime}>
+                {/* <Text style={styles.currentTime}>
                   {currentDay} {currentTime}
-                </Text>
+                </Text> */}
                 <TouchableOpacity
                   onPress={() => {
                     toggleUnlike(groupName, busStopCode, busNumber);
