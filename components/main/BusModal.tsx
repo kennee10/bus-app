@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
   View,
   Text,
@@ -7,20 +7,13 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   ScrollView,
-  Platform,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { scale } from "react-native-size-matters";
 import GroupSelectionModal from "./GroupSelectionModal";
 import { useLikedBuses } from "../context/likedBusesContext";
-import { colors, containerStyles, font } from "../../assets/styles/GlobalStyles";
+import { colors, font } from "../../assets/styles/GlobalStyles";
 import busFirstLastTimingsData from "../../assets/busFirstLastTimings.json";
 import { getBusStopsDetails, BusStopWithDistance } from "../hooks/getBusStopsDetails";
-import DonationTicker from "@/components/main/DonationTicker";
-
-// Instead of importing as a module, use require so we can use Asset.fromModule
-const MRTMap = require("../../assets/images/MRTMap.svg");
 
 // Define TypeScript types for bus timings data
 interface BusDirection {
@@ -74,12 +67,6 @@ const BusModal: React.FC<BusModalProps> = ({
   // Get current day and time
   const now = new Date();
   const currentDay = now.toLocaleString("en-US", { weekday: "long" });
-  const currentTime = now.toLocaleString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-  const isWeekday = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].includes(currentDay);
 
   // Format a time string (assumed in "HHmm" format) to AM/PM format.
   const formatTime = (time: string) => {
@@ -137,14 +124,6 @@ const BusModal: React.FC<BusModalProps> = ({
     (stop) => stop.stopCode === busStopCode
   );
 
-  // Scroll to current stop when modal opens
-  // useEffect(() => {
-  //   if (isVisible && scrollViewRef.current && currentStopIndex >= 0) {
-  //     scrollViewRef.current.scrollTo({ y: currentStopIndex * 40), animated: true });
-  //   }
-  // }, [isVisible, currentStopIndex]);
-
-  // Fetch bus stop details for sorted stops
   useEffect(() => {
     const fetchBusStopsDetails = async () => {
       try {
@@ -164,6 +143,105 @@ const BusModal: React.FC<BusModalProps> = ({
   const toggleTimings = () => {
     setIsTimingsExpanded(!isTimingsExpanded);
   };
+
+  // Helper function to parse time strings
+  const parseTime = (timeStr: string): Date | null => {
+  if (timeStr === "-") return null;
+  
+  const now = new Date();
+  const today = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+  
+  if (timeStr.includes(":") || timeStr.includes("AM") || timeStr.includes("PM")) {
+    // Already in AM/PM format
+    const date = new Date(today);
+    const timeParts = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!timeParts) return null;
+    
+    let hours = parseInt(timeParts[1]);
+    const minutes = parseInt(timeParts[2]);
+    const period = timeParts[3].toUpperCase();
+    
+    if (period === "PM" && hours < 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+    
+    date.setHours(hours, minutes);
+    return date;
+  } else {
+    // In "HHmm" format
+    const paddedTime = timeStr.padStart(4, "0");
+    const hour = parseInt(paddedTime.slice(0, 2));
+    const minute = parseInt(paddedTime.slice(2));
+    
+    const date = new Date(today);
+    date.setHours(hour, minute);
+    return date;
+  }
+  };
+  // Determine which schedule to highlight (weekday, Saturday, or Sunday)
+  const getActiveSchedule = () => {
+    if (!timings) return null;
+    
+    const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const nowTime = now.getHours() * 60 + now.getMinutes(); // Current time in minutes
+    
+    // If it's after midnight but before the last bus of the previous day
+    if (nowTime < (4 * 60)) { // Before 4:00 AM, consider it might be the previous day's schedule
+      // For Monday after midnight, check if it's before Sunday's last bus
+      if (currentDay === "Monday") {
+        const sunLastBus = parseTime(timings.SUN_LastBus);
+        if (sunLastBus) {
+          const sunLastBusMinutes = sunLastBus.getHours() * 60 + sunLastBus.getMinutes();
+          // If Sunday's last bus is after midnight and current time is before it
+          if (sunLastBusMinutes < (4 * 60) && nowTime < sunLastBusMinutes) {
+            return "sunday";
+          }
+        }
+      } 
+      // For Saturday after midnight, check if it's before Friday's last bus
+      else if (currentDay === "Saturday") {
+        const wdLastBus = parseTime(timings.WD_LastBus);
+        if (wdLastBus) {
+          const wdLastBusMinutes = wdLastBus.getHours() * 60 + wdLastBus.getMinutes();
+          if (wdLastBusMinutes < (4 * 60) && nowTime < wdLastBusMinutes) {
+            return "weekday";
+          }
+        }
+      } 
+      // For Sunday after midnight, check if it's before Saturday's last bus
+      else if (currentDay === "Sunday") {
+        const satLastBus = parseTime(timings.SAT_LastBus);
+        if (satLastBus) {
+          const satLastBusMinutes = satLastBus.getHours() * 60 + satLastBus.getMinutes();
+          if (satLastBusMinutes < (4 * 60) && nowTime < satLastBusMinutes) {
+            return "saturday";
+          }
+        }
+      } 
+      // For weekdays (Tue-Fri) after midnight, check if it's before the previous day's last bus
+      else if (weekdays.includes(currentDay)) {
+        const wdLastBus = parseTime(timings.WD_LastBus);
+        if (wdLastBus) {
+          const wdLastBusMinutes = wdLastBus.getHours() * 60 + wdLastBus.getMinutes();
+          if (wdLastBusMinutes < (4 * 60) && nowTime < wdLastBusMinutes) {
+            return "weekday";
+          }
+        }
+      }
+    }
+    
+    // Standard day-based logic if not in the late night scenario
+    if (weekdays.includes(currentDay)) return "weekday";
+    if (currentDay === "Saturday") return "saturday";
+    if (currentDay === "Sunday") return "sunday";
+    
+    return null;
+  };
+
+  const activeSchedule = getActiveSchedule();
 
   return (
     <Modal visible={isVisible} transparent animationType="fade" onRequestClose={onClose}>
@@ -214,46 +292,42 @@ const BusModal: React.FC<BusModalProps> = ({
             {/* Timings Table (dropdown) */}
             {isTimingsExpanded && timings && (
               <View style={styles.table}>
-                {/* <View style={styles.row}>
-                  <Text style={styles.currentTime}>
-                    {currentDay} {currentTime}
-                  </Text>
-                </View> */}
                 <View style={styles.row}>
                   <Text style={styles.cellDay}></Text>
                   <Text style={styles.cellFirst}>First Bus</Text>
                   <Text style={styles.cellLast}>Last Bus</Text>
                 </View>
+                {/* Replace the existing table rows with these */}
                 <View style={styles.row}>
-                  <Text style={[styles.cellDay, isWeekday ? styles.highlightText : null]}>
+                  <Text style={[styles.cellDay, activeSchedule === "weekday" && styles.highlightText]}>
                     Weekday
                   </Text>
-                  <Text style={[styles.cellFirst, isWeekday ? styles.highlightText : null]}>
+                  <Text style={[styles.cellFirst, activeSchedule === "weekday" && styles.highlightText]}>
                     {formatTime(timings.WD_FirstBus)}
                   </Text>
-                  <Text style={[styles.cellLast, isWeekday ? styles.highlightText : null]}>
+                  <Text style={[styles.cellLast, activeSchedule === "weekday" && styles.highlightText]}>
                     {formatTime(timings.WD_LastBus)}
                   </Text>
                 </View>
                 <View style={styles.row}>
-                  <Text style={[styles.cellDay, currentDay === "Saturday" ? styles.highlightText : null]}>
+                  <Text style={[styles.cellDay, activeSchedule === "saturday" && styles.highlightText]}>
                     Saturday
                   </Text>
-                  <Text style={[styles.cellFirst, currentDay === "Saturday" ? styles.highlightText : null]}>
+                  <Text style={[styles.cellFirst, activeSchedule === "saturday" && styles.highlightText]}>
                     {formatTime(timings.SAT_FirstBus)}
                   </Text>
-                  <Text style={[styles.cellLast, currentDay === "Saturday" ? styles.highlightText : null]}>
+                  <Text style={[styles.cellLast, activeSchedule === "saturday" && styles.highlightText]}>
                     {formatTime(timings.SAT_LastBus)}
                   </Text>
                 </View>
                 <View style={styles.row}>
-                  <Text style={[styles.cellDay, currentDay === "Sunday" ? styles.highlightText : null]}>
+                  <Text style={[styles.cellDay, activeSchedule === "sunday" && styles.highlightText]}>
                     Sunday
                   </Text>
-                  <Text style={[styles.cellFirst, currentDay === "Sunday" ? styles.highlightText : null]}>
+                  <Text style={[styles.cellFirst, activeSchedule === "sunday" && styles.highlightText]}>
                     {formatTime(timings.SUN_FirstBus)}
                   </Text>
-                  <Text style={[styles.cellLast, currentDay === "Sunday" ? styles.highlightText : null]}>
+                  <Text style={[styles.cellLast, activeSchedule === "sunday" && styles.highlightText]}>
                     {formatTime(timings.SUN_LastBus)}
                   </Text>
                 </View>

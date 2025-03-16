@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { scale } from "react-native-size-matters";
 import { useLikedBuses } from "../context/likedBusesContext";
 import { colors, font } from "../../assets/styles/GlobalStyles";
 import busFirstLastTimingsData from "../../assets/busFirstLastTimings.json";
@@ -57,11 +56,6 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
   const { toggleUnlike } = useLikedBuses();
   const now = new Date();
   const currentDay = now.toLocaleString("en-US", { weekday: "long" });
-  const currentTime = now.toLocaleString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
 
   // State for timings dropdown expansion and bus stop details
   const [isTimingsExpanded, setIsTimingsExpanded] = useState(false);
@@ -120,14 +114,6 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
     (stop) => stop.stopCode === busStopCode
   );
 
-  // Scroll to current bus stop when the modal opens
-  // useEffect(() => {
-  //   if (isVisible && scrollViewRef.current && currentStopIndex >= 0) {
-  //     scrollViewRef.current.scrollTo({ y: currentStopIndex * 40), animated: true });
-  //   }
-  // }, [isVisible, currentStopIndex]);
-
-  // Fetch details for each bus stop
   useEffect(() => {
     const fetchBusStopsDetails = async () => {
       try {
@@ -146,14 +132,101 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
   const toggleTimings = () => {
     setIsTimingsExpanded(!isTimingsExpanded);
   };
+  
+  // Add this helper function to parse time strings
+  const parseTime = (timeStr: string): Date | null => {
+    if (timeStr === "-") return null;
+    
+    const now = new Date();
+    const today = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+    
+    if (timeStr.includes(":") || timeStr.includes("AM") || timeStr.includes("PM")) {
+      // Already in AM/PM format
+      const date = new Date(today);
+      const timeParts = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (!timeParts) return null;
+      
+      let hours = parseInt(timeParts[1]);
+      const minutes = parseInt(timeParts[2]);
+      const period = timeParts[3].toUpperCase();
+      
+      if (period === "PM" && hours < 12) hours += 12;
+      if (period === "AM" && hours === 12) hours = 0;
+      
+      date.setHours(hours, minutes);
+      return date;
+    } else {
+      // In "HHmm" format
+      const paddedTime = timeStr.padStart(4, "0");
+      const hour = parseInt(paddedTime.slice(0, 2));
+      const minute = parseInt(paddedTime.slice(2));
+      
+      const date = new Date(today);
+      date.setHours(hour, minute);
+      return date;
+    }
+  };
 
-  // Optionally, determine the active schedule for highlighting purposes
   const getActiveSchedule = () => {
     if (!timings) return null;
-    if (["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].includes(currentDay))
-      return "weekday";
+    
+    const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+    const nowTime = now.getHours() * 60 + now.getMinutes(); // Current time in minutes
+    
+    // If it's after midnight but before the last bus of the previous day
+    if (nowTime < (4 * 60)) { // Before 4:00 AM, consider it might be the previous day's schedule
+      // For Monday after midnight, check if it's before Sunday's last bus
+      if (currentDay === "Monday") {
+        const sunLastBus = parseTime(timings.SUN_LastBus);
+        if (sunLastBus) {
+          const sunLastBusMinutes = sunLastBus.getHours() * 60 + sunLastBus.getMinutes();
+          // If Sunday's last bus is after midnight and current time is before it
+          if (sunLastBusMinutes < (4 * 60) && nowTime < sunLastBusMinutes) {
+            return "sunday";
+          }
+        }
+      } 
+      // For Saturday after midnight, check if it's before Friday's last bus
+      else if (currentDay === "Saturday") {
+        const wdLastBus = parseTime(timings.WD_LastBus);
+        if (wdLastBus) {
+          const wdLastBusMinutes = wdLastBus.getHours() * 60 + wdLastBus.getMinutes();
+          if (wdLastBusMinutes < (4 * 60) && nowTime < wdLastBusMinutes) {
+            return "weekday";
+          }
+        }
+      } 
+      // For Sunday after midnight, check if it's before Saturday's last bus
+      else if (currentDay === "Sunday") {
+        const satLastBus = parseTime(timings.SAT_LastBus);
+        if (satLastBus) {
+          const satLastBusMinutes = satLastBus.getHours() * 60 + satLastBus.getMinutes();
+          if (satLastBusMinutes < (4 * 60) && nowTime < satLastBusMinutes) {
+            return "saturday";
+          }
+        }
+      } 
+      // For weekdays (Tue-Fri) after midnight, check if it's before the previous day's last bus
+      else if (weekdays.includes(currentDay)) {
+        const wdLastBus = parseTime(timings.WD_LastBus);
+        if (wdLastBus) {
+          const wdLastBusMinutes = wdLastBus.getHours() * 60 + wdLastBus.getMinutes();
+          if (wdLastBusMinutes < (4 * 60) && nowTime < wdLastBusMinutes) {
+            return "weekday";
+          }
+        }
+      }
+    }
+    
+    // Standard day-based logic if not in the late night scenario
+    if (weekdays.includes(currentDay)) return "weekday";
     if (currentDay === "Saturday") return "saturday";
     if (currentDay === "Sunday") return "sunday";
+    
     return null;
   };
 
@@ -190,9 +263,6 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
               </TouchableOpacity>
               <View style={{ flex: 1 }} />
               <View style={styles.likeButtonWrapper}>
-                {/* <Text style={styles.currentTime}>
-                  {currentDay} {currentTime}
-                </Text> */}
                 <TouchableOpacity
                   onPress={() => {
                     toggleUnlike(groupName, busStopCode, busNumber);
