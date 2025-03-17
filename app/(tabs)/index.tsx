@@ -220,6 +220,7 @@ const NearbyBusStopsPage = () => {
                 placeholderTextColor={colors.onSurfaceSecondary}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
+                autoCorrect={false}
               />
 
               {searchQuery === "" ? (
