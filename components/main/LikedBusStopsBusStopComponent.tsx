@@ -131,6 +131,14 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
       return a.localeCompare(b);
     });
 
+  const getFontSize = (text: string) => {
+    const length = text.length;
+    if (length > 35) return 12;
+    if (length > 30) return 13;
+    if (length > 25) return 14;
+    return 16.5;
+  };
+
   return (
     <View style={[styles.outerContainer, props.isActive && styles.activeContainer]}>
       <TouchableOpacity
@@ -148,7 +156,10 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
             </Text>
           </View>
           <View style={styles.descriptionWrapper}>
-            <Text style={styles.description}  adjustsFontSizeToFit numberOfLines={1}>
+            <Text
+              style={[styles.description, { fontSize: getFontSize(props.Description) }]}
+              numberOfLines={1}
+            >
               {props.searchQuery
                 ? highlightText(props.Description, props.searchQuery)
                 : props.Description}
