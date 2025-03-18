@@ -1,7 +1,6 @@
 import { colors, font } from "@/assets/styles/GlobalStyles";
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, Animated, StyleSheet, Dimensions } from "react-native";
-import { scale } from "react-native-size-matters";
 
 
 const donations: string[] = [

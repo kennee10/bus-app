@@ -10,7 +10,6 @@ import {
   BackHandler,
 } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { scale } from "react-native-size-matters";
 import { calculateDistance } from "../../components/hooks/usefulFunctions";
 import { colors, containerStyles, font, navigationBarHeight } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from '../../components/main/BusStopComponent';
@@ -20,7 +19,6 @@ import InfoModal from "../../components/main/InfoModal";
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type BusStopData = {
   Description: string;
@@ -197,89 +195,85 @@ const NearbyBusStopsPage = () => {
   ), [likedBusStopsOrder, searchQuery, toggleLike]);
 
   return (
-    // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={containerStyles.pageContainer}>
-        <View style={containerStyles.innerPageContainer}>
-          <View style={styles.headerContainer}>
-            <View style={styles.searchContainer}>
-              {searchQuery === "" ? (
-                <TouchableOpacity onPress={searchIconPress} activeOpacity={1}>
-                  <Ionicons name="search" style={styles.searchIcon} />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={clearSearchQuery}>
-                  <Ionicons name="arrow-back" style={styles.searchIcon} />
-                </TouchableOpacity>
-              )}
-
-              <TextInput
-                ref={inputRef}
-                style={styles.searchInput}
-                placeholder="Search for a bus stop..."
-                placeholderTextColor={colors.onSurfaceSecondary}
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                autoCorrect={false}
-              />
-
-              {searchQuery === "" ? (
-                <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-                  <Ionicons name="information-circle-outline" style={styles.infoIcon} />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={clearSearchQuery}>
-                  <Ionicons name="close-circle" style={styles.crossIcon} />
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-
-          {loading ? (
-            <ActivityIndicator
-              size="large"
-              color={colors.onBackgroundSecondary}
-              style={{ flex: 1 }}
-            />
-          ) : (
-            filteredStops.length > 0 ? (
-              <DraggableFlatList
-                data={filteredStops.slice(0, limit)}
-                keyExtractor={(item) => item.BusStopCode}
-                renderItem={renderItem}
-                keyboardShouldPersistTaps="handled"
-                contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
-                onScrollBeginDrag={() => Keyboard.dismiss()}
-                removeClippedSubviews
-                initialNumToRender={12}
-                maxToRenderPerBatch={8}
-                windowSize={12}
-                onEndReached={handleEndReached}
-                onEndReachedThreshold={0.000001}
-              />
-                
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={containerStyles.pageContainer}>
+      <View style={containerStyles.innerPageContainer}>
+        <View style={styles.headerContainer}>
+          <View style={styles.searchContainer}>
+            {searchQuery === "" ? (
+              <TouchableOpacity onPress={searchIconPress} activeOpacity={1}>
+                <Ionicons name="search" style={styles.searchIcon} />
+              </TouchableOpacity>
             ) : (
-              nearbyBusStops.length > 0 ? (
-                <View style={containerStyles.pageContainer}>
-                  <Text style={containerStyles.globalInfoTextMessage}>No bus stops match your search</Text>
-                </View>
-              ) : (
-                <View style={containerStyles.pageContainer}>
-                  <Text style={containerStyles.globalInfoTextMessage}>No bus stops within 2000m</Text>
-                </View>
-              )
-            )
-          )}
-        </View>
-      </View>
-      <InfoModal 
-            isVisible={isModalVisible} 
-            onClose={() => setIsModalVisible(false)}
-          />
-      </GestureHandlerRootView>
+              <TouchableOpacity onPress={clearSearchQuery}>
+                <Ionicons name="arrow-back" style={styles.searchIcon} />
+              </TouchableOpacity>
+            )}
 
-      
-    // </SafeAreaView>
+            <TextInput
+              ref={inputRef}
+              style={styles.searchInput}
+              placeholder="Search for a bus stop..."
+              placeholderTextColor={colors.onSurfaceSecondary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              autoCorrect={false}
+            />
+
+            {searchQuery === "" ? (
+              <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+                <Ionicons name="information-circle-outline" style={styles.infoIcon} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={clearSearchQuery}>
+                <Ionicons name="close-circle" style={styles.crossIcon} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.onBackgroundSecondary}
+            style={{ flex: 1 }}
+          />
+        ) : (
+          filteredStops.length > 0 ? (
+            <DraggableFlatList
+              data={filteredStops.slice(0, limit)}
+              keyExtractor={(item) => item.BusStopCode}
+              renderItem={renderItem}
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
+              onScrollBeginDrag={() => Keyboard.dismiss()}
+              removeClippedSubviews
+              initialNumToRender={12}
+              maxToRenderPerBatch={8}
+              windowSize={12}
+              onEndReached={handleEndReached}
+              onEndReachedThreshold={0.000001}
+            />
+              
+          ) : (
+            nearbyBusStops.length > 0 ? (
+              <View style={containerStyles.pageContainer}>
+                <Text style={containerStyles.globalInfoTextMessage}>No bus stops match your search</Text>
+              </View>
+            ) : (
+              <View style={containerStyles.pageContainer}>
+                <Text style={containerStyles.globalInfoTextMessage}>No bus stops within 2000m</Text>
+              </View>
+            )
+          )
+        )}
+      </View>
+    </View>
+    <InfoModal 
+          isVisible={isModalVisible} 
+          onClose={() => setIsModalVisible(false)}
+        />
+    </GestureHandlerRootView>
   );
 };
 

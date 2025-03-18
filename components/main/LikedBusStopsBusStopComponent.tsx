@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { scale, verticalScale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { colors, font } from "../../assets/styles/GlobalStyles";
 import BusComponent from "./BusComponent";

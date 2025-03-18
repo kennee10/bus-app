@@ -16,7 +16,6 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useLikedBuses } from "../../components/context/likedBusesContext";
 import LikedBusesBusStopComponent from "../../components/main/LikedBusesBusStopComponent";
 import { colors, containerStyles, font, navigationBarHeight } from "../../assets/styles/GlobalStyles";
-import { scale } from "react-native-size-matters";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
 import DraggableFlatList from "react-native-draggable-flatlist";
@@ -453,89 +452,88 @@ const LikedBusesPage = () => {
   }, []);
 
   return (
-    // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={containerStyles.pageContainer}>
-        <View style={[containerStyles.innerPageContainer, { marginTop: 10 }]}>
-          {unarchivedGroupsOrder.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              {archivedGroupsOrder.length === 0 ? (
-                <Text style={containerStyles.globalInfoTextMessage}>
-                  You haven't liked any buses
-                </Text>
-              ) : (
-                <Text style={containerStyles.globalInfoTextMessage}>
-                  Groups are in archive
-                </Text>
-              )}
-              
-            </View>
-          ) : (
-            <DraggableFlatList
-              data={unarchivedGroupsOrder}
-              keyExtractor={(item) => item}
-              renderItem={renderGroupItem}
-              contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
-              keyboardShouldPersistTaps="handled"
-              
-            />
-          )}
-        </View>
-
-        <TouchableOpacity
-          style={styles.archivedGroupsButton}
-          onPress={() => setArchivedModalVisible(true)}
-        >
-          <Ionicons
-            name="eye-off"
-            size={24}
-            color={colors.onSurfaceSecondary2}
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={containerStyles.pageContainer}>
+      <View style={[containerStyles.innerPageContainer, { marginTop: 10 }]}>
+        {unarchivedGroupsOrder.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            {archivedGroupsOrder.length === 0 ? (
+              <Text style={containerStyles.globalInfoTextMessage}>
+                You haven't liked any buses
+              </Text>
+            ) : (
+              <Text style={containerStyles.globalInfoTextMessage}>
+                Groups are in archive
+              </Text>
+            )}
+            
+          </View>
+        ) : (
+          <DraggableFlatList
+            data={unarchivedGroupsOrder}
+            keyExtractor={(item) => item}
+            renderItem={renderGroupItem}
+            contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
+            keyboardShouldPersistTaps="handled"
+            
           />
-        </TouchableOpacity>
-
-        {/* Archived Groups Modal */}
-        <Modal
-          visible={archivedModalVisible}
-          animationType="fade"
-          transparent
-          onRequestClose={closeArchivedModal}
-        >
-            <View style={styles.modalOverlay}>
-              {/* Backdrop that closes the modal */}
-              <TouchableWithoutFeedback onPress={closeArchivedModal}>
-                <View style={StyleSheet.absoluteFillObject} />
-              </TouchableWithoutFeedback>
-
-                <View style={[styles.bottomModalContainer, styles.archivedModalContainer]}>
-                  <View style={styles.modalHeader}>
-                    <Text style={styles.modalTitle}>Archived Groups</Text>
-                    <TouchableOpacity onPress={closeArchivedModal} style={styles.closeButton}>
-                      <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.modalDivider} />
-                  
-                  {archivedGroupsOrder.length === 0 ? (
-                    <View style={styles.emptyContainerArchived}>
-                      <Text style={[containerStyles.globalInfoTextMessage]}>
-                        No archived groups
-                      </Text>
-                    </View>
-                      
-                  ) : (
-                    <DraggableFlatList
-                      data={archivedGroupsOrder}
-                      keyExtractor={(item) => item}
-                      renderItem={renderGroupItem}
-                      keyboardShouldPersistTaps="always"
-                      contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
-                    />
-                  )}
-                </View>
-            </View>
-        </Modal>
+        )}
       </View>
-      </GestureHandlerRootView>
+
+      <TouchableOpacity
+        style={styles.archivedGroupsButton}
+        onPress={() => setArchivedModalVisible(true)}
+      >
+        <Ionicons
+          name="eye-off"
+          size={24}
+          color={colors.onSurfaceSecondary2}
+        />
+      </TouchableOpacity>
+
+      {/* Archived Groups Modal */}
+      <Modal
+        visible={archivedModalVisible}
+        animationType="fade"
+        transparent
+        onRequestClose={closeArchivedModal}
+      >
+          <View style={styles.modalOverlay}>
+            {/* Backdrop that closes the modal */}
+            <TouchableWithoutFeedback onPress={closeArchivedModal}>
+              <View style={StyleSheet.absoluteFillObject} />
+            </TouchableWithoutFeedback>
+
+              <View style={[styles.bottomModalContainer, styles.archivedModalContainer]}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>Archived Groups</Text>
+                  <TouchableOpacity onPress={closeArchivedModal} style={styles.closeButton}>
+                    <Ionicons name="close" size={20} color={colors.onSurfaceSecondary2} />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.modalDivider} />
+                
+                {archivedGroupsOrder.length === 0 ? (
+                  <View style={styles.emptyContainerArchived}>
+                    <Text style={[containerStyles.globalInfoTextMessage]}>
+                      No archived groups
+                    </Text>
+                  </View>
+                    
+                ) : (
+                  <DraggableFlatList
+                    data={archivedGroupsOrder}
+                    keyExtractor={(item) => item}
+                    renderItem={renderGroupItem}
+                    keyboardShouldPersistTaps="always"
+                    contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
+                  />
+                )}
+              </View>
+          </View>
+      </Modal>
+    </View>
+    </GestureHandlerRootView>
   );
 };
 

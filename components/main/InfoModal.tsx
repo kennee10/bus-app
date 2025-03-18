@@ -8,7 +8,6 @@ import {
   ScrollView,
   TouchableWithoutFeedback
 } from 'react-native';
-import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { colors, font } from '../../assets/styles/GlobalStyles'; 

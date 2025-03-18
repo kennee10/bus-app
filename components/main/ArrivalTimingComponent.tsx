@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { scale } from "react-native-size-matters";
 import { colors } from '../../assets/styles/GlobalStyles';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import EntypoIcons from "react-native-vector-icons/Entypo";

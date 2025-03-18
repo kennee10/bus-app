@@ -1,15 +1,12 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { scale, verticalScale } from "react-native-size-matters";
 import { colors, navigationBarHeight } from "../../assets/styles/GlobalStyles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Platform } from "react-native";
 
 export default function TabsLayout() {
   console.log("_layout.tsx(tabs): Tabs layout rendering...");
-
-  const insets = useSafeAreaInsets(); // Get safe area insets
 
   return (
     <Tabs
@@ -26,8 +23,6 @@ export default function TabsLayout() {
           paddingBottom: 20,
           width: "100%",
           height: Platform.OS === "android" ? navigationBarHeight : 50,
-          // ...(Platform.OS === "android" ? { height: navigationBarHeight } : {}),
-          // paddingBottom: 10),
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.onBackgroundSecondary2,

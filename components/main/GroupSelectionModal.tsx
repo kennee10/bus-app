@@ -12,7 +12,6 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { scale } from "react-native-size-matters";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { colors, font } from "../../assets/styles/GlobalStyles";
 import { useLikedBuses } from "../context/likedBusesContext";

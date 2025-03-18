@@ -4,7 +4,6 @@ import { colors, font } from "../../assets/styles/GlobalStyles";
 import LikedBusesBusComponent from "./LikedBusesBusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
-import { scale } from "react-native-size-matters";
 import LikedBusesBusModal from "./LikedBusesBusModal";
 
 type BusStopWithDist = {
@@ -288,7 +287,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     width: 33,
     height: 33,
-    // padding: 8,
     backgroundColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",

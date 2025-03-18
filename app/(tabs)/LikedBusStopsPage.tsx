@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
-import { scale } from 'react-native-size-matters';
-import { colors, containerStyles, navigationBarHeight } from '../../assets/styles/GlobalStyles';
+import { colors, containerStyles } from '../../assets/styles/GlobalStyles';
 import LikedBusStopsBusStopComponent from '../../components/main/LikedBusStopsBusStopComponent';
 import { useLikedBusStops } from '../../components/context/likedBusStopsContext';
 import { getBusStopsDetails } from '../../components/hooks/getBusStopsDetails';
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
-import FlatList from 'react-native-draggable-flatlist';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 
 type BusStopWithDist = {
@@ -58,44 +55,42 @@ const LikedBusStopsPage = () => {
   };
 
   return (
-    // <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={containerStyles.pageContainer}>
-          <View style={[containerStyles.innerPageContainer, { marginTop: 10 }]}>
-            {loading ? (
-              <ActivityIndicator size="large" color={colors.onBackgroundSecondary} style={{ flex: 1 }} />
-            ) : likedBusStopsDetails.length > 0 ? (
-              <DraggableFlatList
-                data={likedBusStopsDetails}
-                keyExtractor={(item) => item.BusStopCode}
-                keyboardShouldPersistTaps="always"
-                renderItem={({ item, drag, isActive }) => (
-                  <LikedBusStopsBusStopComponent
-                    BusStopCode={item.BusStopCode}
-                    Description={item.Description}
-                    RoadName={item.RoadName}
-                    Distance={item.Distance}
-                    isLiked={likedBusStopsOrder.includes(item.BusStopCode)} // Check if in order array
-                    onLikeToggle={() => toggleLike(item.BusStopCode)}
-                    searchQuery=""
-                    allBusServices={busStopsData[item.BusStopCode]?.ServiceNos || []}
-                    onLongPress={drag}
-                    isActive={isActive}
-                  />
-                )}
-                onDragEnd={onDragEnd}
-              />
-            ) : (
-              <View style={containerStyles.pageContainer}>
-                <Text style={containerStyles.globalInfoTextMessage}>
-                  You haven't liked any bus stops
-                </Text>
-              </View>
-            )}
-          </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={containerStyles.pageContainer}>
+        <View style={[containerStyles.innerPageContainer, { marginTop: 10 }]}>
+          {loading ? (
+            <ActivityIndicator size="large" color={colors.onBackgroundSecondary} style={{ flex: 1 }} />
+          ) : likedBusStopsDetails.length > 0 ? (
+            <DraggableFlatList
+              data={likedBusStopsDetails}
+              keyExtractor={(item) => item.BusStopCode}
+              keyboardShouldPersistTaps="always"
+              renderItem={({ item, drag, isActive }) => (
+                <LikedBusStopsBusStopComponent
+                  BusStopCode={item.BusStopCode}
+                  Description={item.Description}
+                  RoadName={item.RoadName}
+                  Distance={item.Distance}
+                  isLiked={likedBusStopsOrder.includes(item.BusStopCode)} // Check if in order array
+                  onLikeToggle={() => toggleLike(item.BusStopCode)}
+                  searchQuery=""
+                  allBusServices={busStopsData[item.BusStopCode]?.ServiceNos || []}
+                  onLongPress={drag}
+                  isActive={isActive}
+                />
+              )}
+              onDragEnd={onDragEnd}
+            />
+          ) : (
+            <View style={containerStyles.pageContainer}>
+              <Text style={containerStyles.globalInfoTextMessage}>
+                You haven't liked any bus stops
+              </Text>
+            </View>
+          )}
         </View>
-      </GestureHandlerRootView>
-    // </SafeAreaView>
+      </View>
+    </GestureHandlerRootView>
     
   );
 };

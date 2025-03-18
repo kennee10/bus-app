@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, StyleSheet, Platform, StatusBar, Text } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import { scale } from "react-native-size-matters";
 import { Stack } from "expo-router";
 import { colors, containerStyles } from "../assets/styles/GlobalStyles";
 import { LikedBusStopsProvider } from "../components/context/likedBusStopsContext";
 import { LikedBusesProvider } from "../components/context/likedBusesContext";
 import AppInitializer from "./AppInitializer";
-import * as NavigationBar from 'expo-navigation-bar'; // Add this import
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import * as NavigationBar from 'expo-navigation-bar';
 
 export default function RootLayout() {
   const [isInitialized, setIsInitialized] = useState(false);
