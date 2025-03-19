@@ -1,11 +1,11 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors, navigationBarHeight } from "../../assets/styles/GlobalStyles";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Platform } from "react-native";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 export default function TabsLayout() {
+  const { colors } = useTheme();
   console.log("_layout.tsx(tabs): Tabs layout rendering...");
 
   return (
@@ -22,7 +22,7 @@ export default function TabsLayout() {
           borderTopWidth: 0,
           paddingBottom: 20,
           width: "100%",
-          height: Platform.OS === "android" ? navigationBarHeight : 50,
+          height: Platform.OS === "android" ? 55 : 50,
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.onBackgroundSecondary2,

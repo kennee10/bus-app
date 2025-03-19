@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors } from "../../assets/styles/GlobalStyles";
 import ArrivalTimingComponent from "./ArrivalTimingComponent";
 import GroupSelectionModal from "./GroupSelectionModal";
 import BusModal from "./BusModal";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 type NextBusInfo = {
   OriginCode: string;
@@ -31,6 +31,46 @@ type BusComponentProps = {
 const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, description, nextBuses, isHearted }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isBusModalVisible, setBusModalVisible] = useState(false);
+  const { colors, font, containerStyles } = useTheme();
+
+  const styles = StyleSheet.create({
+    container: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingLeft: 8,
+      paddingRight: 8,
+      margin: 2.5,
+      marginLeft: 5,
+      marginRight: 5,
+      borderRadius: 4,
+      elevation: 2,
+      backgroundColor: colors.surface2,
+    },
+    touchableOpacity: {
+      flexDirection: "row",
+      alignItems: "center",
+      flex: 1,
+    },
+    likeButtonWrapper: {
+      marginLeft: 16
+    },
+    busNumberWrapper: {
+      flex: 2,
+      alignItems: "center",
+      marginRight: 16,
+    },
+    busNumber: {
+      fontSize: 21,
+      fontWeight: "bold",
+      color: colors.secondary,
+    },
+    busInfoWrapper: {
+      flex: 10,
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+  });
 
   return (
     <View style={styles.container}>
@@ -78,43 +118,6 @@ const BusComponent: React.FC<BusComponentProps> = ({ busNumber, busStopCode, des
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingLeft: 8,
-    paddingRight: 8,
-    margin: 2.5,
-    marginLeft: 5,
-    marginRight: 5,
-    borderRadius: 4,
-    elevation: 2,
-    backgroundColor: colors.surface2,
-  },
-  touchableOpacity: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  likeButtonWrapper: {
-    marginLeft: 16
-  },
-  busNumberWrapper: {
-    flex: 2,
-    alignItems: "center",
-    marginRight: 16,
-  },
-  busNumber: {
-    fontSize: 21,
-    fontWeight: "bold",
-    color: colors.secondary,
-  },
-  busInfoWrapper: {
-    flex: 10,
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-});
+
 
 export default BusComponent;

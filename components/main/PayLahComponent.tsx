@@ -1,8 +1,10 @@
-import { containerStyles } from "@/assets/styles/GlobalStyles";
 import React from "react";
 import { TouchableOpacity, Text, Linking } from "react-native";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 const PayLahComponent: React.FC = () => {
+    const { colors, font, containerStyles } = useTheme();
+    
     const url = "https://www.dbs.com.sg/personal/mobile/paylink/index.html?tranRef=xEhaZBzqPd"; // 5th jan 2025
 
     const handlePress = async () => {

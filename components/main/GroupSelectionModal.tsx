@@ -13,9 +13,9 @@ import {
   Platform,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors, font } from "../../assets/styles/GlobalStyles";
 import { useLikedBuses } from "../context/likedBusesContext";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 type GroupSelectionModalProps = {
   busNumber: string;
@@ -38,6 +38,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [inputRef, setInputRef] = useState<TextInput | null>(null);
+  const { colors, font, containerStyles } = useTheme();
 
   // Focus the input when modal becomes visible
   React.useEffect(() => {
@@ -60,6 +61,140 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
       setInputValue("");
     }
   }, [inputValue, onSave]);
+
+  const styles = StyleSheet.create({
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end", // Position at bottom
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      elevation: 5,
+      maxHeight: "80%",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+      flex: 1,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    modalBody: {
+      maxHeight: "80%",
+    },
+    emptyContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 20,
+    },
+    emptyText: {
+      fontFamily: font.medium,
+      fontSize: 14,
+      color: colors.onSurfaceSecondary,
+      textAlign: "center",
+    },
+    flatList: {
+      width: "100%",
+    },
+    groupItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      backgroundColor: colors.surface3,
+      borderRadius: 4,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress2,
+    },
+    groupItemContent: {
+      flex: 1,
+      padding: 10,
+    },
+    groupItemText: {
+      fontSize: 14,
+      color: colors.primary,
+      fontFamily: font.semiBold,
+    },
+    groupItemIcons: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    archiveIcon: {
+      marginRight: 4,
+    },
+    deleteButton: {
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+    },
+    separator: {
+      height: 5,
+    },
+    createGroupButton: {
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      padding: 12,
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 16,
+    },
+    createGroupButtonText: {
+      fontSize: 14,
+      fontFamily: font.semiBold,
+      color: colors.surface3,
+    },
+    disabledButton: {
+      backgroundColor: colors.onSurfaceSecondary2,
+      opacity: 0.7,
+    },
+    // Styles for the new Create Group modal
+    modalTextInput: {
+      fontSize: 14,
+      fontFamily: font.medium,
+      color: colors.primary,
+      borderWidth: 1,
+      borderColor: colors.borderToPress,
+      borderRadius: 8,
+      padding: 12,
+      marginBottom: 10,
+    },
+    modalButtonsContainer: {
+      flexDirection: "row",
+      justifyContent: "flex-end",
+    },
+    modalButton: {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 4,
+      marginLeft: 8,
+    },
+    primaryButton: {
+      backgroundColor: colors.primary,
+    },
+    modalButtonText: {
+      fontSize: 14,
+      fontFamily: font.semiBold,
+      color: colors.primary,
+    },
+    primaryButtonText: {
+      color: colors.surface3,
+    },
+  });
 
   return (
     <Modal
@@ -124,6 +259,7 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
 }) => {
   const { groups, order, toggleLike, createGroupAndLike, deleteGroup } = useLikedBuses();
   const [createModalVisible, setCreateModalVisible] = useState(false);
+  const { colors, font, containerStyles } = useTheme();
 
   const handleCreateGroup = useCallback(async (groupName: string) => {
     if (groupName) {
@@ -189,6 +325,140 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
     </TouchableOpacity>
   ), [groups, handleDeleteGroup, handleToggleLike]);
 
+  const styles = StyleSheet.create({
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end", // Position at bottom
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      elevation: 5,
+      maxHeight: "80%",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+      flex: 1,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    modalBody: {
+      maxHeight: "80%",
+    },
+    emptyContainer: {
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 20,
+    },
+    emptyText: {
+      fontFamily: font.medium,
+      fontSize: 14,
+      color: colors.onSurfaceSecondary,
+      textAlign: "center",
+    },
+    flatList: {
+      width: "100%",
+    },
+    groupItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      backgroundColor: colors.surface3,
+      borderRadius: 4,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress2,
+    },
+    groupItemContent: {
+      flex: 1,
+      padding: 10,
+    },
+    groupItemText: {
+      fontSize: 14,
+      color: colors.primary,
+      fontFamily: font.semiBold,
+    },
+    groupItemIcons: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    archiveIcon: {
+      marginRight: 4,
+    },
+    deleteButton: {
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+    },
+    separator: {
+      height: 5,
+    },
+    createGroupButton: {
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      padding: 12,
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 16,
+    },
+    createGroupButtonText: {
+      fontSize: 14,
+      fontFamily: font.semiBold,
+      color: colors.surface3,
+    },
+    disabledButton: {
+      backgroundColor: colors.onSurfaceSecondary2,
+      opacity: 0.7,
+    },
+    // Styles for the new Create Group modal
+    modalTextInput: {
+      fontSize: 14,
+      fontFamily: font.medium,
+      color: colors.primary,
+      borderWidth: 1,
+      borderColor: colors.borderToPress,
+      borderRadius: 8,
+      padding: 12,
+      marginBottom: 10,
+    },
+    modalButtonsContainer: {
+      flexDirection: "row",
+      justifyContent: "flex-end",
+    },
+    modalButton: {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 4,
+      marginLeft: 8,
+    },
+    primaryButton: {
+      backgroundColor: colors.primary,
+    },
+    modalButtonText: {
+      fontSize: 14,
+      fontFamily: font.semiBold,
+      color: colors.primary,
+    },
+    primaryButtonText: {
+      color: colors.surface3,
+    },
+  });
+
   return (
     <Modal
       visible={isVisible}
@@ -247,138 +517,6 @@ const GroupSelectionModal: React.FC<GroupSelectionModalProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: colors.modalOverlayBackgroundColor,
-    justifyContent: "flex-end", // Position at bottom
-  },
-  bottomModalContainer: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    padding: 10,
-    elevation: 5,
-    maxHeight: "80%",
-  },
-  modalHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 6,
-  },
-  modalTitle: {
-    fontSize: 16,
-    fontFamily: font.bold,
-    color: colors.primary,
-    flex: 1,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  modalDivider: {
-    height: 1,
-    backgroundColor: colors.borderToPress,
-    marginVertical: 10,
-  },
-  modalBody: {
-    maxHeight: "80%",
-  },
-  emptyContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  emptyText: {
-    fontFamily: font.medium,
-    fontSize: 14,
-    color: colors.onSurfaceSecondary,
-    textAlign: "center",
-  },
-  flatList: {
-    width: "100%",
-  },
-  groupItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: colors.surface3,
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: colors.borderToPress2,
-  },
-  groupItemContent: {
-    flex: 1,
-    padding: 10,
-  },
-  groupItemText: {
-    fontSize: 14,
-    color: colors.primary,
-    fontFamily: font.semiBold,
-  },
-  groupItemIcons: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  archiveIcon: {
-    marginRight: 4,
-  },
-  deleteButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  separator: {
-    height: 5,
-  },
-  createGroupButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 8,
-    padding: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 16,
-  },
-  createGroupButtonText: {
-    fontSize: 14,
-    fontFamily: font.semiBold,
-    color: colors.surface3,
-  },
-  disabledButton: {
-    backgroundColor: colors.onSurfaceSecondary2,
-    opacity: 0.7,
-  },
-  // Styles for the new Create Group modal
-  modalTextInput: {
-    fontSize: 14,
-    fontFamily: font.medium,
-    color: colors.primary,
-    borderWidth: 1,
-    borderColor: colors.borderToPress,
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 10,
-  },
-  modalButtonsContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  modalButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 4,
-    marginLeft: 8,
-  },
-  primaryButton: {
-    backgroundColor: colors.primary,
-  },
-  modalButtonText: {
-    fontSize: 14,
-    fontFamily: font.semiBold,
-    color: colors.primary,
-  },
-  primaryButtonText: {
-    color: colors.surface3,
-  },
-});
+
 
 export default GroupSelectionModal;

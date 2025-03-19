@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors } from '../../assets/styles/GlobalStyles';
 import ArrivalTimingComponent from "./ArrivalTimingComponent";
 import { useLikedBuses } from "../context/likedBusesContext";
 import LikedBusesBusModal from "./LikedBusesBusModal";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 type NextBusInfo = {
   OriginCode: string;
@@ -32,10 +32,53 @@ type LikedBusesBusComponent = {
 const LikedBusesBusComponent: React.FC<LikedBusesBusComponent> = (props) => {
   const { toggleUnlike } = useLikedBuses();
   const [isBusModalVisible, setBusModalVisible] = useState(false);
+  const { colors, font, containerStyles } = useTheme();
 
   const handleHeartPress = async () => {
     await toggleUnlike(props.groupName, props.busStopCode, props.busNumber);
   };
+  const styles = StyleSheet.create({
+    container: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingLeft: 8,
+      paddingRight: 8,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+      
+      // shadow stuff
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    touchableOpacity: {
+      flexDirection: "row",
+      alignItems: "center",
+      flex: 1,
+    },
+    likeButtonWrapper: {
+      marginLeft: 16
+    },
+    busNumberWrapper: {
+      flex: 2,
+      alignItems: "center",
+      marginRight: 16,
+    },
+    busNumber: {
+      fontSize: 21,
+      fontWeight: "bold",
+      color: colors.secondary,
+    },
+    busInfoWrapper: {
+      flex: 10,
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    
+  });
 
   return (
     <View style={styles.container}>
@@ -82,48 +125,7 @@ const LikedBusesBusComponent: React.FC<LikedBusesBusComponent> = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingLeft: 8,
-    paddingRight: 8,
-    borderRadius: 4,
-    backgroundColor: colors.surface2,
-    
-    // shadow stuff
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  touchableOpacity: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  likeButtonWrapper: {
-    marginLeft: 16
-  },
-  busNumberWrapper: {
-    flex: 2,
-    alignItems: "center",
-    marginRight: 16,
-  },
-  busNumber: {
-    fontSize: 21,
-    fontWeight: "bold",
-    color: colors.secondary,
-  },
-  busInfoWrapper: {
-    flex: 10,
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  
-});
+
 
 export default LikedBusesBusComponent;
 

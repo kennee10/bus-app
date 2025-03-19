@@ -5,9 +5,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system";
-import { colors, containerStyles, font } from "@/assets/styles/GlobalStyles";
 import paynowQR from "../../assets/images/paynow.jpg";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 import PayPalComponent from "@/components/main/PayPalComponent";
 import DonationTicker from '@/components/main/DonationTicker';
@@ -20,6 +20,7 @@ export default function App() {
   const [isPayNowVisible, setIsPayNowVisible] = useState(false);
   const [isMRTMapVisible, setIsMRTMapVisible] = useState(false);
   const [svgHtml, setSvgHtml] = useState<string | null>(null);
+  const { theme, toggleTheme, colors, font, containerStyles } = useTheme();
 
   // On mount, download and read the SVG file as a string,
   // then wrap it in an HTML document so the WebView can display it.
@@ -74,6 +75,85 @@ export default function App() {
     );
   };
 
+  // Create dynamic styles that update with theme
+  const styles = StyleSheet.create({
+    heading: {
+      fontSize: 14,
+      fontFamily: font.bold,
+      color: colors.onSurface,
+      textAlign: "left",
+    },
+    oneContainer: {
+      padding: 12,
+      borderRadius: 4,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.borderToPress2,
+      margin: 7.5,
+      width: "95%",
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+      flex: 1,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end",
+    },
+    modalOverlayMRT: {
+      flex: 1,
+      backgroundColor: colors.background,
+      justifyContent: "flex-end",
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      elevation: 5,
+    },
+    
+    content: {
+      flexDirection: "row",
+      marginTop: 10,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    mrtMapModalContainer: {
+      height: Platform.OS === "android" ? "100%" : "95%",
+    },
+    webViewContainer: {
+      flex: 1,
+      width: "100%",
+      marginTop: 5,
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    payNowImageContainer: {
+      alignItems: "center",
+      padding: 10,
+    },
+    image: {
+      width: 180,
+      height: 180,
+      marginBottom: 10
+    },
+
+  });
+
   return (
     <ScrollView style={{backgroundColor: colors.background}}>
       <View style={[containerStyles.pageContainer, { justifyContent: "flex-start", paddingTop: 15 }]}>
@@ -88,6 +168,26 @@ export default function App() {
               size={23}
               style={{ marginLeft: 5 }}
             />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Add Theme Toggle Section */}
+      <View style={styles.oneContainer}>
+        <Text style={styles.heading}>Appearance</Text>
+        <View style={styles.content}>
+          <TouchableOpacity 
+            onPress={toggleTheme} 
+            style={[containerStyles.button, { flexDirection: 'row', gap: 10 }]}
+          >
+            <MaterialCommunityIcons
+              name={theme === 'dark' ? 'weather-night' : 'weather-sunny'}
+              color={colors.onSurface}
+              size={20}
+            />
+            <Text style={[containerStyles.globalTextMessage, { color: colors.onSurface }]}>
+              Switch to {theme === 'dark' ? 'Light' : 'Dark'} Theme
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -181,79 +281,79 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  heading: {
-    fontSize: 14,
-    fontFamily: font.bold,
-    color: colors.onSurface,
-    textAlign: "left",
-  },
-  image: {
-    width: 180,
-    height: 180,
-    marginBottom: 10
-  },
-  oneContainer: {
-    padding: 12,
-    borderRadius: 4,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.borderToPress2,
-    margin: 7.5,
-    width: "95%",
-  },
-  content: {
-    flexDirection: "row",
-    marginTop: 10,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: colors.modalOverlayBackgroundColor,
-    justifyContent: "flex-end",
-  },
-  modalOverlayMRT: {
-    flex: 1,
-    backgroundColor: colors.background,
-    justifyContent: "flex-end",
-  },
-  bottomModalContainer: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    padding: 10,
-    elevation: 5,
+// const styles = StyleSheet.create({
+//   heading: {
+//     fontSize: 14,
+//     fontFamily: font.bold,
+//     color: colors.onSurface,
+//     textAlign: "left",
+//   },
+//   image: {
+//     width: 180,
+//     height: 180,
+//     marginBottom: 10
+//   },
+//   oneContainer: {
+//     padding: 12,
+//     borderRadius: 4,
+//     backgroundColor: colors.surface,
+//     borderWidth: 1,
+//     borderColor: colors.borderToPress2,
+//     margin: 7.5,
+//     width: "95%",
+//   },
+//   content: {
+//     flexDirection: "row",
+//     marginTop: 10,
+//   },
+//   modalOverlay: {
+//     flex: 1,
+//     backgroundColor: colors.modalOverlayBackgroundColor,
+//     justifyContent: "flex-end",
+//   },
+//   modalOverlayMRT: {
+//     flex: 1,
+//     backgroundColor: colors.background,
+//     justifyContent: "flex-end",
+//   },
+//   bottomModalContainer: {
+//     backgroundColor: colors.surface,
+//     borderTopLeftRadius: 12,
+//     borderTopRightRadius: 12,
+//     padding: 10,
+//     elevation: 5,
 
-  },
-  mrtMapModalContainer: {
-    height: Platform.OS === "android" ? "100%" : "95%",
-  },
-  webViewContainer: {
-    flex: 1,
-    width: "100%",
-    marginTop: 5,
-  },
-  modalHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 6,
-  },
-  modalTitle: {
-    fontSize: 16,
-    fontFamily: font.bold,
-    color: colors.primary,
-    flex: 1,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  modalDivider: {
-    height: 1,
-    backgroundColor: colors.borderToPress,
-    marginVertical: 10,
-  },
-  payNowImageContainer: {
-    alignItems: "center",
-    padding: 10,
-  },
-});
+//   },
+//   mrtMapModalContainer: {
+//     height: Platform.OS === "android" ? "100%" : "95%",
+//   },
+//   webViewContainer: {
+//     flex: 1,
+//     width: "100%",
+//     marginTop: 5,
+//   },
+//   modalHeader: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     justifyContent: "space-between",
+//     paddingHorizontal: 6,
+//   },
+//   modalTitle: {
+//     fontSize: 16,
+//     fontFamily: font.bold,
+//     color: colors.primary,
+//     flex: 1,
+//   },
+//   closeButton: {
+//     padding: 4,
+//   },
+//   modalDivider: {
+//     height: 1,
+//     backgroundColor: colors.borderToPress,
+//     marginVertical: 10,
+//   },
+//   payNowImageContainer: {
+//     alignItems: "center",
+//     padding: 10,
+//   },
+// });

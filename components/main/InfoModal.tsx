@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { colors, font } from '../../assets/styles/GlobalStyles'; 
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 
 interface BusModalProps {
@@ -21,6 +21,108 @@ interface BusModalProps {
 }
 
 const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
+  const { colors, font } = useTheme();
+
+  const styles = StyleSheet.create({
+    infoContainer: {
+      flexDirection: "column",
+      gap: 12.5,
+      paddingHorizontal: 10,
+      paddingBottom: 20,
+    },
+    oneInfoContainer: {
+      flexDirection: "column",
+      gap: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.borderToPress2,
+      paddingBottom: 12.5,
+    },
+    oneLine: {
+      flexDirection: "row",
+    },
+    leftSide: {
+      flex: 2,
+    },
+    rightSide: {
+      flex: 6,
+      marginRight: 27,
+    },
+    infoText: {
+      fontSize: 12,
+      fontFamily: font.bold,
+      color: colors.onSurface,
+      textAlign: "justify",
+    },
+    proTipText: {
+      fontSize: 11,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+      textAlign: "justify",
+      marginTop: 2,
+    },
+    timingWrapper: {
+      width: 50,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      marginBottom: 3,
+    },
+    minsWrapper: {
+      justifyContent: 'flex-end',
+    },
+    mins: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: colors.onSurface2Secondary,
+    },
+    secsWrapper: {
+      justifyContent: 'flex-end',
+      marginLeft: 2,
+    },
+    secs: {
+      fontSize: 6.5,
+      fontWeight: "bold",
+      marginBottom: 4,
+      color: colors.onSurface2Secondary,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end",
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      elevation: 5,
+      maxHeight: "80%",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+      flex: 1,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    scrollContainer: {
+      flexGrow: 1,
+    },
+  });
+
+
   return (
     <Modal
       visible={isVisible}
@@ -247,104 +349,5 @@ const InfoModal: React.FC<BusModalProps> = ({ isVisible, onClose }) => {
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  infoContainer: {
-    flexDirection: "column",
-    gap: 12.5,
-    paddingHorizontal: 10,
-    paddingBottom: 20,
-  },
-  oneInfoContainer: {
-    flexDirection: "column",
-    gap: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderToPress2,
-    paddingBottom: 12.5,
-  },
-  oneLine: {
-    flexDirection: "row",
-  },
-  leftSide: {
-    flex: 2,
-  },
-  rightSide: {
-    flex: 6,
-    marginRight: 27,
-  },
-  infoText: {
-    fontSize: 12,
-    fontFamily: font.bold,
-    color: colors.onSurface,
-    textAlign: "justify",
-  },
-  proTipText: {
-    fontSize: 11,
-    fontFamily: font.medium,
-    color: colors.onSurfaceSecondary,
-    textAlign: "justify",
-    marginTop: 2,
-  },
-  timingWrapper: {
-    width: 50,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginBottom: 3,
-  },
-  minsWrapper: {
-    justifyContent: 'flex-end',
-  },
-  mins: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: colors.onSurface2Secondary,
-  },
-  secsWrapper: {
-    justifyContent: 'flex-end',
-    marginLeft: 2,
-  },
-  secs: {
-    fontSize: 6.5,
-    fontWeight: "bold",
-    marginBottom: 4,
-    color: colors.onSurface2Secondary,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: colors.modalOverlayBackgroundColor,
-    justifyContent: "flex-end",
-  },
-  bottomModalContainer: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    padding: 10,
-    elevation: 5,
-    maxHeight: "80%",
-  },
-  modalHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 6,
-  },
-  modalTitle: {
-    fontSize: 16,
-    fontFamily: font.bold,
-    color: colors.primary,
-    flex: 1,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  modalDivider: {
-    height: 1,
-    backgroundColor: colors.borderToPress,
-    marginVertical: 10,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-  },
-});
 
 export default InfoModal;

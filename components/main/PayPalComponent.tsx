@@ -1,8 +1,10 @@
-import { containerStyles } from "@/assets/styles/GlobalStyles";
 import React from "react";
 import { TouchableOpacity, Text, Linking } from "react-native";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 const PayPalComponent: React.FC = () => {
+    const { containerStyles } = useTheme();
+
     const url = "https://www.paypal.com/paypalme/kennee10";
 
     const handlePress = async () => {

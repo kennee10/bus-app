@@ -7,6 +7,7 @@ import { getBusStopsDetails } from '../../components/hooks/getBusStopsDetails';
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import DraggableFlatList from 'react-native-draggable-flatlist';
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -32,6 +33,7 @@ const LikedBusStopsPage = () => {
   const [likedBusStopsDetails, setLikedBusStopsDetails] = useState<BusStopWithDist[]>([]);
   const { likedBusStopsOrder, toggleLike, updateLikedBusStopsOrder } = useLikedBusStops();
   const [busStopsData, setBusStopsData] = useState<BusStopsData>(busStopsWithServices);
+  const { colors, containerStyles } = useTheme();
 
   // Load details based on order
   useEffect(() => {

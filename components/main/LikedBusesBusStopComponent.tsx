@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
-import { colors, font } from "../../assets/styles/GlobalStyles";
 import LikedBusesBusComponent from "./LikedBusesBusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
 import LikedBusesBusModal from "./LikedBusesBusModal";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -45,9 +45,10 @@ type LikedBusesBusStopComponentProps = {
 const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (props) => {
   const [busArrivalData, setBusArrivalData] = useState<BusService[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { groups, toggleLike } = useLikedBuses();
+  const { groups } = useLikedBuses();
   const [isBusModalVisible, setBusModalVisible] = useState(false);
   const [selectedBusNumber, setSelectedBusNumber] = useState<string | null>(null);
+  const { colors, font, containerStyles } = useTheme();
 
   // Getting bus timings
   useEffect(() => {
@@ -98,6 +99,136 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
   const busesNotInOperation = props.likedServices.filter(
     (service) => !busArrivalData.some((bus) => bus.ServiceNo === service)
   );
+
+  const styles = StyleSheet.create({
+    outerContainer: {
+      flex: 1,
+      overflow: "hidden",
+      padding: 4,
+      margin: 5,
+      borderRadius: 4,
+      backgroundColor: colors.surface,
+    },
+    upper: {
+      flexDirection: "row",
+      flex: 1,
+      width: "100%",
+      height: 20,
+      marginBottom: 2,
+    },
+    lower: {
+      flexDirection: "row",
+      flex: 1,
+      width: "100%",
+      height: 16.6,
+      marginBottom: 4,
+    },
+    busStopCodeWrapper: {
+      flex: 6.1,
+    },
+    descriptionWrapper: {
+      flex: 19,
+      
+    },
+    busStopCode: {
+      fontSize: 11,
+      lineHeight: 20,
+      paddingLeft: 7,
+      fontFamily: font.bold,
+      color: colors.onSurface,
+    },
+    description: {
+      fontSize: 13,
+      lineHeight: 20,
+      fontFamily: font.bold,
+      color: colors.onSurface,
+    },
+    distanceWrapper: {
+      flex: 6.1,
+      height: 16.6,
+      justifyContent: "center",
+    },
+    roadNameWrapper: {
+      flex: 19,
+      height: 16.6,
+      paddingBottom: 2,
+      justifyContent: "center",
+    },
+    distance: {
+      fontSize: 10,
+      paddingLeft: 7,
+      textAlign: "left",
+      fontFamily: font.semiBold,
+      color: colors.onSurfaceSecondary,
+    },
+    roadName: {
+      fontSize: 11,
+      fontFamily: font.semiBold,
+      color: colors.onSurfaceSecondary,
+    },
+    servicesContainer: {
+      gap: 4,
+    },
+    noBusesText: {
+      fontSize: 12,
+      fontFamily: font.bold,
+      padding: 8,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+      color: colors.warning,
+      textAlign: "center",
+    },
+    notInOperationContainer: {
+      marginTop: 8,
+      padding: 8,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+  
+      // shadow stuff
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    notOperationalText: {
+      fontSize: 10.5,
+      fontFamily: font.semiBold,
+      marginBottom: 4,
+      color: colors.onSurfaceSecondary2,
+    },
+    notInOperationGrid: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 6,
+    },
+    notInOperationBox: {
+      borderRadius: 4,
+      width: 33,
+      height: 33,
+      backgroundColor: colors.surface,
+      alignItems: "center",
+      justifyContent: "center",
+      position: "relative", // Enables absolute positioning of the diagonal line
+    },
+    diagonalLine: {
+      position: "absolute",
+      width: "140%", // Ensures the line covers the box diagonally
+      height: 1.5,
+      backgroundColor: colors.warning, // Use a distinct color for the cross-out
+      transform: [{ rotate: "-45deg" }],
+      top: "50%",
+      left: "-20%", // Adjust to align the diagonal line correctly
+      opacity: 0.25,
+    },
+    notInOperationText: {
+      fontSize: 11,
+      fontFamily: font.semiBold,
+      color: colors.onSurfaceSecondary2,
+      textAlign: "center",
+    },
+    
+  });
 
   return (
     <View style={styles.outerContainer}>
@@ -181,134 +312,6 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
   );
 };
 
-const styles = StyleSheet.create({
-  outerContainer: {
-    flex: 1,
-    overflow: "hidden",
-    padding: 4,
-    margin: 5,
-    borderRadius: 4,
-    backgroundColor: colors.surface,
-  },
-  upper: {
-    flexDirection: "row",
-    flex: 1,
-    width: "100%",
-    height: 20,
-    marginBottom: 2,
-  },
-  lower: {
-    flexDirection: "row",
-    flex: 1,
-    width: "100%",
-    height: 16.6,
-    marginBottom: 4,
-  },
-  busStopCodeWrapper: {
-    flex: 6.1,
-  },
-  descriptionWrapper: {
-    flex: 19,
-    
-  },
-  busStopCode: {
-    fontSize: 11,
-    lineHeight: 20,
-    paddingLeft: 7,
-    fontFamily: font.bold,
-    color: colors.onSurface,
-  },
-  description: {
-    fontSize: 13,
-    lineHeight: 20,
-    fontFamily: font.bold,
-    color: colors.onSurface,
-  },
-  distanceWrapper: {
-    flex: 6.1,
-    height: 16.6,
-    justifyContent: "center",
-  },
-  roadNameWrapper: {
-    flex: 19,
-    height: 16.6,
-    paddingBottom: 2,
-    justifyContent: "center",
-  },
-  distance: {
-    fontSize: 10,
-    paddingLeft: 7,
-    textAlign: "left",
-    fontFamily: font.semiBold,
-    color: colors.onSurfaceSecondary,
-  },
-  roadName: {
-    fontSize: 11,
-    fontFamily: font.semiBold,
-    color: colors.onSurfaceSecondary,
-  },
-  servicesContainer: {
-    gap: 4,
-  },
-  noBusesText: {
-    fontSize: 12,
-    fontFamily: font.bold,
-    padding: 8,
-    borderRadius: 4,
-    backgroundColor: colors.surface2,
-    color: colors.warning,
-    textAlign: "center",
-  },
-  notInOperationContainer: {
-    marginTop: 8,
-    padding: 8,
-    borderRadius: 4,
-    backgroundColor: colors.surface2,
 
-    // shadow stuff
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  notOperationalText: {
-    fontSize: 10.5,
-    fontFamily: font.semiBold,
-    marginBottom: 4,
-    color: colors.onSurfaceSecondary2,
-  },
-  notInOperationGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 6,
-  },
-  notInOperationBox: {
-    borderRadius: 4,
-    width: 33,
-    height: 33,
-    backgroundColor: colors.surface,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative", // Enables absolute positioning of the diagonal line
-  },
-  diagonalLine: {
-    position: "absolute",
-    width: "140%", // Ensures the line covers the box diagonally
-    height: 1.5,
-    backgroundColor: colors.warning, // Use a distinct color for the cross-out
-    transform: [{ rotate: "-45deg" }],
-    top: "50%",
-    left: "-20%", // Adjust to align the diagonal line correctly
-    opacity: 0.25,
-  },
-  notInOperationText: {
-    fontSize: 11,
-    fontFamily: font.semiBold,
-    color: colors.onSurfaceSecondary2,
-    textAlign: "center",
-  },
-  
-});
 
 export default LikedBusesBusStopComponent;

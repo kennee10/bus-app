@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { calculateDistance } from "../../components/hooks/usefulFunctions";
-import { colors, containerStyles, font, navigationBarHeight } from '../../assets/styles/GlobalStyles';
 import BusStopComponent from '../../components/main/BusStopComponent';
 import { useLikedBusStops } from "../../components/context/likedBusStopsContext";
 import { LocationWatcher } from "../../components/hooks/LocationWatcher";
@@ -19,6 +18,7 @@ import InfoModal from "../../components/main/InfoModal";
 import busStopsWithServices from '../../assets/busStopsWithServices.json';
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 type BusStopData = {
   Description: string;
@@ -41,6 +41,7 @@ const NearbyBusStopsPage = () => {
   const inputRef = useRef<TextInput>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStopsOrder, toggleLike } = useLikedBusStops();
+  const { colors, font, containerStyles } = useTheme();
 
   // Memoized bus stops data
   const allBusStops = useMemo(() => 
@@ -194,6 +195,49 @@ const NearbyBusStopsPage = () => {
     />
   ), [likedBusStopsOrder, searchQuery, toggleLike]);
 
+  const styles = StyleSheet.create({
+    headerContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    searchContainer: {
+      flexDirection: "row",
+      overflow: "hidden",
+      marginTop: 5,
+      marginBottom: 10,
+      borderRadius: 10,
+      borderWidth: 1.3,
+      alignItems: "center",
+      backgroundColor: colors.surface,
+      borderColor: colors.onBackgroundSecondary,
+    },
+    searchIcon: {
+      fontSize: 18,
+      padding: 10,
+      color: colors.secondary2,
+      opacity: 0.8,
+    },
+    crossIcon: {
+      fontSize: 24,
+      color: colors.secondary2,
+      padding: 7,
+    },
+    searchInput: {
+      flex: 1,
+      color: colors.onSurfaceSecondary,
+      fontFamily: font.semiBold,
+      height: 45,
+      fontSize: 13,
+    },
+    infoIcon: {
+      fontSize: 22,
+      color: colors.secondary2,
+      padding: 7,
+      opacity: 0.8,
+    },
+  });
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={containerStyles.pageContainer}>
@@ -245,7 +289,7 @@ const NearbyBusStopsPage = () => {
               keyExtractor={(item) => item.BusStopCode}
               renderItem={renderItem}
               keyboardShouldPersistTaps="handled"
-              contentContainerStyle={{ paddingBottom: navigationBarHeight + 10}}
+              contentContainerStyle={{ paddingBottom: 55 + 10}}
               onScrollBeginDrag={() => Keyboard.dismiss()}
               removeClippedSubviews
               initialNumToRender={12}
@@ -276,48 +320,5 @@ const NearbyBusStopsPage = () => {
     </GestureHandlerRootView>
   );
 };
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    overflow: "hidden",
-    marginTop: 5,
-    marginBottom: 10,
-    borderRadius: 10,
-    borderWidth: 1.3,
-    alignItems: "center",
-    backgroundColor: colors.surface,
-    borderColor: colors.onBackgroundSecondary,
-  },
-  searchIcon: {
-    fontSize: 18,
-    padding: 10,
-    color: colors.secondary2,
-    opacity: 0.8,
-  },
-  crossIcon: {
-    fontSize: 24,
-    color: colors.secondary2,
-    padding: 7,
-  },
-  searchInput: {
-    flex: 1,
-    color: colors.onSurfaceSecondary,
-    fontFamily: font.semiBold,
-    height: 45,
-    fontSize: 13,
-  },
-  infoIcon: {
-    fontSize: 22,
-    color: colors.secondary2,
-    padding: 7,
-    opacity: 0.8,
-  },
-});
 
 export default NearbyBusStopsPage;

@@ -11,9 +11,9 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useLikedBuses } from "../context/likedBusesContext";
-import { colors, font } from "../../assets/styles/GlobalStyles";
 import busFirstLastTimingsData from "../../assets/busFirstLastTimings.json";
 import { getBusStopsDetails, BusStopWithDistance } from "../hooks/getBusStopsDetails";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 interface BusDirection {
   Direction: number;
@@ -61,6 +61,7 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
   const [isTimingsExpanded, setIsTimingsExpanded] = useState(false);
   const [busStopsDetails, setBusStopsDetails] = useState<BusStopWithDistance[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
+  const { colors, font, containerStyles } = useTheme();
 
   // Format time (from "HHmm" to AM/PM format)
   const formatTime = (time: string) => {
@@ -232,6 +233,139 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
 
   const activeSchedule = getActiveSchedule();
 
+  const styles = StyleSheet.create({
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end",
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      paddingBottom: 0,
+      elevation: 5,
+      maxHeight: "80%",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalHeaderText: {
+      flexDirection: "column",
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    modalBody: {
+      maxHeight: "80%",
+    },
+    bodyHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 10,
+    },
+    timingsToggle: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    toggleText: {
+      fontSize: 13,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+      marginLeft: 4,
+    },
+    likeButtonWrapper: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    currentTime: {
+      fontSize: 13,
+      color: colors.secondary,
+      marginRight: 8,
+    },
+    table: {
+      borderWidth: 1,
+      borderColor: colors.borderToPress,
+      borderRadius: 4,
+      paddingVertical: 6,
+      marginBottom: 10,
+    },
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      paddingVertical: 4,
+      paddingHorizontal: 10,
+    },
+    cellDay: {
+      flex: 0.5,
+      textAlign: "right",
+      fontSize: 13,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+    },
+    cellFirst: {
+      flex: 1.05,
+      textAlign: "center",
+      fontSize: 13,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+    },
+    cellLast: {
+      flex: 0.7,
+      textAlign: "center",
+      fontSize: 13,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+    },
+    
+    highlightText: {
+      color: colors.secondary,
+    },
+    busStopsList: {
+      marginTop: 10,
+      backgroundColor: colors.surface4,
+      padding: 8,
+      borderRadius: 4,
+    },
+    busStopItem: {
+      padding: 8,
+      marginBottom: 8,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+      borderWidth: 0.6,
+      borderColor: colors.accent8,
+    },
+    pastBusStopItem: {
+      padding: 8,
+      marginBottom: 8,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+      borderWidth: 0.6,
+      borderColor: colors.borderToPress,
+    },
+    currentBusStopItem: {
+      backgroundColor: colors.accent8,
+    },
+    busStopText: {
+      fontSize: 13,
+      fontFamily: font.medium,
+    },
+  });
+
   return (
     <Modal visible={isVisible} transparent animationType="fade" onRequestClose={onClose}>
       <SafeAreaView style={styles.modalOverlay} edges={["top", "bottom"]}>
@@ -357,137 +491,6 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: colors.modalOverlayBackgroundColor,
-    justifyContent: "flex-end",
-  },
-  bottomModalContainer: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    padding: 10,
-    paddingBottom: 0,
-    elevation: 5,
-    maxHeight: "80%",
-  },
-  modalHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 6,
-  },
-  modalHeaderText: {
-    flexDirection: "column",
-  },
-  modalTitle: {
-    fontSize: 16,
-    fontFamily: font.bold,
-    color: colors.primary,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  modalDivider: {
-    height: 1,
-    backgroundColor: colors.borderToPress,
-    marginVertical: 10,
-  },
-  modalBody: {
-    maxHeight: "80%",
-  },
-  bodyHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  timingsToggle: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  toggleText: {
-    fontSize: 13,
-    fontFamily: font.medium,
-    color: colors.onSurfaceSecondary,
-    marginLeft: 4,
-  },
-  likeButtonWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  currentTime: {
-    fontSize: 13,
-    color: colors.secondary,
-    marginRight: 8,
-  },
-  table: {
-    borderWidth: 1,
-    borderColor: colors.borderToPress,
-    borderRadius: 4,
-    paddingVertical: 6,
-    marginBottom: 10,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-  },
-  cellDay: {
-    flex: 0.5,
-    textAlign: "right",
-    fontSize: 13,
-    fontFamily: font.medium,
-    color: colors.onSurfaceSecondary,
-  },
-  cellFirst: {
-    flex: 1.05,
-    textAlign: "center",
-    fontSize: 13,
-    fontFamily: font.medium,
-    color: colors.onSurfaceSecondary,
-  },
-  cellLast: {
-    flex: 0.7,
-    textAlign: "center",
-    fontSize: 13,
-    fontFamily: font.medium,
-    color: colors.onSurfaceSecondary,
-  },
-  
-  highlightText: {
-    color: colors.secondary,
-  },
-  busStopsList: {
-    marginTop: 10,
-    backgroundColor: colors.surface4,
-    padding: 8,
-    borderRadius: 4,
-  },
-  busStopItem: {
-    padding: 8,
-    marginBottom: 8,
-    borderRadius: 4,
-    backgroundColor: colors.surface2,
-    borderWidth: 0.6,
-    borderColor: colors.accent8,
-  },
-  pastBusStopItem: {
-    padding: 8,
-    marginBottom: 8,
-    borderRadius: 4,
-    backgroundColor: colors.surface2,
-    borderWidth: 0.6,
-    borderColor: colors.borderToPress,
-  },
-  currentBusStopItem: {
-    backgroundColor: colors.accent8,
-  },
-  busStopText: {
-    fontSize: 13,
-    fontFamily: font.medium,
-  },
-});
+
 
 export default LikedBusesBusModal;

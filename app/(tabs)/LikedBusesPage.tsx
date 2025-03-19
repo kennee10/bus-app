@@ -21,6 +21,7 @@ import { getBusStopsDetails } from "../../components/hooks/getBusStopsDetails";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from '../../assets/styles/ThemeContext';
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -58,6 +59,168 @@ const BottomModalMenu: React.FC<BottomModalMenuProps> = memo(({
   onRenamePress,
   onDeletePress,
 }) => {
+  const { colors, font } = useTheme();
+
+  const styles = StyleSheet.create({
+    emptyContainer: {
+      flex: 1,
+      justifyContent: "center",
+    },
+    emptyContainerArchived: {
+      height: 100,
+      justifyContent: "center",
+    },
+    groupContainer: {
+      marginBottom: 7,
+      borderRadius: 4,
+      overflow: "hidden",
+      backgroundColor: colors.surface3,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress2,
+    },
+    groupHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between", // Add this
+    },
+    groupTitleContainer: {
+      flexDirection: "row",
+      flex: 1,
+      alignItems: "center",
+      padding: 10,
+      paddingRight: 6,
+    },
+    arrowContainer: {
+      marginRight: 6,
+      justifyContent: "center",
+    },
+    groupTitle: {
+      flex: 1,
+      fontSize: 15,
+      marginRight: 6,
+      fontFamily: font.bold,
+      color: colors.primary,
+      width: "100%",
+    },
+    menuButton: {
+      padding: 4,
+      marginRight: 6,
+    },
+    noLikedBusesInGroupTextWrapper: {
+      alignItems: "center",
+      justifyContent: "center",
+      margin: 5,
+      paddingVertical: 10,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+      elevation: 2,
+    },
+    noLikedBusesInGroupText: {
+      fontFamily: font.bold,
+      color: colors.onSurfaceSecondary,
+      textAlign: "center",
+    },
+    archivedGroupsButton: {
+      position: "absolute",
+      bottom: 20,
+      right: 20,
+      backgroundColor: colors.surface3,
+      padding: 10,
+      borderRadius: 30,
+      elevation: 5,
+    },
+    // Modal styles
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end", // Position at bottom
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      elevation: 5,
+      maxHeight: '80%',
+    },
+    archivedModalContainer: {
+      maxHeight: "80%",
+      width: "100%",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+      flex: 1,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    modalMenuItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      padding: 10,
+      marginBottom: 5,
+      borderRadius: 4,
+      backgroundColor: colors.surface3,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress,
+    },
+    modalMenuIcon: {
+      marginRight: 8,
+      paddingHorizontal: 6,
+      textAlign: "center",
+    },
+    modalMenuItemText: {
+      fontSize: 14.5,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+    },
+    // Text input and button styles for rename modal
+    modalTextInput: {
+      fontSize: 14.5,
+      fontFamily: font.medium,
+      color: colors.primary,
+      borderWidth: 1,
+      borderColor: colors.borderToPress,
+      borderRadius: 8,
+      padding: 12,
+    },
+    modalButtonsContainer: {
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      marginTop: 10,
+    },
+    modalButton: {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 4,
+      marginLeft: 2,
+    },
+    primaryButton: {
+      backgroundColor: colors.primary,
+    },
+    modalButtonText: {
+      fontSize: 14,
+      fontFamily: font.semiBold,
+      color: colors.primary,
+    },
+    primaryButtonText: {
+      color: colors.surface3,
+    },
+  });
+
   return (
     <Modal
       visible={isVisible}
@@ -123,6 +286,7 @@ const RenameBottomModal: React.FC<RenameModalProps> = memo(({
 }) => {
   const [name, setName] = useState(initialName);
   const [inputRef, setInputRef] = useState<TextInput | null>(null);
+  const { colors, font, containerStyles } = useTheme();
 
   // Reset the name state when modal becomes visible and focus the input
   useEffect(() => {
@@ -145,6 +309,166 @@ const RenameBottomModal: React.FC<RenameModalProps> = memo(({
       onSave(name.trim());
     }
   }, [name, onSave]);
+
+  const styles = StyleSheet.create({
+    emptyContainer: {
+      flex: 1,
+      justifyContent: "center",
+    },
+    emptyContainerArchived: {
+      height: 100,
+      justifyContent: "center",
+    },
+    groupContainer: {
+      marginBottom: 7,
+      borderRadius: 4,
+      overflow: "hidden",
+      backgroundColor: colors.surface3,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress2,
+    },
+    groupHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between", // Add this
+    },
+    groupTitleContainer: {
+      flexDirection: "row",
+      flex: 1,
+      alignItems: "center",
+      padding: 10,
+      paddingRight: 6,
+    },
+    arrowContainer: {
+      marginRight: 6,
+      justifyContent: "center",
+    },
+    groupTitle: {
+      flex: 1,
+      fontSize: 15,
+      marginRight: 6,
+      fontFamily: font.bold,
+      color: colors.primary,
+      width: "100%",
+    },
+    menuButton: {
+      padding: 4,
+      marginRight: 6,
+    },
+    noLikedBusesInGroupTextWrapper: {
+      alignItems: "center",
+      justifyContent: "center",
+      margin: 5,
+      paddingVertical: 10,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+      elevation: 2,
+    },
+    noLikedBusesInGroupText: {
+      fontFamily: font.bold,
+      color: colors.onSurfaceSecondary,
+      textAlign: "center",
+    },
+    archivedGroupsButton: {
+      position: "absolute",
+      bottom: 20,
+      right: 20,
+      backgroundColor: colors.surface3,
+      padding: 10,
+      borderRadius: 30,
+      elevation: 5,
+    },
+    // Modal styles
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end", // Position at bottom
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      elevation: 5,
+      maxHeight: '80%',
+    },
+    archivedModalContainer: {
+      maxHeight: "80%",
+      width: "100%",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+      flex: 1,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    modalMenuItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      padding: 10,
+      marginBottom: 5,
+      borderRadius: 4,
+      backgroundColor: colors.surface3,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress,
+    },
+    modalMenuIcon: {
+      marginRight: 8,
+      paddingHorizontal: 6,
+      textAlign: "center",
+    },
+    modalMenuItemText: {
+      fontSize: 14.5,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+    },
+    // Text input and button styles for rename modal
+    modalTextInput: {
+      fontSize: 14.5,
+      fontFamily: font.medium,
+      color: colors.primary,
+      borderWidth: 1,
+      borderColor: colors.borderToPress,
+      borderRadius: 8,
+      padding: 12,
+    },
+    modalButtonsContainer: {
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      marginTop: 10,
+    },
+    modalButton: {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 4,
+      marginLeft: 2,
+    },
+    primaryButton: {
+      backgroundColor: colors.primary,
+    },
+    modalButtonText: {
+      fontSize: 14,
+      fontFamily: font.semiBold,
+      color: colors.primary,
+    },
+    primaryButtonText: {
+      color: colors.surface3,
+    },
+  });
 
   return (
     <Modal
@@ -231,6 +555,7 @@ const GroupItem = memo(({
   const groupData = groups[groupName];
   const [menuVisible, setMenuVisible] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
+  const { colors, font } = useTheme();
 
   const toggleMenu = useCallback(() => setMenuVisible((prev) => !prev), []);
   const closeMenu = useCallback(() => setMenuVisible(false), []);
@@ -284,6 +609,166 @@ const GroupItem = memo(({
   const handleToggleCollapse = useCallback(() => {
     toggleGroupCollapse(groupName);
   }, [groupName, toggleGroupCollapse]);
+
+  const styles = StyleSheet.create({
+    emptyContainer: {
+      flex: 1,
+      justifyContent: "center",
+    },
+    emptyContainerArchived: {
+      height: 100,
+      justifyContent: "center",
+    },
+    groupContainer: {
+      marginBottom: 7,
+      borderRadius: 4,
+      overflow: "hidden",
+      backgroundColor: colors.surface3,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress2,
+    },
+    groupHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between", // Add this
+    },
+    groupTitleContainer: {
+      flexDirection: "row",
+      flex: 1,
+      alignItems: "center",
+      padding: 10,
+      paddingRight: 6,
+    },
+    arrowContainer: {
+      marginRight: 6,
+      justifyContent: "center",
+    },
+    groupTitle: {
+      flex: 1,
+      fontSize: 15,
+      marginRight: 6,
+      fontFamily: font.bold,
+      color: colors.primary,
+      width: "100%",
+    },
+    menuButton: {
+      padding: 4,
+      marginRight: 6,
+    },
+    noLikedBusesInGroupTextWrapper: {
+      alignItems: "center",
+      justifyContent: "center",
+      margin: 5,
+      paddingVertical: 10,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+      elevation: 2,
+    },
+    noLikedBusesInGroupText: {
+      fontFamily: font.bold,
+      color: colors.onSurfaceSecondary,
+      textAlign: "center",
+    },
+    archivedGroupsButton: {
+      position: "absolute",
+      bottom: 20,
+      right: 20,
+      backgroundColor: colors.surface3,
+      padding: 10,
+      borderRadius: 30,
+      elevation: 5,
+    },
+    // Modal styles
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end", // Position at bottom
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      elevation: 5,
+      maxHeight: '80%',
+    },
+    archivedModalContainer: {
+      maxHeight: "80%",
+      width: "100%",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+      flex: 1,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    modalMenuItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      padding: 10,
+      marginBottom: 5,
+      borderRadius: 4,
+      backgroundColor: colors.surface3,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress,
+    },
+    modalMenuIcon: {
+      marginRight: 8,
+      paddingHorizontal: 6,
+      textAlign: "center",
+    },
+    modalMenuItemText: {
+      fontSize: 14.5,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+    },
+    // Text input and button styles for rename modal
+    modalTextInput: {
+      fontSize: 14.5,
+      fontFamily: font.medium,
+      color: colors.primary,
+      borderWidth: 1,
+      borderColor: colors.borderToPress,
+      borderRadius: 8,
+      padding: 12,
+    },
+    modalButtonsContainer: {
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      marginTop: 10,
+    },
+    modalButton: {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 4,
+      marginLeft: 2,
+    },
+    primaryButton: {
+      backgroundColor: colors.primary,
+    },
+    modalButtonText: {
+      fontSize: 14,
+      fontFamily: font.semiBold,
+      color: colors.primary,
+    },
+    primaryButtonText: {
+      color: colors.surface3,
+    },
+  });
 
   return (
     <View style={styles.groupContainer}>
@@ -361,6 +846,7 @@ const LikedBusesPage = () => {
   const [collapsedGroups, setCollapsedGroups] = useState<{ [key: string]: boolean }>({});
   const [busStopDetails, setBusStopDetails] = useState<{ [key: string]: BusStopWithDist }>({});
   const [archivedModalVisible, setArchivedModalVisible] = useState(false);
+  const { colors, font, containerStyles } = useTheme();
   
   // Load collapsed state from storage
   useEffect(() => {
@@ -451,6 +937,166 @@ const LikedBusesPage = () => {
     setArchivedModalVisible(false);
   }, []);
 
+  const styles = StyleSheet.create({
+    emptyContainer: {
+      flex: 1,
+      justifyContent: "center",
+    },
+    emptyContainerArchived: {
+      height: 100,
+      justifyContent: "center",
+    },
+    groupContainer: {
+      marginBottom: 7,
+      borderRadius: 4,
+      overflow: "hidden",
+      backgroundColor: colors.surface3,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress2,
+    },
+    groupHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between", // Add this
+    },
+    groupTitleContainer: {
+      flexDirection: "row",
+      flex: 1,
+      alignItems: "center",
+      padding: 10,
+      paddingRight: 6,
+    },
+    arrowContainer: {
+      marginRight: 6,
+      justifyContent: "center",
+    },
+    groupTitle: {
+      flex: 1,
+      fontSize: 15,
+      marginRight: 6,
+      fontFamily: font.bold,
+      color: colors.primary,
+      width: "100%",
+    },
+    menuButton: {
+      padding: 4,
+      marginRight: 6,
+    },
+    noLikedBusesInGroupTextWrapper: {
+      alignItems: "center",
+      justifyContent: "center",
+      margin: 5,
+      paddingVertical: 10,
+      borderRadius: 4,
+      backgroundColor: colors.surface2,
+      elevation: 2,
+    },
+    noLikedBusesInGroupText: {
+      fontFamily: font.bold,
+      color: colors.onSurfaceSecondary,
+      textAlign: "center",
+    },
+    archivedGroupsButton: {
+      position: "absolute",
+      bottom: 20,
+      right: 20,
+      backgroundColor: colors.surface3,
+      padding: 10,
+      borderRadius: 30,
+      elevation: 5,
+    },
+    // Modal styles
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: colors.modalOverlayBackgroundColor,
+      justifyContent: "flex-end", // Position at bottom
+    },
+    bottomModalContainer: {
+      backgroundColor: colors.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 10,
+      elevation: 5,
+      maxHeight: '80%',
+    },
+    archivedModalContainer: {
+      maxHeight: "80%",
+      width: "100%",
+    },
+    modalHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 6,
+    },
+    modalTitle: {
+      fontSize: 16,
+      fontFamily: font.bold,
+      color: colors.primary,
+      flex: 1,
+    },
+    closeButton: {
+      padding: 4,
+    },
+    modalDivider: {
+      height: 1,
+      backgroundColor: colors.borderToPress,
+      marginVertical: 10,
+    },
+    modalMenuItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      padding: 10,
+      marginBottom: 5,
+      borderRadius: 4,
+      backgroundColor: colors.surface3,
+      borderWidth: 0.5,
+      borderColor: colors.borderToPress,
+    },
+    modalMenuIcon: {
+      marginRight: 8,
+      paddingHorizontal: 6,
+      textAlign: "center",
+    },
+    modalMenuItemText: {
+      fontSize: 14.5,
+      fontFamily: font.medium,
+      color: colors.onSurfaceSecondary,
+    },
+    // Text input and button styles for rename modal
+    modalTextInput: {
+      fontSize: 14.5,
+      fontFamily: font.medium,
+      color: colors.primary,
+      borderWidth: 1,
+      borderColor: colors.borderToPress,
+      borderRadius: 8,
+      padding: 12,
+    },
+    modalButtonsContainer: {
+      flexDirection: "row",
+      justifyContent: "flex-end",
+      marginTop: 10,
+    },
+    modalButton: {
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: 4,
+      marginLeft: 2,
+    },
+    primaryButton: {
+      backgroundColor: colors.primary,
+    },
+    modalButtonText: {
+      fontSize: 14,
+      fontFamily: font.semiBold,
+      color: colors.primary,
+    },
+    primaryButtonText: {
+      color: colors.surface3,
+    },
+  });
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={containerStyles.pageContainer}>
@@ -536,165 +1182,5 @@ const LikedBusesPage = () => {
     </GestureHandlerRootView>
   );
 };
-
-const styles = StyleSheet.create({
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  emptyContainerArchived: {
-    height: 100,
-    justifyContent: "center",
-  },
-  groupContainer: {
-    marginBottom: 7,
-    borderRadius: 4,
-    overflow: "hidden",
-    backgroundColor: colors.surface3,
-    borderWidth: 0.5,
-    borderColor: colors.borderToPress2,
-  },
-  groupHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between", // Add this
-  },
-  groupTitleContainer: {
-    flexDirection: "row",
-    flex: 1,
-    alignItems: "center",
-    padding: 10,
-    paddingRight: 6,
-  },
-  arrowContainer: {
-    marginRight: 6,
-    justifyContent: "center",
-  },
-  groupTitle: {
-    flex: 1,
-    fontSize: 15,
-    marginRight: 6,
-    fontFamily: font.bold,
-    color: colors.primary,
-    width: "100%",
-  },
-  menuButton: {
-    padding: 4,
-    marginRight: 6,
-  },
-  noLikedBusesInGroupTextWrapper: {
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 5,
-    paddingVertical: 10,
-    borderRadius: 4,
-    backgroundColor: colors.surface2,
-    elevation: 2,
-  },
-  noLikedBusesInGroupText: {
-    fontFamily: font.bold,
-    color: colors.onSurfaceSecondary,
-    textAlign: "center",
-  },
-  archivedGroupsButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: colors.surface3,
-    padding: 10,
-    borderRadius: 30,
-    elevation: 5,
-  },
-  // Modal styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: colors.modalOverlayBackgroundColor,
-    justifyContent: "flex-end", // Position at bottom
-  },
-  bottomModalContainer: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    padding: 10,
-    elevation: 5,
-    maxHeight: '80%',
-  },
-  archivedModalContainer: {
-    maxHeight: "80%",
-    width: "100%",
-  },
-  modalHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 6,
-  },
-  modalTitle: {
-    fontSize: 16,
-    fontFamily: font.bold,
-    color: colors.primary,
-    flex: 1,
-  },
-  closeButton: {
-    padding: 4,
-  },
-  modalDivider: {
-    height: 1,
-    backgroundColor: colors.borderToPress,
-    marginVertical: 10,
-  },
-  modalMenuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    marginBottom: 5,
-    borderRadius: 4,
-    backgroundColor: colors.surface3,
-    borderWidth: 0.5,
-    borderColor: colors.borderToPress,
-  },
-  modalMenuIcon: {
-    marginRight: 8,
-    paddingHorizontal: 6,
-    textAlign: "center",
-  },
-  modalMenuItemText: {
-    fontSize: 14.5,
-    fontFamily: font.medium,
-    color: colors.onSurfaceSecondary,
-  },
-  // Text input and button styles for rename modal
-  modalTextInput: {
-    fontSize: 14.5,
-    fontFamily: font.medium,
-    color: colors.primary,
-    borderWidth: 1,
-    borderColor: colors.borderToPress,
-    borderRadius: 8,
-    padding: 12,
-  },
-  modalButtonsContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: 10,
-  },
-  modalButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 4,
-    marginLeft: 2,
-  },
-  primaryButton: {
-    backgroundColor: colors.primary,
-  },
-  modalButtonText: {
-    fontSize: 14,
-    fontFamily: font.semiBold,
-    color: colors.primary,
-  },
-  primaryButtonText: {
-    color: colors.surface3,
-  },
-});
 
 export default LikedBusesPage;
