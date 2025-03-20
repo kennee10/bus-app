@@ -172,6 +172,19 @@ export default function App() {
         </View>
       </View>
 
+      {/* Donate */}
+      <View style={styles.oneContainer}>
+        <Text style={styles.heading}>Support Us</Text>
+        <View style={styles.content}>
+          {/* <TouchableOpacity onPress={onPayNowPress} style={containerStyles.button}>
+            <Text style={containerStyles.globalTextMessage}>PayNow</Text>
+          </TouchableOpacity> */}
+          {/* <PayPalComponent /> */}
+          <PayNowLinkComponent />
+        </View>
+        {/* <DonationTicker/> */}
+      </View>
+
       {/* Add Theme Toggle Section */}
       <View style={styles.oneContainer}>
         <Text style={styles.heading}>Appearance</Text>
@@ -191,19 +204,6 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
-
-      {/* Donate */}
-      {/* <View style={styles.oneContainer}>
-        <Text style={styles.heading}>Donate</Text>
-        <View style={styles.content}>
-          <TouchableOpacity onPress={onPayNowPress} style={containerStyles.button}>
-            <Text style={containerStyles.globalTextMessage}>PayNow</Text>
-          </TouchableOpacity>
-          <PayPalComponent />
-          <PayNowLinkComponent />
-        </View>
-        <DonationTicker/>
-      </View> */}
 
       {/* MRT Map */}
       <View style={styles.oneContainer}>
