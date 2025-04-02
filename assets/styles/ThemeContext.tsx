@@ -83,7 +83,7 @@ const lightColors = {
   busIcon: "steelblue", // Darker blue for icon
   borderToPress: "rgba(0, 0, 0, 0.15)", // Subtle dark border
   borderToPress2: "rgba(0, 0, 0, 0.1)", // Even subtler dark border
-  modalOverlayBackgroundColor: "rgba(255, 255, 255, 0.8)", // Light overlay
+  modalOverlayBackgroundColor: "rgba(0,0,0,0.5)", // Light overlay
   info: 'dimgray',
   warning: '#F4C430',
   error: '#FF6859',
