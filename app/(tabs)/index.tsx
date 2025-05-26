@@ -187,6 +187,8 @@ const NearbyBusStopsPage = () => {
       BusStopCode={item.BusStopCode}
       Description={item.Description}
       RoadName={item.RoadName}
+      Latitude={item.Latitude}
+      Longitude={item.Longitude}
       Distance={item.Distance.toFixed(0)}
       isLiked={likedBusStopsOrder.includes(item.BusStopCode)}
       onLikeToggle={toggleLike}

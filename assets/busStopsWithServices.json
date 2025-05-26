@@ -71,7 +71,7 @@
     ]
   },
   "10018": {
-    "Description": "OUTRAM PK STN EXIT 6/SGH",
+    "Description": "Outram Pk Stn Exit 6/SGH",
     "RoadName": "Eu Tong Sen St",
     "Latitude": 1.27900819665099,
     "Longitude": 103.83860360621959,
@@ -1400,7 +1400,7 @@
     ]
   },
   "11019": {
-    "Description": "Bef Blk 2",
+    "Description": "Alexandra Ctrl",
     "RoadName": "Jln Bt Merah",
     "Latitude": 1.28679632523156,
     "Longitude": 103.80565677295323,
@@ -3201,7 +3201,7 @@
     ]
   },
   "13011": {
-    "Description": "NAPIER STN EXIT 2",
+    "Description": "Napier Stn Exit 2",
     "RoadName": "Napier Rd",
     "Latitude": 1.306504,
     "Longitude": 103.81932,
@@ -3217,7 +3217,7 @@
     ]
   },
   "13019": {
-    "Description": "NAPIER STN EXIT 1",
+    "Description": "Napier Stn Exit 1",
     "RoadName": "Napier Rd",
     "Latitude": 1.3067380217198,
     "Longitude": 103.82013079894885,
@@ -3377,7 +3377,7 @@
     ]
   },
   "13079": {
-    "Description": "GREAT WORLD STN EXIT 4",
+    "Description": "Great World Stn Exit 4",
     "RoadName": "River Valley Rd",
     "Latitude": 1.29612213279141,
     "Longitude": 103.83229211134126,
@@ -3573,7 +3573,7 @@
     ]
   },
   "13191": {
-    "Description": "OPP ORCHARD STN EXIT 12",
+    "Description": "Opp Orchard Stn Exit 12",
     "RoadName": "Paterson Rd",
     "Latitude": 1.302461,
     "Longitude": 103.8297819,
@@ -3588,7 +3588,7 @@
     ]
   },
   "13199": {
-    "Description": "AFT ORCHARD STN EXIT 12",
+    "Description": "Aft Orchard Stn Exit 12",
     "RoadName": "Paterson Rd",
     "Latitude": 1.302127,
     "Longitude": 103.829875,
@@ -4030,7 +4030,7 @@
     ]
   },
   "14151": {
-    "Description": "Opp Chr Community Chapel",
+    "Description": "Opp Hotel Faber Pk",
     "RoadName": "Telok Blangah Rd",
     "Latitude": 1.26964765905364,
     "Longitude": 103.8129359412343,
@@ -4052,7 +4052,7 @@
     ]
   },
   "14159": {
-    "Description": "Bef Chr Community Chapel",
+    "Description": "Hotel Faber Pk",
     "RoadName": "Telok Blangah Rd",
     "Latitude": 1.26994046445496,
     "Longitude": 103.81315419081787,
@@ -4970,7 +4970,7 @@
     ]
   },
   "15181": {
-    "Description": "Opp Ascent",
+    "Description": "1A Sci Pk Dr (Geneo)",
     "RoadName": "Science Pk Dr",
     "Latitude": 1.29108496444522,
     "Longitude": 103.78541356072027,
@@ -6840,7 +6840,7 @@
     ]
   },
   "18109": {
-    "Description": "Opp PSB Science Pk Bldg",
+    "Description": "Blk 55/Opp 5 Sci Pk Dr",
     "RoadName": "Buona Vista Flyover",
     "Latitude": 1.29403436577434,
     "Longitude": 103.78672599789039,
@@ -7079,7 +7079,7 @@
     ]
   },
   "18241": {
-    "Description": "Opp Dnv Technology Ctr",
+    "Description": "7 Sci Pk Dr (Geneo)",
     "RoadName": "Science Pk Dr",
     "Latitude": 1.29092304543197,
     "Longitude": 103.78707861052065,
@@ -7100,7 +7100,7 @@
     ]
   },
   "18251": {
-    "Description": "Opp Reuters",
+    "Description": "71 Sci Pk Dr",
     "RoadName": "Science Pk Dr",
     "Latitude": 1.29068138903164,
     "Longitude": 103.78845361097359,
@@ -7122,7 +7122,7 @@
     ]
   },
   "18269": {
-    "Description": "Bef Reuters",
+    "Description": "DSO Natl Laboratories",
     "RoadName": "Science Pk Dr",
     "Latitude": 1.29010333301913,
     "Longitude": 103.78918694399599,
@@ -7233,8 +7233,8 @@
   "18331": {
     "Description": "Kent Ridge Stn Exit A/NUH",
     "RoadName": "Lower Kent Ridge Rd",
-    "Latitude": 1.2937072200211,
-    "Longitude": 103.78489139998855,
+    "Latitude": 1.29485266612069,
+    "Longitude": 103.78437805999793,
     "ServiceNos": [
       "95"
     ]
@@ -7242,8 +7242,8 @@
   "18339": {
     "Description": "Opp Kent Ridge Stn Exit A",
     "RoadName": "Lower Kent Ridge Rd",
-    "Latitude": 1.29379302903228,
-    "Longitude": 103.78507910002646,
+    "Latitude": 1.29506450651125,
+    "Longitude": 103.78455508578391,
     "ServiceNos": [
       "95",
       "95B"
@@ -11889,7 +11889,7 @@
     ]
   },
   "24369": {
-    "Description": "Dyna-Mac Engrg Svcs",
+    "Description": "Hanwha Offshore S'pore",
     "RoadName": "Gul Rd",
     "Latitude": 1.30077687663858,
     "Longitude": 103.66698326196405,
@@ -13296,6 +13296,16 @@
     "RoadName": "Tuas Sth Ave 5",
     "Latitude": 1.289014,
     "Longitude": 103.624893,
+    "ServiceNos": [
+      "248",
+      "248M"
+    ]
+  },
+  "25721": {
+    "Description": "Opp Abbott",
+    "RoadName": "Tuas Sth Ave 10",
+    "Latitude": 1.2851115,
+    "Longitude": 103.6282915,
     "ServiceNos": [
       "248",
       "248M"
@@ -18052,7 +18062,7 @@
     ]
   },
   "40221": {
-    "Description": "STEVENS STN EXIT 3",
+    "Description": "Stevens Stn Exit 3",
     "RoadName": "Stevens Rd",
     "Latitude": 1.31902531287493,
     "Longitude": 103.82545561296305,
@@ -18064,7 +18074,7 @@
     ]
   },
   "40229": {
-    "Description": "BEF STEVENS STN EXIT 2",
+    "Description": "Bef Stevens Stn Exit 2",
     "RoadName": "Stevens Rd",
     "Latitude": 1.319241,
     "Longitude": 103.825711,
@@ -20145,6 +20155,15 @@
       "177"
     ]
   },
+  "43159": {
+    "Description": "Bef Glendale Pk Condo",
+    "RoadName": "Hillview Ave",
+    "Latitude": 1.364803,
+    "Longitude": 103.7652,
+    "ServiceNos": [
+      "177"
+    ]
+  },
   "43161": {
     "Description": "Blk 272",
     "RoadName": "Bt Batok East Ave 4",
@@ -22048,7 +22067,7 @@
     ]
   },
   "44091": {
-    "Description": "Bef Choa Chu Kang Mkt",
+    "Description": "Choa Chu Kang Mkt",
     "RoadName": "Choa Chu Kang Ave 1",
     "Latitude": 1.37647222708666,
     "Longitude": 103.74421611501322,
@@ -23709,7 +23728,7 @@
     ]
   },
   "44859": {
-    "Description": "Maysprings Condo",
+    "Description": "Opp Bt Panjang Stn",
     "RoadName": "Petir Rd",
     "Latitude": 1.37763753804628,
     "Longitude": 103.76321805626448,
@@ -26387,7 +26406,7 @@
     ]
   },
   "46611": {
-    "Description": "Fuchun Sec Sch",
+    "Description": "W'lands Ring Sec Sch",
     "RoadName": "Woodlands Ave 1",
     "Latitude": 1.42923412810157,
     "Longitude": 103.77760584579323,
@@ -26399,7 +26418,7 @@
     ]
   },
   "46619": {
-    "Description": "Opp Fuchun Sec Sch",
+    "Description": "Opp W'lands Ring Sec Sch",
     "RoadName": "Woodlands Ave 1",
     "Latitude": 1.42907407993851,
     "Longitude": 103.77775112537243,
@@ -28612,6 +28631,7 @@
       "141",
       "166",
       "21",
+      "21X",
       "56",
       "57",
       "851",
@@ -28824,7 +28844,8 @@
       "131A",
       "139",
       "186",
-      "21"
+      "21",
+      "21X"
     ]
   },
   "50161": {
@@ -29148,7 +29169,8 @@
       "131",
       "139",
       "186",
-      "21"
+      "21",
+      "21X"
     ]
   },
   "51011": {
@@ -29631,7 +29653,8 @@
     "Longitude": 103.85978762051998,
     "ServiceNos": [
       "129",
-      "21"
+      "21",
+      "21X"
     ]
   },
   "52051": {
@@ -29804,7 +29827,8 @@
       "131A",
       "139",
       "186",
-      "21"
+      "21",
+      "21X"
     ]
   },
   "52109": {
@@ -29829,7 +29853,8 @@
     "Longitude": 103.8581076205424,
     "ServiceNos": [
       "129",
-      "21"
+      "21",
+      "21X"
     ]
   },
   "52129": {
@@ -29846,7 +29871,8 @@
       "139",
       "139A",
       "186",
-      "21"
+      "21",
+      "21X"
     ]
   },
   "52131": {
@@ -30564,7 +30590,7 @@
     ]
   },
   "52449": {
-    "Description": "Toa Payoh Police Ctr",
+    "Description": "Bef Blk 105",
     "RoadName": "Lor 1 Toa Payoh",
     "Latitude": 1.34044945876465,
     "Longitude": 103.85000305578686,
@@ -30589,7 +30615,8 @@
       "139",
       "139A",
       "186",
-      "21"
+      "21",
+      "21X"
     ]
   },
   "52479": {
@@ -30633,7 +30660,8 @@
       "131",
       "131A",
       "186",
-      "21"
+      "21",
+      "21X"
     ]
   },
   "52501": {
@@ -38943,6 +38971,7 @@
       "142",
       "142A",
       "147",
+      "148",
       "506",
       "853",
       "853M"
@@ -38974,7 +39003,8 @@
     "Longitude": 103.86663249997784,
     "ServiceNos": [
       "142",
-      "142A"
+      "142A",
+      "148"
     ]
   },
   "61011": {
@@ -39031,6 +39061,7 @@
     "ServiceNos": [
       "13",
       "133",
+      "146",
       "147",
       "147A",
       "506",
@@ -39129,7 +39160,8 @@
     "Longitude": 103.8682283329788,
     "ServiceNos": [
       "142",
-      "142A"
+      "142A",
+      "148"
     ]
   },
   "61069": {
@@ -39149,7 +39181,8 @@
     "Longitude": 103.86525430193133,
     "ServiceNos": [
       "142",
-      "142A"
+      "142A",
+      "148"
     ]
   },
   "61089": {
@@ -39159,7 +39192,8 @@
     "Longitude": 103.86530804883829,
     "ServiceNos": [
       "142",
-      "142A"
+      "142A",
+      "148"
     ]
   },
   "61099": {
@@ -39179,7 +39213,8 @@
     "Longitude": 103.86370334032118,
     "ServiceNos": [
       "142",
-      "142A"
+      "142A",
+      "148"
     ]
   },
   "61111": {
@@ -39190,7 +39225,8 @@
     "ServiceNos": [
       "107",
       "107M",
-      "146"
+      "146",
+      "148"
     ]
   },
   "61119": {
@@ -39200,7 +39236,45 @@
     "Longitude": 103.871938,
     "ServiceNos": [
       "107",
-      "107M"
+      "107M",
+      "146",
+      "148"
+    ]
+  },
+  "61121": {
+    "Description": "Opp Blk 212",
+    "RoadName": "Bidadari Pk Dr",
+    "Latitude": 1.3416375,
+    "Longitude": 103.874179,
+    "ServiceNos": [
+      "148"
+    ]
+  },
+  "61129": {
+    "Description": "Blk 212",
+    "RoadName": "Bidadari Pk Dr",
+    "Latitude": 1.3417695,
+    "Longitude": 103.875484,
+    "ServiceNos": [
+      "148"
+    ]
+  },
+  "61131": {
+    "Description": "Opp Woodleigh Mall",
+    "RoadName": "Bidadari Pk Dr",
+    "Latitude": 1.338895,
+    "Longitude": 103.8726965,
+    "ServiceNos": [
+      "146"
+    ]
+  },
+  "61139": {
+    "Description": "Woodleigh Mall",
+    "RoadName": "Bidadari Pk Dr",
+    "Latitude": 1.3389265,
+    "Longitude": 103.8724955,
+    "ServiceNos": [
+      "146"
     ]
   },
   "62011": {
@@ -42532,7 +42606,6 @@
       "82",
       "83",
       "83T",
-      "84A",
       "84G",
       "84W",
       "85"
@@ -42766,7 +42839,6 @@
     "Latitude": 1.4039796271467,
     "Longitude": 103.90655641325277,
     "ServiceNos": [
-      "84A",
       "84G",
       "84W"
     ]
@@ -42787,7 +42859,6 @@
     "Latitude": 1.407889,
     "Longitude": 103.908735,
     "ServiceNos": [
-      "84A",
       "84W"
     ]
   },
@@ -43029,7 +43100,6 @@
       "39B",
       "83",
       "83T",
-      "84A",
       "84G",
       "84W",
       "85"
@@ -43999,7 +44069,6 @@
     "Latitude": 1.411316,
     "Longitude": 103.910496,
     "ServiceNos": [
-      "84A",
       "84W"
     ]
   },
@@ -44036,7 +44105,6 @@
     "Latitude": 1.414675,
     "Longitude": 103.911277,
     "ServiceNos": [
-      "84A",
       "84W"
     ]
   },
@@ -47077,6 +47145,16 @@
       "102B"
     ]
   },
+  "68009": {
+    "Description": "Woodleigh Int",
+    "RoadName": "Bidadari Pk Dr",
+    "Latitude": 1.340141,
+    "Longitude": 103.871449,
+    "ServiceNos": [
+      "146",
+      "148"
+    ]
+  },
   "68011": {
     "Description": "Bef Jln Kayu",
     "RoadName": "Sengkang West Ave",
@@ -47672,6 +47750,7 @@
     "ServiceNos": [
       "100",
       "135",
+      "148",
       "155"
     ]
   },
@@ -47684,6 +47763,7 @@
       "100",
       "100A",
       "135",
+      "148",
       "155"
     ]
   },
@@ -49360,6 +49440,7 @@
       "23",
       "518",
       "58",
+      "58B",
       "8"
     ]
   },
@@ -49443,7 +49524,8 @@
       "129",
       "18",
       "298",
-      "298X"
+      "298X",
+      "299"
     ]
   },
   "74011": {
@@ -49528,6 +49610,33 @@
     "Longitude": 103.929222,
     "ServiceNos": [
       "72"
+    ]
+  },
+  "74919": {
+    "Description": "Blk 951A",
+    "RoadName": "Tampines St 96",
+    "Latitude": 1.344284,
+    "Longitude": 103.93562,
+    "ServiceNos": [
+      "299"
+    ]
+  },
+  "74929": {
+    "Description": "Blk 953C",
+    "RoadName": "Tampines St 96",
+    "Latitude": 1.34218,
+    "Longitude": 103.935758,
+    "ServiceNos": [
+      "299"
+    ]
+  },
+  "74959": {
+    "Description": "Blk 969C",
+    "RoadName": "Tampines St 96",
+    "Latitude": 1.340033,
+    "Longitude": 103.937911,
+    "ServiceNos": [
+      "299"
     ]
   },
   "75009": {
@@ -50007,6 +50116,7 @@
       "15",
       "15A",
       "23",
+      "299",
       "513",
       "518",
       "69",
@@ -50476,7 +50586,7 @@
     ]
   },
   "75419": {
-    "Description": "AFT TAMPINES AVE 5",
+    "Description": "The Alps Residences Condo",
     "RoadName": "Tampines Ave 10",
     "Latitude": 1.35575831547919,
     "Longitude": 103.92918587034406,
@@ -50705,6 +50815,7 @@
     "Longitude": 103.941333,
     "ServiceNos": [
       "129",
+      "299",
       "46"
     ]
   },
@@ -50715,6 +50826,7 @@
     "Longitude": 103.941721,
     "ServiceNos": [
       "129",
+      "299",
       "46"
     ]
   },
@@ -50727,6 +50839,7 @@
       "129",
       "298",
       "298X",
+      "299",
       "46"
     ]
   },
@@ -50739,6 +50852,7 @@
       "129",
       "298",
       "298X",
+      "299",
       "46"
     ]
   },
@@ -50774,6 +50888,7 @@
       "129",
       "15",
       "298",
+      "299",
       "969",
       "969A"
     ]
@@ -50897,6 +51012,7 @@
       "23",
       "292",
       "293",
+      "299",
       "3",
       "31",
       "34",
@@ -50917,6 +51033,7 @@
       "23",
       "292",
       "293",
+      "299",
       "3",
       "31",
       "31A",
@@ -50983,7 +51100,6 @@
       "18",
       "20",
       "28",
-      "292",
       "34",
       "34B",
       "39",
@@ -51142,6 +51258,7 @@
       "129",
       "293",
       "298",
+      "299",
       "65"
     ]
   },
@@ -51154,6 +51271,7 @@
       "129",
       "293",
       "298",
+      "299",
       "65"
     ]
   },
@@ -51165,6 +51283,7 @@
     "ServiceNos": [
       "129",
       "293",
+      "299",
       "65"
     ]
   },
@@ -51176,6 +51295,7 @@
     "ServiceNos": [
       "129",
       "293",
+      "299",
       "65"
     ]
   },
@@ -51643,6 +51763,7 @@
     "Longitude": 103.93848632286071,
     "ServiceNos": [
       "129",
+      "299",
       "46",
       "65"
     ]
@@ -51654,6 +51775,7 @@
     "Longitude": 103.93814569319093,
     "ServiceNos": [
       "129",
+      "299",
       "46",
       "65"
     ]
@@ -51696,6 +51818,15 @@
       "18",
       "29",
       "29A"
+    ]
+  },
+  "76321": {
+    "Description": "Opp Blk 124",
+    "RoadName": "Tampines St 11",
+    "Latitude": 1.345967,
+    "Longitude": 103.949073,
+    "ServiceNos": [
+      "292"
     ]
   },
   "76329": {
@@ -51964,6 +52095,15 @@
       "293"
     ]
   },
+  "76481": {
+    "Description": "Blk 136",
+    "RoadName": "Tampines Lane",
+    "Latitude": 1.3448265,
+    "Longitude": 103.945919,
+    "ServiceNos": [
+      "292"
+    ]
+  },
   "76511": {
     "Description": "The Tampines Trilliant",
     "RoadName": "Tampines Concourse",
@@ -52063,7 +52203,8 @@
     "ServiceNos": [
       "129",
       "298",
-      "298X"
+      "298X",
+      "299"
     ]
   },
   "76559": {
@@ -52074,14 +52215,15 @@
     "ServiceNos": [
       "129",
       "298",
-      "298X"
+      "298X",
+      "299"
     ]
   },
   "77009": {
     "Description": "Pasir Ris Int",
     "RoadName": "Pasir Ris Dr 3",
-    "Latitude": 1.373564,
-    "Longitude": 103.950478,
+    "Latitude": 1.373696,
+    "Longitude": 103.94845,
     "ServiceNos": [
       "12",
       "12e",
@@ -55025,7 +55167,6 @@
     "ServiceNos": [
       "10",
       "134",
-      "135",
       "197",
       "31",
       "32",
@@ -55044,7 +55185,6 @@
     "ServiceNos": [
       "10",
       "134",
-      "135",
       "197",
       "31",
       "32",
@@ -55166,6 +55306,7 @@
     "Latitude": 1.30965150589688,
     "Longitude": 103.8965764453886,
     "ServiceNos": [
+      "135",
       "16",
       "16M",
       "33"
@@ -55177,6 +55318,7 @@
     "Latitude": 1.30943460005849,
     "Longitude": 103.8966101212743,
     "ServiceNos": [
+      "135",
       "16",
       "16M",
       "33",
@@ -55305,6 +55447,24 @@
     "Longitude": 103.8936761363468,
     "ServiceNos": [
       "197"
+    ]
+  },
+  "82241": {
+    "Description": "Opp Tg Katong Sec Sch",
+    "RoadName": "Haig Rd",
+    "Latitude": 1.307747,
+    "Longitude": 103.8985,
+    "ServiceNos": [
+      "135"
+    ]
+  },
+  "82249": {
+    "Description": "Tg Katong Sec Sch",
+    "RoadName": "Haig Rd",
+    "Latitude": 1.307375,
+    "Longitude": 103.898635,
+    "ServiceNos": [
+      "135"
     ]
   },
   "83011": {
@@ -56409,7 +56569,7 @@
     ]
   },
   "84111": {
-    "Description": "Temasek JC",
+    "Description": "Opp Blk 17",
     "RoadName": "Bedok Sth Rd",
     "Latitude": 1.31958802627855,
     "Longitude": 103.93574197184712,
@@ -56422,7 +56582,7 @@
     ]
   },
   "84119": {
-    "Description": "Opp Temasek JC",
+    "Description": "Blk 18",
     "RoadName": "Bedok Sth Rd",
     "Latitude": 1.31964,
     "Longitude": 103.935232,
@@ -58795,7 +58955,6 @@
     "ServiceNos": [
       "10",
       "134",
-      "135",
       "197",
       "31",
       "32",
@@ -58814,7 +58973,6 @@
     "ServiceNos": [
       "10",
       "134",
-      "135",
       "197",
       "31",
       "32",
@@ -59747,7 +59905,7 @@
     ]
   },
   "94031": {
-    "Description": "The Summit",
+    "Description": "Opp Bayshore Stn Exit 3",
     "RoadName": "Upp East Coast Rd",
     "Latitude": 1.31504670788151,
     "Longitude": 103.94089937209914,
@@ -59765,7 +59923,7 @@
     ]
   },
   "94039": {
-    "Description": "Opp The Summit",
+    "Description": "Bef Bayshore Stn Exit 3",
     "RoadName": "Upp East Coast Rd",
     "Latitude": 1.31485363967239,
     "Longitude": 103.94066333773824,
@@ -62662,7 +62820,7 @@
     ]
   },
   "01121": {
-    "Description": "Stamford Pr Sch",
+    "Description": "Aft Victoria Ln",
     "RoadName": "Victoria St",
     "Latitude": 1.30393809691048,
     "Longitude": 103.85867999243207,
@@ -62684,7 +62842,7 @@
     ]
   },
   "01129": {
-    "Description": "Opp Stamford Pr Sch",
+    "Description": "Bef Jln Pisang",
     "RoadName": "Victoria St",
     "Latitude": 1.30350269187301,
     "Longitude": 103.85864530718491,
@@ -63739,7 +63897,7 @@
     ]
   },
   "03151": {
-    "Description": "Opp GB Bldg",
+    "Description": "Aft Telok Ayer St",
     "RoadName": "Cecil St",
     "Latitude": 1.27892124625262,
     "Longitude": 103.84776234627124,
@@ -63758,7 +63916,7 @@
     ]
   },
   "03217": {
-    "Description": "Opp AXA Twr",
+    "Description": "Aft Straits Blvd",
     "RoadName": "Shenton Way",
     "Latitude": 1.27552218897645,
     "Longitude": 103.8479443674916,
@@ -63954,7 +64112,7 @@
     ]
   },
   "03361": {
-    "Description": "GARDENS BY THE BAY STN EXIT 2",
+    "Description": "Gardens by the Bay Stn Exit 2",
     "RoadName": "Marina Gdns Dr",
     "Latitude": 1.279917,
     "Longitude": 103.868895,
@@ -63963,7 +64121,7 @@
     ]
   },
   "03369": {
-    "Description": "GARDENS BY THE BAY STN EXIT 1",
+    "Description": "Gardens by the Bay Stn Exit 1",
     "RoadName": "Marina Gdns Dr",
     "Latitude": 1.27960772061959,
     "Longitude": 103.8698744774074,
@@ -64866,7 +65024,7 @@
     ]
   },
   "05069": {
-    "Description": "OUTRAM PK STN EXIT 4",
+    "Description": "Outram Pk Stn Exit 4",
     "RoadName": "New Bridge Rd",
     "Latitude": 1.28027629959632,
     "Longitude": 103.84029791443083,
@@ -64959,7 +65117,7 @@
     ]
   },
   "05259": {
-    "Description": "OPP MAXWELL STN EXIT 3",
+    "Description": "Opp Maxwell Stn Exit 3",
     "RoadName": "Neil Rd",
     "Latitude": 1.27979447837032,
     "Longitude": 103.84262707605177,
@@ -64970,7 +65128,7 @@
     ]
   },
   "05269": {
-    "Description": "MAXWELL STN EXIT 2",
+    "Description": "Maxwell Stn Exit 2",
     "RoadName": "Sth Bridge Rd",
     "Latitude": 1.280894,
     "Longitude": 103.844567,
@@ -65072,7 +65230,7 @@
     ]
   },
   "05539": {
-    "Description": "Opposite Police Cantonment Complex",
+    "Description": "Opp Police Cantonment Cplx",
     "RoadName": "Cantonment Rd",
     "Latitude": 1.278515,
     "Longitude": 103.840322,
@@ -65150,7 +65308,7 @@
     ]
   },
   "06011": {
-    "Description": "OUTRAM PK STN EXIT 7",
+    "Description": "Outram Pk Stn Exit 7",
     "RoadName": "Outram Rd",
     "Latitude": 1.28165999996967,
     "Longitude": 103.83801388886192,
@@ -65167,7 +65325,7 @@
     ]
   },
   "06029": {
-    "Description": "OUTRAM PK STN EXIT 1",
+    "Description": "Outram Pk Stn Exit 1",
     "RoadName": "Outram Rd",
     "Latitude": 1.28177041153491,
     "Longitude": 103.8383828488293,
@@ -65258,7 +65416,7 @@
     ]
   },
   "06071": {
-    "Description": "HAVELOCK STN EXIT 2",
+    "Description": "Havelock Stn Exit 2",
     "RoadName": "Zion Rd",
     "Latitude": 1.28685859481289,
     "Longitude": 103.83360028266564,
@@ -65275,7 +65433,7 @@
     ]
   },
   "06081": {
-    "Description": "HAVELOCK STN EXIT 3",
+    "Description": "Havelock Stn Exit 3",
     "RoadName": "Zion Rd",
     "Latitude": 1.28837086415387,
     "Longitude": 103.83349881780524,
@@ -65323,7 +65481,7 @@
     ]
   },
   "06141": {
-    "Description": "HAVELOCK STN EXIT 5",
+    "Description": "Havelock Stn Exit 5",
     "RoadName": "Havelock Rd",
     "Latitude": 1.28963300933974,
     "Longitude": 103.83381241921823,
@@ -65334,7 +65492,7 @@
     ]
   },
   "06149": {
-    "Description": "HAVELOCK STN EXIT 4",
+    "Description": "Havelock Stn Exit 4",
     "RoadName": "Havelock Rd",
     "Latitude": 1.28984045728104,
     "Longitude": 103.83411526676929,
@@ -66186,7 +66344,7 @@
     ]
   },
   "09022": {
-    "Description": "ORCHARD STN EXIT 13",
+    "Description": "Orchard Stn Exit 13",
     "RoadName": "Orchard Blvd",
     "Latitude": 1.30252834773643,
     "Longitude": 103.83239784275958,
@@ -66375,7 +66533,7 @@
     ]
   },
   "09131": {
-    "Description": "OPP ORCHARD BLVD STN",
+    "Description": "Opp Orchard Blvd Stn",
     "RoadName": "Grange Rd",
     "Latitude": 1.30391999998489,
     "Longitude": 103.82333805603095,
@@ -66393,7 +66551,7 @@
     ]
   },
   "09139": {
-    "Description": "ORCHARD BLVD STN EXIT 1",
+    "Description": "Orchard Blvd Stn Exit 1",
     "RoadName": "Grange Rd",
     "Latitude": 1.303528,
     "Longitude": 103.823585,
