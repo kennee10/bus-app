@@ -327,7 +327,10 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
                 : props.Description}
             </Text>
           </View>
-          <View style={styles.likeButtonWrapper}>
+          <View
+            style={styles.likeButtonWrapper}
+            onStartShouldSetResponder={() => true}
+          >
             <TouchableOpacity onPress={() => props.onLikeToggle(props.BusStopCode)}>
               <Ionicons
                 name={props.isLiked ? "star" : "star-outline"}

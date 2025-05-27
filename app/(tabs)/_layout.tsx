@@ -22,7 +22,7 @@ export default function TabsLayout() {
           borderTopWidth: 0,
           paddingBottom: 20,
           width: "100%",
-          height: Platform.OS === "android" ? 55 : 50,
+          height: Platform.OS === "android" ? 70 : 50,
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.onBackgroundSecondary2,
