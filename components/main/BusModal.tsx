@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from "react-native";
+import { useRouter } from 'expo-router';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import GroupSelectionModal from "./GroupSelectionModal";
 import { useLikedBuses } from "../context/likedBusesContext";
@@ -57,6 +58,15 @@ const BusModal: React.FC<BusModalProps> = ({
   const [busStopsDetails, setBusStopsDetails] = useState<BusStopWithDistance[]>([]);
   const [isTimingsExpanded, setIsTimingsExpanded] = useState(false);
   const { colors, font, containerStyles } = useTheme();
+  const router = useRouter();
+
+  const handlePress = (busStopName: string) => {
+  router.push({
+    pathname: '/',
+    params: { query: busStopName },
+    });
+  };
+
 
   // Ref for scrolling bus stops list
   const scrollViewRef = useRef<ScrollView>(null);
@@ -476,7 +486,8 @@ const BusModal: React.FC<BusModalProps> = ({
                 const detail = busStopsDetails.find((d) => d.BusStopCode === stop.stopCode);
                 const stopDescription = isCurrent ? description : detail?.Description || "";
                 return (
-                  <View
+                  <TouchableOpacity
+                    onPress={() => handlePress(stopDescription)}
                     key={`${busNumber}-${stop.stopCode}-${stop.sequence}`}
                     style={[
                       styles.busStopItem,
@@ -489,7 +500,7 @@ const BusModal: React.FC<BusModalProps> = ({
                     }]}>
                       {stop.stopCode} - {stopDescription}
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 );
               })}
             </ScrollView>

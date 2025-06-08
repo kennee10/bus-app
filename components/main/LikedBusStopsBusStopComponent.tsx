@@ -5,8 +5,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Linking,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import BusComponent from "./BusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
@@ -37,6 +39,8 @@ type BusStopComponentProps = {
   BusStopCode: string;
   Description: string;
   RoadName: string;
+  Latitude: number;
+  Longitude: number;
   Distance: string;
   isLiked: boolean;
   onLikeToggle: (busStopCode: string) => void;
@@ -213,6 +217,9 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
     },
     blackSpace2: {
       flex: 2.5,
+      justifyContent: "center",
+      alignItems: "flex-end",
+      marginRight: 7,
     },
     distance: {
       fontSize: 10,
@@ -352,11 +359,22 @@ const LikedBusStopsBusStopComponent: React.FC<BusStopComponentProps> = (props) =
                 : props.RoadName}
             </Text>
           </View>
-          <View style={styles.blackSpace2}>
+          <View
+            style={styles.blackSpace2}
+            onStartShouldSetResponder={() => true}
+          >
             {isLoading ? (
               <ActivityIndicator size="small" color={colors.onSurfaceSecondary} />
             ) : (
-              <View />
+              <TouchableOpacity onPress={() => {
+                Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${props.Latitude},${props.Longitude}`);
+                }}>
+                <FontAwesome5
+                  name={"directions"}
+                  color={colors.onSurfaceSecondary2}
+                  size={16}
+                />
+              </TouchableOpacity>
             )}
           </View>
         </View>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Linking } from "react-native";
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import LikedBusesBusComponent from "./LikedBusesBusComponent";
 import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
@@ -123,12 +124,18 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
       height: 16.6,
       marginBottom: 4,
     },
+    // Upper section
     busStopCodeWrapper: {
       flex: 6.1,
     },
     descriptionWrapper: {
-      flex: 19,
-      
+      flex: 16.5,
+    },
+    blankSpace1: {
+      flex: 2.5,
+      justifyContent: "center",
+      alignItems: "flex-end",
+      marginRight: 4,
     },
     busStopCode: {
       fontSize: 11,
@@ -143,13 +150,14 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
       fontFamily: font.bold,
       color: colors.onSurface,
     },
+    // Lower section
     distanceWrapper: {
       flex: 6.1,
       height: 16.6,
       justifyContent: "center",
     },
     roadNameWrapper: {
-      flex: 19,
+      flex: 16.5,
       height: 16.6,
       paddingBottom: 2,
       justifyContent: "center",
@@ -165,6 +173,13 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
       fontSize: 11,
       fontFamily: font.semiBold,
       color: colors.onSurfaceSecondary,
+    },
+    directionWrapper: {
+      flex: 2.5,
+      justifyContent: "center",
+      alignItems: "flex-end",
+      marginRight: 4,
+      // marginBottom: 10,
     },
     servicesContainer: {
       gap: 4,
@@ -234,6 +249,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
     <View style={styles.outerContainer}>
       {!isLoading && props.busStopDetails && (
         <View>
+          {/* Upper section */}
           <View style={styles.upper}>
             <View style={styles.busStopCodeWrapper}>
               <Text style={styles.busStopCode}>{props.busStopCode}</Text>
@@ -243,13 +259,30 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
                 {props.busStopDetails?.Description}
               </Text>
             </View>
+            <View style={styles.blankSpace1}>
+            </View>
           </View>
+          {/* Lower section */}
           <View style={styles.lower}>
             <View style={styles.distanceWrapper}>
               <Text style={styles.distance}>{props.busStopDetails?.Distance}m</Text>
             </View>
             <View style={styles.roadNameWrapper}>
               <Text style={styles.roadName}>{props.busStopDetails?.RoadName}</Text>
+            </View>
+            <View
+              style={styles.directionWrapper}
+              onStartShouldSetResponder={() => true}
+            >
+              <TouchableOpacity onPress={() => {
+                Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${props.busStopDetails?.Latitude},${props.busStopDetails?.Longitude}`);
+                }}>
+                <FontAwesome5
+                  name={"directions"}
+                  color={colors.onSurfaceSecondary2}
+                  size={14}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>

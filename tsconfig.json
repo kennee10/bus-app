@@ -1,11 +1,11 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "module": "commonjs", // Use ES modules
+    "module": "Node16", // Use ES modules
     "target": "esnext", // Target the latest ECMAScript version
     "strict": true, // Enable all strict type-checking options
     "jsx": "react-native", // Support React Native JSX
-    "moduleResolution": "node", // Use Node.js-style module resolution
+    "moduleResolution": "node16", // Use Node.js-style module resolution
     "baseUrl": ".", // Base directory for resolving non-relative module names
     "paths": {
       "@/*": ["./*"] // Map '@/*' to the root directory

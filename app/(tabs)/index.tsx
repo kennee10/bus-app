@@ -19,6 +19,7 @@ import busStopsWithServices from '../../assets/busStopsWithServices.json';
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useTheme } from '../../assets/styles/ThemeContext';
+import { useLocalSearchParams } from 'expo-router';
 
 type BusStopData = {
   Description: string;
@@ -42,6 +43,14 @@ const NearbyBusStopsPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { likedBusStopsOrder, toggleLike } = useLikedBusStops();
   const { colors, font, containerStyles } = useTheme();
+  const { query } = useLocalSearchParams();
+
+  useEffect(() => {
+    if (typeof query === 'string') {
+      setSearchQuery(query);
+    }
+  }, [query]);
+
 
   // Memoized bus stops data
   const allBusStops = useMemo(() => 

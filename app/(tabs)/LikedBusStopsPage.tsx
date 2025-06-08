@@ -72,6 +72,8 @@ const LikedBusStopsPage = () => {
                   BusStopCode={item.BusStopCode}
                   Description={item.Description}
                   RoadName={item.RoadName}
+                  Latitude={item.Latitude}
+                  Longitude={item.Longitude}
                   Distance={item.Distance}
                   isLiked={likedBusStopsOrder.includes(item.BusStopCode)} // Check if in order array
                   onLikeToggle={() => toggleLike(item.BusStopCode)}

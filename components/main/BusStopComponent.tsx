@@ -213,7 +213,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
       flex: 2.5,
       justifyContent: "center",
       alignItems: "flex-end",
-      marginRight: 7,
+      marginRight: 8.5,
     },
     distance: {
       fontSize: 10,
@@ -371,7 +371,7 @@ const BusStopComponent: React.FC<BusStopComponentProps> = (props) => {
                 <FontAwesome5
                   name={"directions"}
                   color={colors.onSurfaceSecondary2}
-                  size={16}
+                  size={14}
                 />
               </TouchableOpacity>
             )}
