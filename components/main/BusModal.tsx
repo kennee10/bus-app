@@ -60,12 +60,13 @@ const BusModal: React.FC<BusModalProps> = ({
   const { colors, font, containerStyles } = useTheme();
   const router = useRouter();
 
-  const handlePress = (busStopName: string) => {
-  router.push({
-    pathname: '/',
-    params: { query: busStopName },
-    });
-  };
+  const handlePress = (busStopCode: string) => {
+    onClose();
+    router.push({
+      pathname: '/',
+      params: { query: busStopCode },
+      });
+    };
 
 
   // Ref for scrolling bus stops list
@@ -487,7 +488,7 @@ const BusModal: React.FC<BusModalProps> = ({
                 const stopDescription = isCurrent ? description : detail?.Description || "";
                 return (
                   <TouchableOpacity
-                    onPress={() => handlePress(stopDescription)}
+                    onPress={() => handlePress(stop.stopCode)}
                     key={`${busNumber}-${stop.stopCode}-${stop.sequence}`}
                     style={[
                       styles.busStopItem,

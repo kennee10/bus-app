@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from "react-native";
+import { useRouter } from 'expo-router';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useLikedBuses } from "../context/likedBusesContext";
@@ -62,6 +63,15 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
   const [busStopsDetails, setBusStopsDetails] = useState<BusStopWithDistance[]>([]);
   const scrollViewRef = useRef<ScrollView>(null);
   const { colors, font, containerStyles } = useTheme();
+  const router = useRouter();
+
+  const handlePress = (busStopCode: string) => {
+    onClose();
+    router.push({
+      pathname: '/',
+      params: { query: busStopCode },
+      });
+    };
 
   // Format time (from "HHmm" to AM/PM format)
   const formatTime = (time: string) => {
@@ -464,7 +474,8 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
                 const detail = busStopsDetails.find((d) => d.BusStopCode === stop.stopCode);
                 const stopDescription = isCurrent ? description : detail?.Description || "";
                 return (
-                  <View
+                  <TouchableOpacity
+                    onPress={() => handlePress(stop.stopCode)}
                     key={`${busNumber}-${stop.stopCode}-${stop.sequence}`}
                     style={[
                       styles.busStopItem,
@@ -472,15 +483,12 @@ const LikedBusesBusModal: React.FC<BusModalProps> = ({
                       isPast && styles.pastBusStopItem,
                     ]}
                   >
-                    <Text
-                      style={[
-                        styles.busStopText,
-                        { color: isPast ? colors.onSurfaceSecondary2 : colors.onSurface },
-                      ]}
-                    >
+                    <Text style={[styles.busStopText, {
+                      color: isPast ? colors.onSurfaceSecondary2 : colors.onSurface
+                    }]}>
                       {stop.stopCode} - {stopDescription}
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 );
               })}
             </ScrollView>
