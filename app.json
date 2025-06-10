@@ -2,7 +2,7 @@
   "expo": {
     "name": "Bussin",
     "slug": "bus-app",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/images/adaptive-icon.png",
     "scheme": "myapp",
@@ -29,7 +29,7 @@
         "backgroundColor": "#0d0d0d"
       },
       "package": "com.kennee10.busapp",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": {
       "bundler": "metro",

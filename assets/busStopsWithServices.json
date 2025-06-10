@@ -16903,26 +16903,6 @@
       "405"
     ]
   },
-  "31021": {
-    "Description": "Jln Bahar Power Stn",
-    "RoadName": "Jln Bahar",
-    "Latitude": 1.36247047014576,
-    "Longitude": 103.69287888535482,
-    "ServiceNos": [
-      "172",
-      "405"
-    ]
-  },
-  "31029": {
-    "Description": "Opp Jln Bahar Power Stn",
-    "RoadName": "Jln Bahar",
-    "Latitude": 1.36307987152083,
-    "Longitude": 103.69296604646463,
-    "ServiceNos": [
-      "172",
-      "405"
-    ]
-  },
   "31031": {
     "Description": "Civil Defence Acad",
     "RoadName": "Jln Bahar",
@@ -16983,77 +16963,14 @@
       "405"
     ]
   },
-  "31061": {
-    "Description": "Opp Lim Chu Kang Camp II",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.37594722202959,
-    "Longitude": 103.695570278013,
-    "ServiceNos": [
-      "405",
-      "975",
-      "975B",
-      "975C"
-    ]
-  },
-  "31069": {
-    "Description": "Bef Old Choa Chu Kang Rd",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.37493138896603,
-    "Longitude": 103.69550611102841,
-    "ServiceNos": [
-      "405",
-      "975"
-    ]
-  },
-  "31071": {
-    "Description": "Aft Chinese Cemy Path 11",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.37853314214565,
-    "Longitude": 103.69626045229732,
-    "ServiceNos": [
-      "405",
-      "975",
-      "975B",
-      "975C"
-    ]
-  },
-  "31079": {
-    "Description": "Opp Chinese Cemy Path 11",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.37768611102662,
-    "Longitude": 103.69632194402648,
-    "ServiceNos": [
-      "405",
-      "975"
-    ]
-  },
-  "31081": {
-    "Description": "Opp HQ 5th SIB Camp I",
-    "RoadName": "Old Lim Chu Kang Rd",
-    "Latitude": 1.38056264189347,
-    "Longitude": 103.69732526991169,
-    "ServiceNos": [
-      "975",
-      "975B",
-      "975C"
-    ]
-  },
-  "31089": {
-    "Description": "HQ 5th SIB Camp I",
-    "RoadName": "Old Lim Chu Kang Rd",
-    "Latitude": 1.37992729418245,
-    "Longitude": 103.69711516294915,
-    "ServiceNos": [
-      "975"
-    ]
-  },
   "31121": {
     "Description": "Nirvana Memorial Gdn",
     "RoadName": "Old Choa Chu Kang Rd",
     "Latitude": 1.37035531879968,
     "Longitude": 103.68800387696562,
     "ServiceNos": [
-      "405"
+      "405",
+      "975"
     ]
   },
   "31129": {
@@ -17062,7 +16979,10 @@
     "Latitude": 1.36997393445421,
     "Longitude": 103.68740996007186,
     "ServiceNos": [
-      "405"
+      "405",
+      "975",
+      "975B",
+      "975C"
     ]
   },
   "31131": {
@@ -17071,7 +16991,8 @@
     "Latitude": 1.3721005602879,
     "Longitude": 103.6901494100538,
     "ServiceNos": [
-      "405"
+      "405",
+      "975"
     ]
   },
   "31139": {
@@ -17080,7 +17001,10 @@
     "Latitude": 1.37211281474792,
     "Longitude": 103.69038412231409,
     "ServiceNos": [
-      "405"
+      "405",
+      "975",
+      "975B",
+      "975C"
     ]
   },
   "31141": {
@@ -17089,7 +17013,8 @@
     "Latitude": 1.37409630689339,
     "Longitude": 103.69342185827556,
     "ServiceNos": [
-      "405"
+      "405",
+      "975"
     ]
   },
   "31149": {
@@ -17098,7 +17023,10 @@
     "Latitude": 1.37394854683347,
     "Longitude": 103.69400832710886,
     "ServiceNos": [
-      "405"
+      "405",
+      "975",
+      "975B",
+      "975C"
     ]
   },
   "31151": {
@@ -17189,104 +17117,6 @@
       "975C"
     ]
   },
-  "31201": {
-    "Description": "Aft Chinese Cemy Path 13",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.38044981963514,
-    "Longitude": 103.69659409681319,
-    "ServiceNos": [
-      "405"
-    ]
-  },
-  "31211": {
-    "Description": "Aft Muslim Cemy Path 17",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.38283900023768,
-    "Longitude": 103.6969997018249,
-    "ServiceNos": [
-      "405"
-    ]
-  },
-  "32031": {
-    "Description": "Opp Ama Keng Rd",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.40270299424992,
-    "Longitude": 103.70078174769526,
-    "ServiceNos": [
-      "975",
-      "975B",
-      "975C"
-    ]
-  },
-  "32039": {
-    "Description": "Aft Ama Keng Rd",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.40251788786303,
-    "Longitude": 103.70081478116067,
-    "ServiceNos": [
-      "975"
-    ]
-  },
-  "32041": {
-    "Description": "Opp LP 160",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.40436104392726,
-    "Longitude": 103.70166157203701,
-    "ServiceNos": [
-      "975",
-      "975B",
-      "975C"
-    ]
-  },
-  "32049": {
-    "Description": "Aft LP 161",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.40452254375654,
-    "Longitude": 103.70187031633597,
-    "ServiceNos": [
-      "975"
-    ]
-  },
-  "32051": {
-    "Description": "Aft Track 11",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.40929365504034,
-    "Longitude": 103.70097942080086,
-    "ServiceNos": [
-      "975",
-      "975B",
-      "975C"
-    ]
-  },
-  "32059": {
-    "Description": "Opp Track 11",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.40903140804682,
-    "Longitude": 103.70120779053055,
-    "ServiceNos": [
-      "975"
-    ]
-  },
-  "32061": {
-    "Description": "Opp LP 173",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.41146307596912,
-    "Longitude": 103.70006004261607,
-    "ServiceNos": [
-      "975",
-      "975B",
-      "975C"
-    ]
-  },
-  "32069": {
-    "Description": "B26 Lim Chu Kang Rd",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.41103257931936,
-    "Longitude": 103.7003812106999,
-    "ServiceNos": [
-      "975"
-    ]
-  },
   "32071": {
     "Description": "Aft Track 13",
     "RoadName": "Lim Chu Kang Rd",
@@ -17296,15 +17126,6 @@
       "975",
       "975B",
       "975C"
-    ]
-  },
-  "32079": {
-    "Description": "Opp Track 13",
-    "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.41512827700833,
-    "Longitude": 103.70026822968337,
-    "ServiceNos": [
-      "975"
     ]
   },
   "32081": {
@@ -17327,42 +17148,82 @@
       "975"
     ]
   },
-  "32101": {
-    "Description": "Aft Murai Farmway",
+  "32121": {
+    "Description": "Aft Old Choa Chu Kang Rd",
     "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.38541382998394,
-    "Longitude": 103.69744470002844,
+    "Latitude": 1.37292105,
+    "Longitude": 103.6851701,
     "ServiceNos": [
       "975",
       "975B",
       "975C"
     ]
   },
-  "32109": {
-    "Description": "Bef Lor Serambi",
+  "32129": {
+    "Description": "Bef Old Choa Chu Kang Rd",
     "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.3857176700282,
-    "Longitude": 103.69770270003046,
+    "Latitude": 1.373591307,
+    "Longitude": 103.6854902,
     "ServiceNos": [
       "975"
     ]
   },
-  "32111": {
-    "Description": "Aft LP 93",
+  "32131": {
+    "Description": "Bef Chinese & Muslim Cemy",
     "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.39837200000575,
-    "Longitude": 103.69964580001103,
+    "Latitude": 1.381767314,
+    "Longitude": 103.6841405,
     "ServiceNos": [
       "975",
       "975B",
       "975C"
     ]
   },
-  "32119": {
-    "Description": "Aft LP 96",
+  "32139": {
+    "Description": "Aft Chinese & Muslim Cemy",
     "RoadName": "Lim Chu Kang Rd",
-    "Latitude": 1.39858000001944,
-    "Longitude": 103.699882699978,
+    "Latitude": 1.380833595,
+    "Longitude": 103.6845929,
+    "ServiceNos": [
+      "975"
+    ]
+  },
+  "32141": {
+    "Description": "B27 Lim Chu Kang Rd",
+    "RoadName": "Lim Chu Kang Rd",
+    "Latitude": 1.395173887,
+    "Longitude": 103.69183,
+    "ServiceNos": [
+      "975",
+      "975B",
+      "975C"
+    ]
+  },
+  "32149": {
+    "Description": "B26 Lim Chu Kang Rd",
+    "RoadName": "Lim Chu Kang Rd",
+    "Latitude": 1.395007965,
+    "Longitude": 103.6921278,
+    "ServiceNos": [
+      "975"
+    ]
+  },
+  "32151": {
+    "Description": "Opp Lim Chu Kang Substation No. 1",
+    "RoadName": "Lim Chu Kang Rd",
+    "Latitude": 1.414093161,
+    "Longitude": 103.696621,
+    "ServiceNos": [
+      "975",
+      "975B",
+      "975C"
+    ]
+  },
+  "32159": {
+    "Description": "Bef Lim Chu Kang Substation No. 1",
+    "RoadName": "Lim Chu Kang Rd",
+    "Latitude": 1.414025693,
+    "Longitude": 103.6973396,
     "ServiceNos": [
       "975"
     ]
@@ -17567,26 +17428,6 @@
     "RoadName": "Lim Chu Kang Rd",
     "Latitude": 1.44234338763128,
     "Longitude": 103.7078689605441,
-    "ServiceNos": [
-      "975"
-    ]
-  },
-  "34101": {
-    "Description": "Aft Old Lim Chu Kang Rd",
-    "RoadName": "Lor Rusuk",
-    "Latitude": 1.38440683002823,
-    "Longitude": 103.69790380001842,
-    "ServiceNos": [
-      "975",
-      "975B",
-      "975C"
-    ]
-  },
-  "34109": {
-    "Description": "Aft Lim Chu Kang Rd",
-    "RoadName": "Lor Rusuk",
-    "Latitude": 1.38430083002772,
-    "Longitude": 103.69811219997105,
     "ServiceNos": [
       "975"
     ]
@@ -29544,6 +29385,7 @@
       "157",
       "159",
       "163",
+      "230M",
       "231",
       "232",
       "235",
@@ -30291,6 +30133,7 @@
     "Longitude": 103.85721839168514,
     "ServiceNos": [
       "230",
+      "230M",
       "232",
       "238"
     ]
@@ -30302,6 +30145,7 @@
     "Longitude": 103.85712611102798,
     "ServiceNos": [
       "230",
+      "230M",
       "238"
     ]
   },
@@ -30313,6 +30157,7 @@
     "ServiceNos": [
       "142",
       "230",
+      "230M",
       "235",
       "238",
       "26",
@@ -30333,6 +30178,7 @@
       "142",
       "142A",
       "230",
+      "230M",
       "235",
       "238",
       "26",
@@ -30352,6 +30198,7 @@
     "Longitude": 103.85581029367948,
     "ServiceNos": [
       "230",
+      "230M",
       "235",
       "238",
       "57"
@@ -30364,6 +30211,7 @@
     "Longitude": 103.8558608329901,
     "ServiceNos": [
       "230",
+      "230M",
       "235",
       "238",
       "57"
@@ -30676,6 +30524,7 @@
       "159",
       "163",
       "230",
+      "230M",
       "235",
       "238",
       "26",
@@ -30704,6 +30553,7 @@
       "159",
       "163",
       "230",
+      "230M",
       "232",
       "235",
       "238",
@@ -30772,7 +30622,8 @@
     "Latitude": 1.33319,
     "Longitude": 103.859677,
     "ServiceNos": [
-      "230"
+      "230",
+      "230M"
     ]
   },
   "52569": {
@@ -30790,7 +30641,8 @@
     "Latitude": 1.3328873,
     "Longitude": 103.858081,
     "ServiceNos": [
-      "230"
+      "230",
+      "230M"
     ]
   },
   "52579": {
@@ -55463,6 +55315,24 @@
     "RoadName": "Haig Rd",
     "Latitude": 1.307375,
     "Longitude": 103.898635,
+    "ServiceNos": [
+      "135"
+    ]
+  },
+  "82251": {
+    "Description": "Tg Katong Pr Sch",
+    "RoadName": "Haig Rd",
+    "Latitude": 1.305103,
+    "Longitude": 103.899669,
+    "ServiceNos": [
+      "135"
+    ]
+  },
+  "82259": {
+    "Description": "Opp Tg Katong Pr Sch",
+    "RoadName": "Haig Rd",
+    "Latitude": 1.303918,
+    "Longitude": 103.900094,
     "ServiceNos": [
       "135"
     ]
