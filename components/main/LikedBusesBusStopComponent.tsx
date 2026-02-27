@@ -6,6 +6,7 @@ import fetchBusArrival from "../apis/fetchBusArrival";
 import { useLikedBuses } from "../context/likedBusesContext";
 import LikedBusesBusModal from "./LikedBusesBusModal";
 import { useTheme } from '../../assets/styles/ThemeContext';
+import { useRouter } from 'expo-router';
 
 type BusStopWithDist = {
   BusStopCode: string;
@@ -50,6 +51,7 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
   const [isBusModalVisible, setBusModalVisible] = useState(false);
   const [selectedBusNumber, setSelectedBusNumber] = useState<string | null>(null);
   const { colors, font, containerStyles } = useTheme();
+  const router = useRouter();
 
   // Getting bus timings
   useEffect(() => {
@@ -100,6 +102,10 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
   const busesNotInOperation = props.likedServices.filter(
     (service) => !busArrivalData.some((bus) => bus.ServiceNo === service)
   );
+
+  const handleBusStopPress = (busStopCode: string) => {
+    router.replace(`/?query=${busStopCode}`);
+    };
 
   const styles = StyleSheet.create({
     outerContainer: {
@@ -248,44 +254,49 @@ const LikedBusesBusStopComponent: React.FC<LikedBusesBusStopComponentProps> = (p
   return (
     <View style={styles.outerContainer}>
       {!isLoading && props.busStopDetails && (
-        <View>
-          {/* Upper section */}
-          <View style={styles.upper}>
-            <View style={styles.busStopCodeWrapper}>
-              <Text style={styles.busStopCode}>{props.busStopCode}</Text>
+        <TouchableOpacity
+          onPress={() => handleBusStopPress(props.busStopCode)}
+        >
+          <View>
+            {/* Upper section */}
+            <View style={styles.upper}>
+              <View style={styles.busStopCodeWrapper}>
+                <Text style={styles.busStopCode}>{props.busStopCode}</Text>
+              </View>
+              <View style={styles.descriptionWrapper}>
+                <Text style={styles.description}>
+                  {props.busStopDetails?.Description}
+                </Text>
+              </View>
+              <View style={styles.blankSpace1}>
+              </View>
             </View>
-            <View style={styles.descriptionWrapper}>
-              <Text style={styles.description}>
-                {props.busStopDetails?.Description}
-              </Text>
-            </View>
-            <View style={styles.blankSpace1}>
+            {/* Lower section */}
+            <View style={styles.lower}>
+              <View style={styles.distanceWrapper}>
+                <Text style={styles.distance}>{props.busStopDetails?.Distance}m</Text>
+              </View>
+              <View style={styles.roadNameWrapper}>
+                <Text style={styles.roadName}>{props.busStopDetails?.RoadName}</Text>
+              </View>
+              <View
+                style={styles.directionWrapper}
+                onStartShouldSetResponder={() => true}
+              >
+                <TouchableOpacity onPress={() => {
+                  Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${props.busStopDetails?.Latitude},${props.busStopDetails?.Longitude}`);
+                  }}>
+                  <FontAwesome5
+                    name={"directions"}
+                    color={colors.onSurfaceSecondary2}
+                    size={14}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-          {/* Lower section */}
-          <View style={styles.lower}>
-            <View style={styles.distanceWrapper}>
-              <Text style={styles.distance}>{props.busStopDetails?.Distance}m</Text>
-            </View>
-            <View style={styles.roadNameWrapper}>
-              <Text style={styles.roadName}>{props.busStopDetails?.RoadName}</Text>
-            </View>
-            <View
-              style={styles.directionWrapper}
-              onStartShouldSetResponder={() => true}
-            >
-              <TouchableOpacity onPress={() => {
-                Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${props.busStopDetails?.Latitude},${props.busStopDetails?.Longitude}`);
-                }}>
-                <FontAwesome5
-                  name={"directions"}
-                  color={colors.onSurfaceSecondary2}
-                  size={14}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+        </TouchableOpacity>
+        
       )}
 
       <View style={styles.servicesContainer}>
